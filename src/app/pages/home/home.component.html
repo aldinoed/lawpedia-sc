@@ -1,0 +1,7 @@
+<p>home works!</p>
+<div *ngFor="let item of items$ | async; index as i; first as isFirst">
+  <p>nomor: {{ i }}</p>
+  <p>username: {{ item.username }}</p>
+  <p>password: {{ item.password }}</p>
+  <span *ngIf="isFirst">default</span>
+</div>

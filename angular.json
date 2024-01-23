@@ -88,6 +88,23 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "lawpedia-sc:build:production",
+              "serveTarget": "lawpedia-sc:serve:production"
+            },
+            "development": {
+              "buildTarget": "lawpedia-sc:build:development",
+              "serveTarget": "lawpedia-sc:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

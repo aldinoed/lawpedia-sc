@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "lawpedia00": {
+      "hosting": {
+        "lawpedia-sc": [
+          "lawpedia00"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "lawpedia00"
+  }
+}
