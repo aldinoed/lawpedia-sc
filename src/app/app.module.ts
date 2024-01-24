@@ -3,6 +3,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+import { AngularFireModule} from '@angular/fire/compat'
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
@@ -28,6 +29,7 @@ import { AppRoutingModule } from './app.routes';
         RouterModule,
         AppRoutingModule,
         CommonModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         provideAuth(() => getAuth()),
         provideAnalytics(() => getAnalytics()),
