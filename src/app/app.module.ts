@@ -22,6 +22,11 @@ import { environment } from '../environments/environment';
 
 // App imports
 import { AppRoutingModule } from './app.routes';
+// import { LoginComponent } from './pages/login/login.component';
+// import { RegisterComponent } from './pages/register/register.component';
+import { FormsModule } from '@angular/forms';
+import { RegisterComponent } from './pages/register/register.component';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
     imports: [
@@ -30,6 +35,7 @@ import { AppRoutingModule } from './app.routes';
         AppRoutingModule,
         CommonModule,
         AngularFireModule.initializeApp(environment.firebaseConfig),
+        FormsModule,
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         provideAuth(() => getAuth()),
         provideAnalytics(() => getAnalytics()),
@@ -42,7 +48,7 @@ import { AppRoutingModule } from './app.routes';
         provideStorage(() => getStorage()),
         provideRemoteConfig(() => getRemoteConfig()),
     ],
-    declarations: [AppComponent],
+    declarations: [AppComponent, RegisterComponent, LoginComponent],
     bootstrap: [AppComponent],
     providers: [ScreenTrackingService, UserTrackingService]
 })

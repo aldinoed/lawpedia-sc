@@ -25,7 +25,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "./node_modules/tailwindcss/base.css",
+              "./node_modules/tailwindcss/components.css",
+              "./node_modules/tailwindcss/utilities.css"
             ],
             "scripts": []
           },
@@ -108,5 +111,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "ddb591d0-f2d0-439f-8db2-a91ecd22658b"
   }
 }
