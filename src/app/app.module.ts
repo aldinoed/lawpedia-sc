@@ -27,6 +27,7 @@ import { AppRoutingModule } from './app.routes';
 import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
     imports: [
@@ -50,7 +51,7 @@ import { LoginComponent } from './pages/login/login.component';
     ],
     declarations: [AppComponent, RegisterComponent, LoginComponent],
     bootstrap: [AppComponent],
-    providers: [ScreenTrackingService, UserTrackingService]
+    providers: [ScreenTrackingService, UserTrackingService, provideAnimationsAsync()]
 })
 
 export class AppModule { }
