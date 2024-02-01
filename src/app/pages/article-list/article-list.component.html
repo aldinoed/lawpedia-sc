@@ -2,8 +2,21 @@
     <h2>
         {{article.title}}
     </h2>
+    <p>{{article.published}}</p>
     <p>
         {{article.content}}
     </p>
+    <p>
+        {{article.author}}
+    </p>
+    <p>
+        {{article.category}}
+    </p>
     <button [routerLink]="['article']" [queryParams]="{article}">Buka</button>
 </div>
+
+<!-- <div *ngFor="let category of categories | async" >
+    <p>
+        {{category.name}}
+    </p>
+</div> -->

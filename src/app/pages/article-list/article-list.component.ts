@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, getDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ArticleService } from '../../services/article.service';
 import { Article } from '../../services/article.service';
+import { ArticleCategory } from '../../services/article.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -18,6 +19,7 @@ import { RouterModule } from '@angular/router';
 export class ArticleListComponent implements OnInit {
   articles: Observable<Article[]> = new Observable<Article[]>();
   popularArticles: Observable<Article[]> = new Observable<Article[]>();
+  category: Observable<ArticleCategory> = new Observable<ArticleCategory>();
 
   constructor(
     private articleService: ArticleService,
@@ -25,7 +27,8 @@ export class ArticleListComponent implements OnInit {
 
   ngOnInit() {
     this.articles = this.articleService.getArticles();
+
     this.popularArticles = this.articleService.getPopularArticles(); 
   }
-  
+
 }

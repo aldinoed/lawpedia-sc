@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { inject } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, getDoc, doc } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,24 @@ import { map } from 'rxjs/operators';
 export class ArticleService {
   private firestore: Firestore = inject(Firestore);
   articles: Observable<Article[]>;
-  
+
   constructor() {
     this.articles = collectionData(collection(this.firestore, 'articles')) as Observable<Article[]>;
+    this.articles.subscribe((articles: any[]) => {
+      const observables = articles.map((article) => getDoc(doc(this.firestore, article.category.path)));
+      
+      forkJoin(observables).subscribe((categorySnapshots: any[]) => {
+        categorySnapshots.forEach((categorySnapshot, index) => {
+          const categoryData = categorySnapshot.data();
+          articles[index].category = categoryData;
+        });
+    
+        console.log('Updated Articles:', articles);
+      });
+    });
+    this.articles.subscribe((articles: any[]) => console.log('Articles:', articles));
   }
+
 
   getArticles(): Observable<any[]> {
     return this.articles;
@@ -35,7 +50,15 @@ export class ArticleService {
 
 export interface Article {
   id: string;
+  author: string;
   title: string;
-  category: string;
+  category: ArticleCategory;
   content: string;
+  views: number;
+  published: Date;
+}
+
+export interface ArticleCategory {
+  id: string;
+  name: string;
 }
