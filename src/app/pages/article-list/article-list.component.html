@@ -1,4 +1,22 @@
-<h1 class="text-xl font-semibold mb-4">Daftar Artikel</h1>
+<h1 class="font-semibold text-2xl mb-4">Daftar Artikel</h1>
+<div class="flex gap-4">
+  <mat-form-field>
+    <mat-label>Pilih Kategori</mat-label>
+    <mat-select [(value)]="selectedCategory">
+      @for (category of categories; track category) {
+      <mat-option [value]="category.value">{{ category.viewValue }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Urut Berdasarkan</mat-label>
+    <mat-select [(value)]="selectedSort">
+      @for (sort of sortLists; track sort) {
+      <mat-option [value]="sort.value">{{ sort.viewValue }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
 <!-- <div *ngFor="let article of articles | async">
   <h2>
     {{ article.title }}
@@ -13,16 +31,6 @@
     let article of collection | paginate : { itemsPerPage: 5, currentPage: p }
   "
 >
-  <!-- <div>
-    <h2>
-      {{ article.title }}
-    </h2>
-    <p>
-      {{ article.content }}
-    </p>
-    <button [routerLink]="['article']" [queryParams]="{article}">Buka</button>
-  </div> -->
-
   <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
     <a href="#">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
