@@ -7,7 +7,14 @@ import { ArticleService } from '../../services/article.service';
 import { Article } from '../../services/article.service';
 import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,6 +36,7 @@ interface Sort {
     RouterModule,
     NgxPaginationModule,
     FormsModule,
+    ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -43,8 +51,6 @@ export class ArticleListComponent implements OnInit {
   //Pagination Settings
   p: number = 1;
   collection: Array<any> = []; // contain articles
-
-  constructor(private articleService: ArticleService) {}
 
   // CATEGORY SELECT
   categories: Category[] = [
@@ -70,6 +76,25 @@ export class ArticleListComponent implements OnInit {
     sortBy: '',
     method: '',
   };
+
+  // SEARCH INPUT
+  searchForm: any;
+  finalSearchKeyword: string = '';  // keyword search database
+
+  get searchKeyword() {
+    return this.searchForm.get('searchKeyword');
+  }
+
+  onSearchSubmit() {
+    this.finalSearchKeyword = this.searchForm.value;
+  }
+
+  // CONSTRUCTOR
+  constructor(private articleService: ArticleService) {
+    this.searchForm = new FormGroup({
+      searchKeyword: new FormControl('', [Validators.required]),
+    });
+  }
 
   ngOnInit() {
     this.articles = this.articleService.getArticles();
