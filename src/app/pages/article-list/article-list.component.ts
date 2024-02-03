@@ -145,7 +145,7 @@ export class ArticleListComponent implements OnInit {
         content: article.content.split(' ').slice(0, 20).join(' ') + '...',
         category: article.category,
         views: article.views,
-        published: article.published,
+        published: article.published.toDate(),
       }));
     });
   }
