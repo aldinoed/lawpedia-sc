@@ -52,6 +52,19 @@ export class ArticleListComponent implements OnInit {
   p: number = 1;
   collection: Array<any> = []; // contain articles
 
+  stripHtmlTags(html: string): string {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  }
+
+  // truncateText(text: string, maxLength: number): string {
+  //   if (text.length > maxLength) {
+  //     return text.substring(0, maxLength) + '...';
+  //   } else {
+  //     return text;
+  //   }
+  // }
+
   // CATEGORY SELECT
   categories: Category[] = [
     { value: 'category1', viewValue: 'Category 1' },
@@ -79,7 +92,7 @@ export class ArticleListComponent implements OnInit {
 
   // SEARCH INPUT
   searchForm: any;
-  finalSearchKeyword: string = '';  // keyword search database
+  finalSearchKeyword: string = ''; // keyword search database
 
   get searchKeyword() {
     return this.searchForm.get('searchKeyword');
@@ -105,12 +118,15 @@ export class ArticleListComponent implements OnInit {
       this.collection = articles.map((article) => ({
         id: article.id,
         title: article.title,
-        content: article.content,
+        content: this.stripHtmlTags(article.content),
         category: article.category,
         views: article.views,
         published: article.published,
       }));
     });
-    this.articles.subscribe((articles: Article[]) => console.log('Articles:', articles));
+
+    this.articles.subscribe((articles: Article[]) =>
+      console.log('Articles:', articles)
+    );
   }
 }

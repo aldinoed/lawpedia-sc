@@ -79,40 +79,54 @@
 </div> -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <ng-container
-      *ngFor="let article of collection | paginate : { itemsPerPage: 6, currentPage: p }
+      *ngFor="
+        let article of collection
+          | paginate : { itemsPerPage: 6, currentPage: p }
       "
     >
-      <div class="p-6 bg-white border border-gray-200 rounded-lg shadow">
-        <a href="#">
-          {{ article.category }}
-        </a>
-        <a href="#">
-          <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            {{ article.title }}
-          </h5>
-        </a>
-        <div class="mb-3 text-gray-700" [innerHTML]="article.content"></div>
-        <button
-          [routerLink]="['/articles', article.id]"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-        >
-          Read more
-          <svg
-            class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 10"
+      <div
+        class="p-6 bg-white border border-gray-200 rounded-lg shadow flex flex-col justify-between"
+      >
+        <div>
+          <span
+            class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-sm font-medium bg-blue-100 text-blue-800"
+            >{{ article.category }}</span
           >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M1 5h12m0 0L9 1m4 4L9 9"
-            />
-          </svg>
-        </button>
+          <div class="overflow-hidden mt-4">
+            <h5
+              class="mb-2 text-lg font-medium tracking-tight text-gray-900 line-clamp-3"
+            >
+              {{ article.title }}
+            </h5>
+          </div>
+          <!-- <div class="mb-3 text-gray-700" [innerHTML]="article.content"></div> -->
+          <div class="h-14 overflow-hidden">
+            <p class="mb-4 line-clamp-2 text-sm">{{ article.content }}</p>
+          </div>
+        </div>
+        <div>
+          <button
+            [routerLink]="['/articles', article.id]"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+          >
+            Read more
+            <svg
+              class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </ng-container>
   </div>

@@ -1,8 +1,10 @@
-<h2>
-    <b>
-        {{ article?.title }}
-    </b>
-</h2>
-<p>
-    {{ article?.content }}
-</p>
+<main class="px-14 py-10">
+  <h1 class="font-semibold text-2xl mb-4">Detail Artikel</h1>
+
+  <span
+    class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-sm font-medium bg-blue-100 text-blue-800 mb-4"
+    >{{ article?.category }}</span
+  >
+  <h1 class="text-4xl font-bold mb-4">{{ article?.title }}</h1>
+  <div class="text-lg" [innerHTML]="article?.content"></div>
+</main>
