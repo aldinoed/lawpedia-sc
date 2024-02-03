@@ -118,10 +118,11 @@ export class ArticleListComponent implements OnInit {
       this.collection = articles.map((article) => ({
         id: article.id,
         title: article.title,
+        author: article.author,
         content: this.stripHtmlTags(article.content),
         category: article.category,
         views: article.views,
-        published: article.published,
+        published: article.formatedPublished,
       }));
     });
 
