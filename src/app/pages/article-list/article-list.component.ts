@@ -122,7 +122,7 @@ export class ArticleListComponent implements OnInit {
         content: this.stripHtmlTags(article.content),
         category: article.category,
         views: article.views,
-        published: article.formatedPublished,
+        published: article.published.toDate(),
       }));
     });
 

@@ -23,7 +23,7 @@
       <p>{{ article?.author }}</p>
     </div>
     <!-- DATE -->
-    <!-- <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -40,14 +40,9 @@
         />
       </svg>
       <p>
-        {{ article?.published ? (publishedDate | date : "longDate") : "-" }}
-        {{
-          article?.published
-            ? (article?.published["seconds"] * 1000 | date : "longDate")
-            : "-"
-        }}
+        {{ publishedDate | date : "longDate" }}
       </p>
-    </div> -->
+    </div>
     <!-- VIEWS -->
     <div class="flex items-center gap-2">
       <svg
