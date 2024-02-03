@@ -27,9 +27,6 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 export class SendArticleComponent {
   form: FormGroup;
   firestore: Firestore = inject(Firestore);
-  // title: string = '';
-  // content: string = '';
-  // category: string = '';
 
   // ARTICLE CATEGORY LIST
   articleCategories = [
@@ -47,23 +44,17 @@ export class SendArticleComponent {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      addDoc(collection(this.firestore, 'articles'), this.form.value);
-      alert('Berhasil');
-    } else {
-      console.log('Error');
+    try {
+      addDoc(collection(this.firestore, 'articles'), {
+        author: 'John Doe',
+        title: this.form.value.title,
+        content: this.form.value.content,
+        category: this.form.value.category,
+        views: 0,
+        published: new Date(),
+      });
+    } catch (e) {
+      console.error('Error adding document: ', e);
     }
   }
-
-  // async sendArticle() {
-  //   try {
-  //     await addDoc(collection(this.firestore, 'articles'), {
-  //       title: this.title,
-  //       content: this.content,
-  //       category: this.category
-  //     });
-  //   } catch (e) {
-  //     console.error('Error adding document: ', e);
-  //   }
-  // }
 }
