@@ -16,6 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-send-article',
