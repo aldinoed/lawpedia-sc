@@ -1,7 +1,7 @@
-<!-- form.component.html -->
 <main class="px-14 py-10">
   <h1 class="font-semibold text-2xl mb-4">Buat Artikel</h1>
 
+  <!-- FORM -->
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <label for="input-title" class="block text-sm font-medium mb-2"
       >Judul</label
@@ -35,7 +35,7 @@
     >
     <editor
       apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
-      [init]="{ plugins: 'list link image table code help wordcount', menubar: 'edit view insert tools table help' }"
+      [init]="{ plugins: 'list link image table code help wordcount', menubar: 'edit view insert tools table help', height: 600 }"
       formControlName="content"
       id="input-content"
     ></editor>
