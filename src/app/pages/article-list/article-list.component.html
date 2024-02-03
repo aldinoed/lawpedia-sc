@@ -5,7 +5,7 @@
     <div class="flex gap-4">
       <mat-form-field>
         <mat-label>Pilih Kategori</mat-label>
-        <mat-select [(value)]="selectedCategory">
+        <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange()">
           @for (category of categories; track category) {
           <mat-option [value]="category.value">{{
             category.viewValue
@@ -15,10 +15,10 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Urut Berdasarkan</mat-label>
-        <mat-select [(value)]="selectedSort">
-          @for (sort of sortLists; track sort) {
-          <mat-option [value]="sort.value">{{ sort.viewValue }}</mat-option>
-          }
+        <mat-select [(value)]="selectedSort" (selectionChange)="onSortChange()">
+          <mat-option *ngFor="let sort of sortLists" [value]="sort.value">
+            {{ sort.viewValue }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -68,15 +68,6 @@
       </div>
     </form>
   </div>
-  <!-- <div *ngFor="let article of articles | async">
-  <h2>
-    {{ article.title }}
-  </h2>
-  <p>
-    {{ article.content }}
-  </p>
-  <button [routerLink]="['article']" [queryParams]="{article}">Buka</button>
-</div> -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <ng-container
       *ngFor="let article of collection | paginate : { itemsPerPage: 6, currentPage: p }

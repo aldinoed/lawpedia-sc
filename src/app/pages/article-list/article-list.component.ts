@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ArticleService } from '../../services/article.service';
 import { Article } from '../../services/article.service';
+import { ArticleCategory } from '../../services/article.service';
 import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import {
@@ -18,6 +19,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormBuilder } from '@angular/forms';
 
 interface Category {
   value: string;
@@ -48,18 +50,17 @@ export class ArticleListComponent implements OnInit {
   articles: Observable<Article[]> = new Observable<Article[]>();
   popularArticles: Observable<Article[]> = new Observable<Article[]>();
 
-  //Pagination Settings
+  // PAGINATION
   p: number = 1;
-  collection: Array<any> = []; // contain articles
+  collection: Array<any> = [];
 
   // CATEGORY SELECT
-  categories: Category[] = [
-    { value: 'category1', viewValue: 'Category 1' },
-    { value: 'category2', viewValue: 'Catgeory 2' },
-    { value: 'category3', viewValue: 'Catgeory 3' },
-  ]; // list of categories
-
-  selectedCategory = ''; // keyword for filter category
+  categories: Category[] = [];
+  selectedCategory = '';
+  onCategoryChange() {
+    console.log(this.selectedCategory);
+    this.loadSortedArticles();
+  }
 
   // SORT SELECT
   sortLists: Sort[] = [
@@ -67,50 +68,86 @@ export class ArticleListComponent implements OnInit {
     { value: 2, viewValue: 'Waktu Publish Asc' },
     { value: 3, viewValue: 'Jumlah View Desc' },
     { value: 4, viewValue: 'Jumlah View Asc' },
-    { value: 5, viewValue: 'Rating Desc' },
-    { value: 6, viewValue: 'Rating Asc' },
-  ]; // list of categories
-
-  selectedSort = ''; // keyword for filter category
-  sortForDatabase = {
-    sortBy: '',
-    method: '',
-  };
-
-  // SEARCH INPUT
-  searchForm: any;
-  finalSearchKeyword: string = '';  // keyword search database
-
-  get searchKeyword() {
-    return this.searchForm.get('searchKeyword');
+    { value: 5, viewValue: 'Title Desc' },
+    { value: 6, viewValue: 'Title Asc' },
+  ];
+  selectedSort = 1;
+  onSortChange() {
+    this.loadSortedArticles();
   }
 
-  onSearchSubmit() {
-    this.finalSearchKeyword = this.searchForm.value;
+  // SEARCH INPUT
+  searchForm: FormGroup;
+  searchKeyword: string = '';
+  onSearchSubmit(): void {
+    this.searchKeyword = this.searchForm.value.searchKeyword;
+    this.loadSortedArticles();
   }
 
   // CONSTRUCTOR
-  constructor(private articleService: ArticleService) {
-    this.searchForm = new FormGroup({
-      searchKeyword: new FormControl('', [Validators.required]),
+  constructor(private articleService: ArticleService, private fb: FormBuilder) {
+    this.searchForm = this.fb.group({
+      searchKeyword: ['', Validators.required]
     });
   }
 
+  // INIT
   ngOnInit() {
-    this.articles = this.articleService.getArticles();
-    this.popularArticles = this.articleService.getPopularArticles();
+    this.loadSortedArticles();
+    this.articleService.getArticleCategories().subscribe((categories) => {
+      this.categories = categories.map((category) => ({
+        value: category.id,
+        viewValue: category.name,
+      }));
+      this.categories.unshift({ value: '', viewValue: 'Semua Kategori' });
+    });
+  } 
 
-    // convert observable to object and assign it to collection
+  // LOAD SORTED ARTICLES
+  private loadSortedArticles() {
     this.articleService.getArticles().subscribe((articles) => {
-      this.collection = articles.map((article) => ({
+      // Filter articles based on the selected category
+      let filteredArticles = articles;
+      if (this.selectedCategory) {
+        filteredArticles = articles.filter(article => article.category === 
+          this.categories.find(category => category.value === this.selectedCategory)?.viewValue);
+      }
+
+      // Filter articles based on the search keyword
+      if (this.searchKeyword) {
+        filteredArticles = articles.filter(article => 
+          article.title.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase())
+          || article.content.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase()));
+      }
+
+      // Sort articles based on the selected sort method
+      filteredArticles.sort((a, b) => {
+        if (this.selectedSort === 1) {
+          return b.published.seconds - a.published.seconds;
+        } else if (this.selectedSort === 2) {
+          return a.published.seconds - b.published.seconds;
+        } else if (this.selectedSort === 3) {
+          return b.views - a.views;
+        } else if (this.selectedSort === 4) {
+          return a.views - b.views;
+        } else if (this.selectedSort === 5) {
+          return b.title.localeCompare(a.title);
+        } else if (this.selectedSort === 6) {
+          return a.title.localeCompare(b.title);
+        }
+        return 0;
+      });
+
+      // Map articles for display
+      this.collection = filteredArticles.map((article) => ({
         id: article.id,
         title: article.title,
-        content: article.content,
+        content: article.content.split(' ').slice(0, 20).join(' ') + '...',
         category: article.category,
         views: article.views,
         published: article.published,
       }));
     });
-    this.articles.subscribe((articles: Article[]) => console.log('Articles:', articles));
   }
 }
+

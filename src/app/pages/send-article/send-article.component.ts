@@ -52,6 +52,7 @@ export class SendArticleComponent {
         category: this.form.value.category,
         views: 0,
         published: new Date(),
+        // formatedPublished: new Date().toLocaleDateString(),
       });
     } catch (e) {
       console.error('Error adding document: ', e);

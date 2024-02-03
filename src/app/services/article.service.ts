@@ -4,7 +4,7 @@ import { Firestore, collection, collectionData, getDoc, doc } from '@angular/fir
 import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
 import { switchMap, map, toArray } from 'rxjs/operators';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
-import { from } from 'rxjs';
+import { from, combineLatest } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,45 +14,48 @@ export class ArticleService {
   private firestore: Firestore = inject(Firestore);
 
   articles: Observable<Article[]>;
+  categories: Observable<ArticleCategory[]>;
+  combinedArticles: Observable<any[]>;
 
   constructor() {
     this.articles = collectionData(collection(this.firestore, 'articles'), { idField: 'id' }) as Observable<Article[]>;
-    
-    // .pipe(
-    //   switchMap((articles: (DocumentData | (DocumentData & { id: string; }))[]) => {
-    //     // Ambil data kategori untuk setiap artikel
-    //     const categoryObservables: Observable<Article>[] = articles.map((article) => {
-    //       const categoryDoc = doc(this.firestore, (article as any).category.path);
-    //       return from(getDoc(categoryDoc)).pipe(
-    //         map((categorySnapshot: DocumentSnapshot<DocumentData>) => {
-    //           const categoryData = categorySnapshot.data() as DocumentData;
-    //           return { ...(article as any), category: categoryData } as Article;
-    //         })
-    //       );
-    //     });
-
-    //     // Gabungkan hasil observables menjadi satu observable
-    //     return forkJoin(categoryObservables).pipe(
-    //       toArray()
-    //     );
-    //   })
-    // ) as Observable<(DocumentData | (DocumentData & { id: string; }))[]>;
-    // this.articles.subscribe((articles) => console.log(articles));
+    this.categories = collectionData(collection(this.firestore, 'articleCategory'), { idField: 'id' }) as Observable<ArticleCategory[]>;
+    this.combinedArticles = combineLatest([this.articles, this.categories]).pipe(
+      map(([articles, categories]) => {
+        return articles.map(article => {
+          const category = categories.find(cat => cat.id === article.category.id);
+          return {
+            ...article,
+            category: category ? category.name : null // Replace null with a default value if needed
+          };
+        });
+      })
+    );
   }
 
   getArticles(): Observable<any[]> {
-    return this.articles;
+    return this.combinedArticles;
   }
 
   getPopularArticles(): Observable<any[]> {
-    return this.articles.pipe(
+    return this.combinedArticles.pipe(
       map((articles: Article[]) => articles.sort((a, b) => b.views - a.views).slice(0, 10))
     );
   }
 
   getArticle(id: string): Observable<any> {
-    return this.articles.pipe(
+    return this.combinedArticles.pipe(
       map((articles: Article[]) => articles.find(article => article.id === id))
+    );
+  }
+
+  getArticleCategories(): Observable<any[]> {
+    return this.categories;
+  }
+
+  getArticleCategory(id: string): Observable<any> {
+    return this.categories.pipe(
+      map((categories: ArticleCategory[]) => categories.find(category => category.id === id))
     );
   }
 }
