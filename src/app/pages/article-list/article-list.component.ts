@@ -103,10 +103,14 @@ export class ArticleListComponent implements OnInit {
     // convert observable to object and assign it to collection
     this.articleService.getArticles().subscribe((articles) => {
       this.collection = articles.map((article) => ({
+        id: article.id,
         title: article.title,
         content: article.content,
+        category: article.category,
+        views: article.views,
+        published: article.published,
       }));
     });
-    // console.log(this.collection);
+    this.articles.subscribe((articles: Article[]) => console.log('Articles:', articles));
   }
 }
