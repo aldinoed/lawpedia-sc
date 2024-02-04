@@ -5,6 +5,11 @@ module.exports = {
     extend: {
       colors: {
         gold: "#F8B179",
+        navy2: "#283845",
+        latte: '#F2D494'
+      },
+      fontFamily: {
+        "playfair-display": ["Playfair Display", "serif"],
       },
     },
   },

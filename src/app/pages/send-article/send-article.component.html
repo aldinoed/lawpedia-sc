@@ -1,50 +1,50 @@
-<main class="px-14 py-10">
-  <h1 class="font-semibold text-2xl mb-4">Buat Artikel</h1>
+<h1 class="font-semibold text-2xl mb-4">Buat Artikel</h1>
 
-  <!-- FORM -->
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label for="input-title" class="block text-sm font-medium mb-2"
-      >Judul</label
-    >
-    <input
-      type="text"
-      id="input-title"
-      class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-      formControlName="title"
-    />
+<!-- FORM -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label for="input-title" class="block text-sm font-medium mb-2">Judul</label>
+  <input
+    type="text"
+    id="input-title"
+    class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+    formControlName="title"
+  />
 
-    <label for="category">Category:</label>
-    <input type="text" id="category" formControlName="category" required />
+  <label for="category">Category:</label>
+  <input type="text" id="category" formControlName="category" required />
 
-    <label for="select-category" class="block text-sm font-medium mb-2 mt-4"
-      >Kategori</label
-    >
-    <select
-      id="select-category"
-      class="py-3 px-4 pe-9 block border-2 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-      formControlName="category"
-    >
-      <!-- <option selected>Open this select menu</option> -->
-      <option *ngFor="let item of articleCategories" [ngValue]="item">
-        {{ item }}
-      </option>
-    </select>
+  <label for="select-category" class="block text-sm font-medium mb-2 mt-4"
+    >Kategori</label
+  >
+  <select
+    id="select-category"
+    class="py-3 px-4 pe-9 block border-2 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+    formControlName="category"
+  >
+    <!-- <option selected>Open this select menu</option> -->
+    <option *ngFor="let item of articleCategories" [ngValue]="item">
+      {{ item }}
+    </option>
+  </select>
 
-    <label for="input-content" class="block text-sm font-medium mb-2 mt-4"
-      >Konten</label
-    >
-    <editor
-      apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
-      [init]="{ plugins: 'list link image table code help wordcount', menubar: 'edit view insert tools table help', height: 600 }"
-      formControlName="content"
-      id="input-content"
-    ></editor>
+  <label for="input-content" class="block text-sm font-medium mb-2 mt-4"
+    >Konten</label
+  >
+  <editor
+    apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
+    [init]="{
+      plugins: 'list link image table code help wordcount',
+      menubar: 'edit view insert tools table help',
+      height: 600
+    }"
+    formControlName="content"
+    id="input-content"
+  ></editor>
 
-    <button
-      type="submit"
-      class="py-3 mt-4 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-    >
-      Publish
-    </button>
-  </form>
-</main>
+  <button
+    type="submit"
+    class="py-3 mt-4 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+  >
+    Publish
+  </button>
+</form>

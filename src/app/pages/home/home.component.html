@@ -1,7 +1,73 @@
-<p>home works!</p>
+<!-- <p>home works!</p>
 <div *ngFor="let item of items$ | async; index as i; first as isFirst">
   <p>nomor: {{ i }}</p>
   <p>username: {{ item.username }}</p>
   <p>password: {{ item.password }}</p>
   <span *ngIf="isFirst">default</span>
-</div>
+</div> -->
+<main>
+  <!-- HERO SECTION -->
+  <section
+    class="grid grid-cols-1 lg:grid-cols-2 pt-36 items-center px-4 md:px-12 lg:px-20 pb-20"
+  >
+    <div>
+      <h1 class="text-4xl font-bold">Hai Folks!</h1>
+      <h1 class="text-4xl font-bold text-gold">Selamat Datang di LawHub</h1>
+      <p class="mt-4">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+      </p>
+    </div>
+    <div class="hidden lg:flex justify-end">
+      <img src="/assets/landing-page-img.png" alt="image" class="max-w-96" />
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section
+    class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-0 items-center bg-latte px-4 md:px-12 lg:px-20 py-20"
+  >
+    <div class="flex justify-center lg:justify-start">
+      <img src="/assets/about-img.png" alt="image" class="max-w-96" />
+    </div>
+    <div>
+      <h1 class="text-3xl font-bold underline underline-offset-8">
+        Tentang Kami
+      </h1>
+      <p class="mt-4 text-justify">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+        mollit anim id est laborum.
+      </p>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section class="px-4 md:px-12 lg:px-20 py-20">
+    <div>
+      <h1
+        class="text-3xl font-bold underline underline-offset-8 decoration-latte text-center"
+      >
+        Layanan
+      </h1>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-10 gap-6">
+      <ng-container *ngFor="let service of servicesData">
+        <button [routerLink]="[service.href]">
+          <div
+            class="flex flex-col gap-6 items-center justify-center p-6 rounded-md hover:shadow-md transition-all"
+          >
+            <div class="rounded-full bg-navy2 p-8">
+              <img [src]="service.image" alt="logo" class="h-20 w-20" />
+            </div>
+            <p class="font-bold text-lg">{{ service.name }}</p>
+          </div>
+        </button>
+      </ng-container>
+    </div>
+  </section>
+</main>

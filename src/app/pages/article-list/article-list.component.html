@@ -1,211 +1,209 @@
-<main class="px-14 py-10">
-  <!-- PAGE TITLE -->
-  <h1 class="font-semibold text-2xl mb-4">Daftar Artikel</h1>
+<!-- PAGE TITLE -->
+<h1 class="font-semibold text-2xl mb-4">Daftar Artikel</h1>
 
-  <div class="flex flex-col lg:flex-row lg:justify-between mb-4">
-    <div class="flex gap-4">
-      <!-- FILTER CATEGORY -->
-      <mat-form-field>
-        <mat-label>Pilih Kategori</mat-label>
-        <mat-select
-          [(value)]="selectedCategory"
-          (selectionChange)="onCategoryChange()"
-        >
-          @for (category of categories; track category) {
-          <mat-option [value]="category.value">{{
-            category.viewValue
-          }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <!-- SORTING  -->
-      <mat-form-field>
-        <mat-label>Urut Berdasarkan</mat-label>
-        <mat-select [(value)]="selectedSort" (selectionChange)="onSortChange()">
-          <mat-option *ngFor="let sort of sortLists" [value]="sort.value">
-            {{ sort.viewValue }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <!-- SEARCH FORM INPUT -->
-    <form [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()">
-      <label
-        for="default-search"
-        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >Search</label
+<div class="flex flex-col lg:flex-row lg:justify-between mb-4">
+  <div class="flex gap-4">
+    <!-- FILTER CATEGORY -->
+    <mat-form-field>
+      <mat-label>Pilih Kategori</mat-label>
+      <mat-select
+        [(value)]="selectedCategory"
+        (selectionChange)="onCategoryChange()"
       >
-      <div class="relative w-72">
-        <div
-          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+        @for (category of categories; track category) {
+        <mat-option [value]="category.value">{{
+          category.viewValue
+        }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <!-- SORTING  -->
+    <mat-form-field>
+      <mat-label>Urut Berdasarkan</mat-label>
+      <mat-select [(value)]="selectedSort" (selectionChange)="onSortChange()">
+        <mat-option *ngFor="let sort of sortLists" [value]="sort.value">
+          {{ sort.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- SEARCH FORM INPUT -->
+  <form [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()">
+    <label
+      for="default-search"
+      class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+      >Search</label
+    >
+    <div class="relative w-72">
+      <div
+        class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+      >
+        <svg
+          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 20 20"
         >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+          />
+        </svg>
+      </div>
+      <input
+        type="search"
+        id="search"
+        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500"
+        placeholder="Cari artikel ..."
+        name="searchKeyword"
+        required
+        formControlName="searchKeyword"
+      />
+      <button
+        type="submit"
+        class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+      >
+        Search
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- ARTICLE CARD LISTS -->
+<div
+  *ngIf="collection && collection.length > 0"
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+>
+  <ng-container
+    *ngFor="
+      let article of collection
+        | paginate : { itemsPerPage: 9, currentPage: p };
+      let i = index
+    "
+  >
+    <div
+      class="p-6 bg-white border border-gray-200 rounded-lg shadow flex flex-col justify-between"
+    >
+      <div>
+        <span
+          class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-sm font-medium bg-blue-100 text-blue-800"
+          >{{ article.category }}</span
+        >
+        <div class="overflow-hidden mt-4">
+          <h5
+            class="mb-2 font-medium tracking-tight text-gray-900 line-clamp-3"
+          >
+            {{ article.title }}
+          </h5>
+        </div>
+        <!-- ARTICLE AUTHOR, PUBLISED DATE, VIEWS -->
+        <div class="mb-4 text-xs">
+          <!-- AUTHOR -->
+          <div class="flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-3 h-3"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <p>{{ article?.author }}</p>
+          </div>
+          <!-- DATE -->
+          <div class="flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-3 h-3"
+            >
+              <path
+                d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <p>
+              {{ article.published | date : "longDate" }}
+            </p>
+          </div>
+          <!-- VIEWS -->
+          <div class="flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-3 h-3"
+            >
+              <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+              <path
+                fill-rule="evenodd"
+                d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <p>
+              {{ article?.views }}
+            </p>
+          </div>
+        </div>
+        <p class="mb-3 text-gray-700">Rating: {{ ratings[i] }}</p>
+        <div class="overflow-hidden">
+          <div
+            class="text-sm mb-4 line-clamp-2"
+            [innerHTML]="article.content"
+          ></div>
+        </div>
+      </div>
+      <div>
+        <button
+          [routerLink]="['/articles', article.id]"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+        >
+          Read more
           <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="0 0 20 20"
+            viewBox="0 0 14 10"
           >
             <path
               stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              d="M1 5h12m0 0L9 1m4 4L9 9"
             />
           </svg>
-        </div>
-        <input
-          type="search"
-          id="search"
-          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500"
-          placeholder="Cari artikel ..."
-          name="searchKeyword"
-          required
-          formControlName="searchKeyword"
-        />
-        <button
-          type="submit"
-          class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-        >
-          Search
         </button>
       </div>
-    </form>
-  </div>
+    </div>
+  </ng-container>
+</div>
 
-  <!-- ARTICLE CARD LISTS -->
-  <div
-    *ngIf="collection && collection.length > 0"
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-  >
-    <ng-container
-      *ngFor="
-        let article of collection
-          | paginate : { itemsPerPage: 9, currentPage: p };
-        let i = index
-      "
-    >
-      <div
-        class="p-6 bg-white border border-gray-200 rounded-lg shadow flex flex-col justify-between"
-      >
-        <div>
-          <span
-            class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-sm font-medium bg-blue-100 text-blue-800"
-            >{{ article.category }}</span
-          >
-          <div class="overflow-hidden mt-4">
-            <h5
-              class="mb-2 font-medium tracking-tight text-gray-900 line-clamp-3"
-            >
-              {{ article.title }}
-            </h5>
-          </div>
-          <!-- ARTICLE AUTHOR, PUBLISED DATE, VIEWS -->
-          <div class="mb-4 text-xs">
-            <!-- AUTHOR -->
-            <div class="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-3 h-3"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <p>{{ article?.author }}</p>
-            </div>
-            <!-- DATE -->
-            <div class="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-3 h-3"
-              >
-                <path
-                  d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-                />
-                <path
-                  fill-rule="evenodd"
-                  d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <p>
-                {{ article.published | date : "longDate" }}
-              </p>
-            </div>
-            <!-- VIEWS -->
-            <div class="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-3 h-3"
-              >
-                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                <path
-                  fill-rule="evenodd"
-                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+<div *ngIf="!collection || collection.length === 0">
+  <p class="text-sm text-gray-700">Belum ada artikel!</p>
+</div>
 
-              <p>
-                {{ article?.views }}
-              </p>
-            </div>
-          </div>
-          <p class="mb-3 text-gray-700">Rating: {{ ratings[i] }}</p>
-          <div class="overflow-hidden">
-            <div
-              class="text-sm mb-4 line-clamp-2"
-              [innerHTML]="article.content"
-            ></div>
-          </div>
-        </div>
-        <div>
-          <button
-            [routerLink]="['/articles', article.id]"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-          >
-            Read more
-            <svg
-              class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </ng-container>
-  </div>
-
-  <div *ngIf="!collection || collection.length === 0">
-    <p class="text-sm text-gray-700">Belum ada artikel!</p>
-  </div>
-
-  <!-- PAGINATION CONTROLLER -->
-  <div class="flex justify-center mt-10">
-    <pagination-controls
-      (pageChange)="p = $event"
-      [responsive]="true"
-    ></pagination-controls>
-  </div>
-</main>
+<!-- PAGINATION CONTROLLER -->
+<div class="flex justify-center mt-10">
+  <pagination-controls
+    (pageChange)="p = $event"
+    [responsive]="true"
+  ></pagination-controls>
+</div>
