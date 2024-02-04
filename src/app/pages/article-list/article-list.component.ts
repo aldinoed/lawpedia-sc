@@ -87,7 +87,7 @@ export class ArticleListComponent implements OnInit {
   // CONSTRUCTOR
   constructor(private articleService: ArticleService, private fb: FormBuilder) {
     this.searchForm = this.fb.group({
-      searchKeyword: ['', Validators.required]
+      searchKeyword: ['', Validators.required],
     });
   }
 
@@ -101,7 +101,7 @@ export class ArticleListComponent implements OnInit {
       }));
       this.categories.unshift({ value: '', viewValue: 'Semua Kategori' });
     });
-  } 
+  }
 
   // LOAD SORTED ARTICLES
   private loadSortedArticles() {
@@ -109,15 +109,26 @@ export class ArticleListComponent implements OnInit {
       // Filter articles based on the selected category
       let filteredArticles = articles;
       if (this.selectedCategory) {
-        filteredArticles = articles.filter(article => article.category === 
-          this.categories.find(category => category.value === this.selectedCategory)?.viewValue);
+        filteredArticles = articles.filter(
+          (article) =>
+            article.category ===
+            this.categories.find(
+              (category) => category.value === this.selectedCategory
+            )?.viewValue
+        );
       }
 
       // Filter articles based on the search keyword
       if (this.searchKeyword) {
-        filteredArticles = articles.filter(article => 
-          article.title.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase())
-          || article.content.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase()));
+        filteredArticles = articles.filter(
+          (article) =>
+            article.title
+              .toLowerCase()
+              .includes(this.searchForm.value.searchKeyword.toLowerCase()) ||
+            article.content
+              .toLowerCase()
+              .includes(this.searchForm.value.searchKeyword.toLowerCase())
+        );
       }
 
       // Sort articles based on the selected sort method
@@ -142,12 +153,12 @@ export class ArticleListComponent implements OnInit {
       this.collection = filteredArticles.map((article) => ({
         id: article.id,
         title: article.title,
-        content: article.content.split(' ').slice(0, 20).join(' ') + '...',
+        content: article.content,
         category: article.category,
         views: article.views,
         published: article.published.toDate(),
+        author: article.author,
       }));
     });
   }
 }
-

@@ -7,7 +7,10 @@
       <!-- FILTER CATEGORY -->
       <mat-form-field>
         <mat-label>Pilih Kategori</mat-label>
-        <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange()">
+        <mat-select
+          [(value)]="selectedCategory"
+          (selectionChange)="onCategoryChange()"
+        >
           @for (category of categories; track category) {
           <mat-option [value]="category.value">{{
             category.viewValue
@@ -166,8 +169,11 @@
             </div>
           </div>
           <!-- <div class="mb-3 text-gray-700" [innerHTML]="article.content"></div> -->
-          <div class="h-14 overflow-hidden">
-            <p class="mb-4 line-clamp-2 text-sm">{{ article.content }}</p>
+          <div class="overflow-hidden">
+            <div
+              class="text-sm mb-4 line-clamp-2"
+              [innerHTML]="article.content"
+            ></div>
           </div>
         </div>
         <div>
