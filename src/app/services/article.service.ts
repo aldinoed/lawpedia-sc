@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, collectionData, getDoc, doc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, getDoc, doc, setDoc } from '@angular/fire/firestore';
 import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
 import { switchMap, map, toArray } from 'rxjs/operators';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
 import { from, combineLatest } from 'rxjs';
+import { query, where } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,7 @@ export class ArticleService {
   }
 
   getArticle(id: string): Observable<any> {
+    this.updateArticleViews(id);
     return this.combinedArticles.pipe(
       map((articles: Article[]) => articles.find(article => article.id === id))
     );
@@ -58,6 +60,32 @@ export class ArticleService {
       map((categories: ArticleCategory[]) => categories.find(category => category.id === id))
     );
   }
+
+  getArticleRating(articleId: any): Observable<number> {
+    const articleRef = doc(this.firestore, 'articles', articleId);
+    const ratingRef = query(collection(this.firestore, 'articleRatings'), where('article', '==', articleRef));
+
+    return collectionData(ratingRef).pipe(
+      map((ratings: any[]) => {
+        let ratingValue: number = 0;
+        ratings.forEach((rating: any) => {
+          ratingValue += rating.rating;
+        });
+        const ratingAverage = ratingValue / ratings.length;
+        return ratingAverage;
+      })
+    );
+  }
+
+  updateArticleViews(id: string): void {
+    const articleRef = doc(this.firestore, 'articles', id);
+    getDoc(articleRef).then((doc) => {
+      if (doc.exists()) {
+        const article = doc.data() as Article;
+        setDoc(articleRef, { views: article.views + 1 }, { merge: true });
+      }
+    });
+  }
 }
 
 export interface Article {
@@ -68,6 +96,7 @@ export interface Article {
   content: string;
   views: number;
   published: Date;
+  ratings: number;
 }
 
 export interface ArticleCategory {

@@ -87,7 +87,8 @@
     <ng-container
       *ngFor="
         let article of collection
-          | paginate : { itemsPerPage: 9, currentPage: p }
+          | paginate : { itemsPerPage: 9, currentPage: p };
+        let i = index
       "
     >
       <div
@@ -165,9 +166,9 @@
               </p>
             </div>
           </div>
-          <!-- <div class="mb-3 text-gray-700" [innerHTML]="article.content"></div> -->
+          <div class="mb-3 text-gray-700">Rating: {{ ratings[i] }}</div>
           <div class="h-14 overflow-hidden">
-            <p class="mb-4 line-clamp-2 text-sm">{{ article.content }}</p>
+            <p class="mb-4 line-clamp-2 text-sm" [innerHTML]="article.content"></p>
           </div>
         </div>
         <div>

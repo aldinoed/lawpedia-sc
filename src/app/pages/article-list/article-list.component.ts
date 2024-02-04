@@ -49,6 +49,8 @@ interface Sort {
 export class ArticleListComponent implements OnInit {
   articles: Observable<Article[]> = new Observable<Article[]>();
   popularArticles: Observable<Article[]> = new Observable<Article[]>();
+  rating: Observable<number> = new Observable<number>();
+  ratings: number[] = [];
 
   // PAGINATION
   p: number = 1;
@@ -101,21 +103,22 @@ export class ArticleListComponent implements OnInit {
       }));
       this.categories.unshift({ value: '', viewValue: 'Semua Kategori' });
     });
-  } 
+  }
 
   // LOAD SORTED ARTICLES
   private loadSortedArticles() {
     this.articleService.getArticles().subscribe((articles) => {
       // Filter articles based on the selected category
+
       let filteredArticles = articles;
       if (this.selectedCategory) {
-        filteredArticles = articles.filter(article => article.category === 
+        filteredArticles = articles.filter(article => article.category ===
           this.categories.find(category => category.value === this.selectedCategory)?.viewValue);
       }
 
       // Filter articles based on the search keyword
       if (this.searchKeyword) {
-        filteredArticles = articles.filter(article => 
+        filteredArticles = articles.filter(article =>
           article.title.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase())
           || article.content.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase()));
       }
@@ -138,15 +141,22 @@ export class ArticleListComponent implements OnInit {
         return 0;
       });
 
+      // Get the ratings and subscribe to the Observable<number>
+      filteredArticles.map((article) => 
+        this.articleService.getArticleRating(article.id).subscribe((rating) => this.ratings.push(rating))
+      );
+
       // Map articles for display
-      this.collection = filteredArticles.map((article) => ({
-        id: article.id,
-        title: article.title,
-        content: article.content.split(' ').slice(0, 20).join(' ') + '...',
-        category: article.category,
-        views: article.views,
-        published: article.published.toDate(),
-      }));
+      this.collection = filteredArticles.map((article) => {
+        return {
+          id: article.id,
+          title: article.title,
+          content: article.content.split(' ').slice(0, 20).join(' ') + '...',
+          category: article.category,
+          views: article.views,
+          published: article.published.toDate(),
+        };
+      });
     });
   }
 }
