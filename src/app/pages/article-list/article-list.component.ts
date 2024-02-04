@@ -112,15 +112,26 @@ export class ArticleListComponent implements OnInit {
 
       let filteredArticles = articles;
       if (this.selectedCategory) {
-        filteredArticles = articles.filter(article => article.category === 
-          this.categories.find(category => category.value === this.selectedCategory)?.viewValue);
+        filteredArticles = articles.filter(
+          (article) =>
+            article.category ===
+            this.categories.find(
+              (category) => category.value === this.selectedCategory
+            )?.viewValue
+        );
       }
 
       // Filter articles based on the search keyword
       if (this.searchKeyword) {
-        filteredArticles = articles.filter(article => 
-          article.title.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase())
-          || article.content.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase()));
+        filteredArticles = articles.filter(
+          (article) =>
+            article.title
+              .toLowerCase()
+              .includes(this.searchForm.value.searchKeyword.toLowerCase()) ||
+            article.content
+              .toLowerCase()
+              .includes(this.searchForm.value.searchKeyword.toLowerCase())
+        );
       }
 
       // Sort articles based on the selected sort method
@@ -142,14 +153,17 @@ export class ArticleListComponent implements OnInit {
       });
 
       // Get the ratings and subscribe to the Observable<number>
-      filteredArticles.map((article) => 
-        this.articleService.getArticleRating(article.id).subscribe((rating) => this.ratings.push(rating))
+      filteredArticles.map((article) =>
+        this.articleService
+          .getArticleRating(article.id)
+          .subscribe((rating) => this.ratings.push(rating))
       );
 
       // Map articles for display
       this.collection = filteredArticles.map((article) => ({
         id: article.id,
         title: article.title,
+        author: article.author,
         content: article.content,
         category: article.category,
         views: article.views,
