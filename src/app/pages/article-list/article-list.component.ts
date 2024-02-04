@@ -150,7 +150,7 @@ export class ArticleListComponent implements OnInit {
       this.collection = filteredArticles.map((article) => ({
         id: article.id,
         title: article.title,
-        content: article.content.split(' ').slice(0, 20).join(' ') + '...',
+        content: article.content,
         category: article.category,
         views: article.views,
         published: article.published.toDate(),
