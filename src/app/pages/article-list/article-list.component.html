@@ -74,15 +74,6 @@
       </div>
     </form>
   </div>
-  <!-- <div *ngFor="let article of articles | async">
-  <h2>
-    {{ article.title }}
-  </h2>
-  <p>
-    {{ article.content }}
-  </p>
-  <button [routerLink]="['article']" [queryParams]="{article}">Buka</button>
-</div> -->
 
   <!-- ARTICLE CARD LISTS -->
   <div
@@ -177,9 +168,13 @@
               class="text-sm mb-4 line-clamp-2"
               [innerHTML]="article.content"
             ></div>
+          </div>
           <div class="mb-3 text-gray-700">Rating: {{ ratings[i] }}</div>
           <div class="h-14 overflow-hidden">
-            <p class="mb-4 line-clamp-2 text-sm" [innerHTML]="article.content"></p>
+            <p
+              class="mb-4 line-clamp-2 text-sm"
+              [innerHTML]="article.content"
+            ></p>
           </div>
         </div>
         <div>
@@ -208,6 +203,7 @@
       </div>
     </ng-container>
   </div>
+
   <div *ngIf="!collection || collection.length === 0">
     <p class="text-sm text-gray-700">Belum ada artikel!</p>
   </div>
