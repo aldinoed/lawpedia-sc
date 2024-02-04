@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 export class ArticleDetailComponent implements OnInit {
   article: Article | null = null;
   publishedDate: Date = new Date();
+  articleCategory = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -26,6 +27,7 @@ export class ArticleDetailComponent implements OnInit {
     this.articleService.getArticle(id ? id : '').subscribe((article) => {
       this.article = article;
       this.publishedDate = article.published.toDate();
+      this.articleCategory = article.category;
     });
   }
 }

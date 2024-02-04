@@ -171,4 +171,11 @@ export class ArticleListComponent implements OnInit {
       }));
     });
   }
+
+  // TABS (Artikel - Kontribusi)
+  activeTab: string = 'artikel';
+
+  onTabClick(content: string) {
+    this.activeTab = content;
+  }
 }

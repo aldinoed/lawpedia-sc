@@ -13,7 +13,7 @@
     >
       <button
         type="button"
-        class="text-navy2 hover:text-white border border-navy2 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 transition"
+        class="text-navy2 hover:text-white border border-navy2 hover:bg-navy2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 transition"
       >
         Login
       </button>
@@ -135,8 +135,10 @@
 
 <router-outlet> </router-outlet>
 
-<footer class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-3 bg-latte">
-  <div class="flex items-center">
+<footer
+  class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-3 gap-4 bg-latte"
+>
+  <div class="flex items-center justify-center md:justify-start">
     <button [routerLink]="['/home']">
       <span class="text-2xl font-semibold whitespace-nowrap">LawHub</span>
     </button>
@@ -144,7 +146,7 @@
 
   <div class="flex justify-center">
     <div>
-      <p class="mb-3 font-medium">Kontak Kami</p>
+      <p class="mb-3 font-medium text-center md:text-start">Kontak Kami</p>
       <ng-container *ngFor="let contact of contactData">
         <div class="flex items-center gap-2 text-sm mb-2">
           <img [src]="contact.icon" alt="icon" class="h-4" />
@@ -154,9 +156,9 @@
     </div>
   </div>
 
-  <div class="flex justify-end">
+  <div class="flex justify-center md:justify-end">
     <div>
-      <p class="mb-2 text-transparent">Social Media</p>
+      <p class="hidden md:block mb-2 text-transparent">Social Media</p>
       <ng-container *ngFor="let socialMedia of socialMediaData">
         <div class="flex items-center gap-2 text-sm mb-2">
           <img [src]="socialMedia.icon" alt="icon" class="h-4" />
