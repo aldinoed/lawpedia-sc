@@ -7,7 +7,10 @@
       <!-- FILTER CATEGORY -->
       <mat-form-field>
         <mat-label>Pilih Kategori</mat-label>
-        <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange()">
+        <mat-select
+          [(value)]="selectedCategory"
+          (selectionChange)="onCategoryChange()"
+        >
           @for (category of categories; track category) {
           <mat-option [value]="category.value">{{
             category.viewValue
@@ -65,7 +68,6 @@
         <button
           type="submit"
           class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-          [disabled]="searchForm.invalid"
         >
           Search
         </button>
@@ -83,7 +85,10 @@
 </div> -->
 
   <!-- ARTICLE CARD LISTS -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div
+    *ngIf="collection && collection.length > 0"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+  >
     <ng-container
       *ngFor="
         let article of collection
@@ -166,6 +171,12 @@
               </p>
             </div>
           </div>
+          <!-- <div class="mb-3 text-gray-700" [innerHTML]="article.content"></div> -->
+          <div class="overflow-hidden">
+            <div
+              class="text-sm mb-4 line-clamp-2"
+              [innerHTML]="article.content"
+            ></div>
           <div class="mb-3 text-gray-700">Rating: {{ ratings[i] }}</div>
           <div class="h-14 overflow-hidden">
             <p class="mb-4 line-clamp-2 text-sm" [innerHTML]="article.content"></p>
@@ -196,6 +207,9 @@
         </div>
       </div>
     </ng-container>
+  </div>
+  <div *ngIf="!collection || collection.length === 0">
+    <p class="text-sm text-gray-700">Belum ada artikel!</p>
   </div>
 
   <!-- PAGINATION CONTROLLER -->

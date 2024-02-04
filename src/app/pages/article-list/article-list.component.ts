@@ -89,7 +89,7 @@ export class ArticleListComponent implements OnInit {
   // CONSTRUCTOR
   constructor(private articleService: ArticleService, private fb: FormBuilder) {
     this.searchForm = this.fb.group({
-      searchKeyword: ['', Validators.required]
+      searchKeyword: '',
     });
   }
 
@@ -112,13 +112,13 @@ export class ArticleListComponent implements OnInit {
 
       let filteredArticles = articles;
       if (this.selectedCategory) {
-        filteredArticles = articles.filter(article => article.category ===
+        filteredArticles = articles.filter(article => article.category === 
           this.categories.find(category => category.value === this.selectedCategory)?.viewValue);
       }
 
       // Filter articles based on the search keyword
       if (this.searchKeyword) {
-        filteredArticles = articles.filter(article =>
+        filteredArticles = articles.filter(article => 
           article.title.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase())
           || article.content.toLowerCase().includes(this.searchForm.value.searchKeyword.toLowerCase()));
       }
@@ -147,17 +147,14 @@ export class ArticleListComponent implements OnInit {
       );
 
       // Map articles for display
-      this.collection = filteredArticles.map((article) => {
-        return {
-          id: article.id,
-          title: article.title,
-          content: article.content.split(' ').slice(0, 20).join(' ') + '...',
-          category: article.category,
-          views: article.views,
-          published: article.published.toDate(),
-        };
-      });
+      this.collection = filteredArticles.map((article) => ({
+        id: article.id,
+        title: article.title,
+        content: article.content.split(' ').slice(0, 20).join(' ') + '...',
+        category: article.category,
+        views: article.views,
+        published: article.published.toDate(),
+      }));
     });
   }
 }
-
