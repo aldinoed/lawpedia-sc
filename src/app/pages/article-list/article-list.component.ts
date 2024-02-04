@@ -87,7 +87,7 @@ export class ArticleListComponent implements OnInit {
   // CONSTRUCTOR
   constructor(private articleService: ArticleService, private fb: FormBuilder) {
     this.searchForm = this.fb.group({
-      searchKeyword: ['', Validators.required],
+      searchKeyword: '',
     });
   }
 

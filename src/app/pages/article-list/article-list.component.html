@@ -68,7 +68,6 @@
         <button
           type="submit"
           class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-          [disabled]="searchForm.invalid"
         >
           Search
         </button>
@@ -86,7 +85,10 @@
 </div> -->
 
   <!-- ARTICLE CARD LISTS -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div
+    *ngIf="collection && collection.length > 0"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+  >
     <ng-container
       *ngFor="
         let article of collection
@@ -201,6 +203,9 @@
         </div>
       </div>
     </ng-container>
+  </div>
+  <div *ngIf="!collection || collection.length === 0">
+    <p class="text-sm text-gray-700">Belum ada artikel!</p>
   </div>
 
   <!-- PAGINATION CONTROLLER -->
