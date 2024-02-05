@@ -22,8 +22,8 @@
       class="py-3 px-4 pe-9 block border-2 w-full max-w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
       formControlName="category"
     >
-      <option *ngFor="let item of articleCategories" [ngValue]="item">
-        {{ item }}
+      <option *ngFor="let item of categories" [ngValue]="item.value">
+        {{ item.viewValue }}
       </option>
     </select>
 

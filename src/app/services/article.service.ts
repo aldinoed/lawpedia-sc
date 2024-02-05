@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, collectionData, getDoc, doc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, getDoc, doc, setDoc, addDoc } from '@angular/fire/firestore';
 import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
 import { switchMap, map, toArray } from 'rxjs/operators';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
@@ -75,6 +75,11 @@ export class ArticleService {
         return ratingAverage;
       })
     );
+  }
+
+  rateArticle(articleId: any, rating: number): void {
+    const articleRef = doc(this.firestore, 'articles', articleId);
+    addDoc(collection(this.firestore, 'articleRatings'), { article: articleRef, rating: rating });
   }
 
   updateArticleViews(id: string): void {
