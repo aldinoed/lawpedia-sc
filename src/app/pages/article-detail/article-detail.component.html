@@ -1,5 +1,7 @@
 <main class="px-4 md:px-12 lg:px-20 pb-10 pt-32">
-  <div class="p-4 rounded-lg border-brown border-s-8 border-y border-e shadow-detail-card">
+  <div
+    class="p-4 rounded-lg border-brown border-s-8 border-y border-e shadow-detail-card"
+  >
     <!-- PUBLISHED DATE -->
     <p class="text-end mb-4">
       {{ publishedDate | date : "longDate" }}
@@ -85,5 +87,85 @@
 
     <!-- ARTICLE CONTENT -->
     <div [innerHTML]="article?.content" class="text-justify"></div>
+  </div>
+
+  <div class="mt-14 flex items-center gap-3">
+    <div>
+      <ng-container *ngIf="authenticatedUser">
+        <div
+          class="relative inline-flex items-center justify-center w-14 h-14 overflow-hidden rounded-full"
+          [ngClass]="{
+            'bg-gray-800 ':
+              userNameLength < 11,
+            'bg-blue-500 ':
+              userNameLength === 11,
+            'bg-red-500 ':
+              userNameLength === 12,
+            'bg-yellow-500 ':
+              userNameLength === 13,
+            'bg-green-500 ':
+              userNameLength === 14,
+            'bg-orange-500 ':
+              userNameLength === 15,
+            'bg-pink-500 ':
+              userNameLength === 16,
+            'bg-purple-500 ':
+              userNameLength === 17,
+            'bg-amber-500 ':
+              userNameLength === 18,
+            'bg-lime-500 ':
+              userNameLength === 19,
+            'bg-rose-500 ':
+              userNameLength === 20,
+            'bg-gray-500 ':
+              userNameLength > 20,
+            
+          }"
+        >
+          <span class="text-xl font-medium text-white">{{
+            getInitialName(authenticatedUser)
+          }}</span>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!authenticatedUser">
+        <div
+          class="relative w-14 h-14 overflow-hidden bg-gray-100 rounded-full"
+        >
+          <svg
+            class="absolute w-16 h-16 text-gray-400 -left-1"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+      </ng-container>
+    </div>
+    <div>
+      <p class="text-gray-600 mb-1">Beri Penilaian</p>
+      <div class="flex gap-1">
+        <ng-container *ngFor="let item of [1, 2, 3, 4, 5]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="w-5 h-5 cursor-pointer"
+            (click)="onRatingClick(item)"
+          >
+            <path
+              fill-rule="evenodd"
+              [attr.fill]="ratingValue >= item ? 'yellow' : 'gray'"
+              d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </ng-container>
+      </div>
+    </div>
   </div>
 </main>
