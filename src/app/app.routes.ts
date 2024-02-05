@@ -7,12 +7,14 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ArticleListComponent } from './pages/article-list/article-list.component';
 import { ArticleDetailComponent } from './pages/article-detail/article-detail.component';
 import { SendArticleComponent } from './pages/send-article/send-article.component';
+import { ArticleSentComponent } from './pages/article-sent/article-sent.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'send-article', component: SendArticleComponent },
+    { path: 'article-sent', component: ArticleSentComponent },
     { path: 'articles', component: ArticleListComponent },
     { path: 'articles/:id', component: ArticleDetailComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' }

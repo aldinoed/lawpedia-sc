@@ -35,11 +35,19 @@ export class SendArticleComponent {
     'Hukum Internasional',
     'Hukum Bisnis',
     'Hukum Administrasi Negara',
+    'Hukum Lingkungan',
+    'Hukum Perdata',
+    'Hukum Pertambangan',
+    'Hukum Pidana',
+    'Hukum Tata Negara',
+    'Hukum Acaran',
+    'Hukum Lainnya',
   ];
 
   constructor(private formBuilder: FormBuilder, private router: Router) {
     this.form = this.formBuilder.group({
       title: '',
+      author: '',
       content: '',
       category: '',
     });
@@ -48,7 +56,7 @@ export class SendArticleComponent {
   async onSubmit() {
     try {
       await addDoc(collection(this.firestore, 'articles'), {
-        author: 'John Doe',
+        author: this.form.value.author,
         title: this.form.value.title,
         content: this.form.value.content,
         category: this.form.value.category,
@@ -61,7 +69,7 @@ export class SendArticleComponent {
         text: 'Berhasil publish artikel!',
         icon: 'success',
       }).then(() => {
-        this.router.navigate(['articles']);
+        this.router.navigate(['article-sent']);
       });
     } catch (e) {
       console.error('Error adding document: ', e);
