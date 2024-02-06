@@ -3,10 +3,12 @@
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-4 px-4 lg:px-6"
   >
     <button [routerLink]="['/home']">
-      <span class="text-2xl font-semibold whitespace-nowrap text-gold"
-        >Law</span
+      <span class="text-2xl font-semibold uppercase whitespace-nowrap text-gold"
+        >L<span class="text-lg font-bold">AW</span></span
       >
-      <span class="text-2xl font-semibold whitespace-nowrap">Hub</span>
+      <span class="text-2xl font-semibold whitespace-nowrap"
+        >H<span class="text-lg font-bold">UB</span></span
+      >
     </button>
     <div
       class="flex lg:order-2 items-center space-x-3 lg:space-x-0 rtl:space-x-reverse"
@@ -103,7 +105,7 @@
                 >
               </li>
               <li>
-                <a href="/home" class="block px-4 py-2 hover:bg-gray-100"
+                <a href="/hoax-threads" class="block px-4 py-2 hover:bg-gray-100"
                   >Hoax Threads</a
                 >
               </li>
@@ -140,7 +142,12 @@
 >
   <div class="flex items-center justify-center md:justify-start">
     <button [routerLink]="['/home']">
-      <span class="text-2xl font-semibold whitespace-nowrap">LawHub</span>
+      <span class="text-2xl font-semibold whitespace-nowrap"
+        >L<span class="text-lg font-bold">AW</span>H<span
+          class="text-lg font-bold"
+          >UB</span
+        ></span
+      >
     </button>
   </div>
 
