@@ -61,7 +61,7 @@
           />
         </svg>
 
-        <p>{{rating}}</p>
+        <p>{{ rating ? rating : 'NR' }}</p>
       </div>
     </div>
 
@@ -149,14 +149,13 @@
     </div>
     <div>
       <p class="text-gray-600 mb-1">Beri Penilaian</p>
-      <div class="flex gap-1">
+      <div class="flex gap-2 items-center">
         <ng-container *ngFor="let item of [1, 2, 3, 4, 5]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             class="w-5 h-5 cursor-pointer"
             (click)="selectRating(item)"
-            
           >
             <path
               fill-rule="evenodd"
@@ -167,8 +166,9 @@
           </svg>
         </ng-container>
         <button
-          class="px-3 py-1 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
-          (click)="onRatingSubmit()">
+          class="px-3 py-1 text-xs font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+          (click)="onRatingSubmit()"
+        >
           Simpan
         </button>
       </div>

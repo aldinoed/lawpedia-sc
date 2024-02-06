@@ -4,6 +4,7 @@ import { ArticleService } from '../../services/article.service';
 import { Article } from '../../services/article.service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-article-detail',
@@ -31,26 +32,6 @@ export class ArticleDetailComponent implements OnInit {
 
   authenticatedUser: string = 'John Doe';  // Authenticated User Data
   userNameLength: number = this.authenticatedUser.length;
-  profileBackgroundData: Array<string> = [
-    'bg-gray-800',
-    'bg-gray-500',
-    'bg-red-500',
-    'bg-green-500',
-    'bg-blue-500',
-    'bg-yellow-500',
-    'bg-amber-500',
-    'bg-purple-500',
-    'bg-pink-500',
-    'bg-orange-500',
-    'bg-rose-500',
-    'bg-emerald-500',
-  ];
-
-  getRandomBackground(): string {
-    const length = this.profileBackgroundData.length;
-    const randomIndex = Math.floor(Math.random() * length);
-    return this.profileBackgroundData[randomIndex];
-  }
 
   ratingValue = 0; // Rating Data
 

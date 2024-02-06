@@ -83,7 +83,7 @@ export class SendArticleComponent implements OnInit {
       });
       Swal.fire({
         title: 'Berhasil!',
-        text: 'Berhasil publish artikel!',
+        text: 'Berhasil mengirim artikel!',
         icon: 'success',
       }).then(() => {
         this.router.navigate(['article-sent']);
@@ -91,8 +91,8 @@ export class SendArticleComponent implements OnInit {
     } catch (e) {
       console.error('Error adding document: ', e);
       Swal.fire({
-        title: 'Gagal!',
-        text: `Ada masalah: ${e}`,
+        title: 'Oops...',
+        text: 'Gagal mengirim artikel. Silakan coba lagi!',
         icon: 'error',
       });
     }
