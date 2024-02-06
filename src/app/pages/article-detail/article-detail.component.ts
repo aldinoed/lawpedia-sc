@@ -16,6 +16,7 @@ export class ArticleDetailComponent implements OnInit {
   article: Article | null = null;
   publishedDate: Date = new Date();
   articleCategory = '';
+  rating: number = 0;
 
   // RATING COMPONENT
   getInitialName(name: string): string {
@@ -53,8 +54,12 @@ export class ArticleDetailComponent implements OnInit {
 
   ratingValue = 0; // Rating Data
 
-  onRatingClick(value: number) {
+  selectRating(value: number) {
     this.ratingValue = value;
+  }
+
+  onRatingSubmit() {
+    this.articleService.rateArticle(this.article?.id, this.ratingValue);
   }
 
   constructor(
@@ -68,6 +73,9 @@ export class ArticleDetailComponent implements OnInit {
       this.article = article;
       this.publishedDate = article.published.toDate();
       this.articleCategory = article.category;
+    });
+    this.articleService.getArticleRating(id ? id : '').subscribe((rating) => {
+      this.rating = rating;
     });
   }
 }
