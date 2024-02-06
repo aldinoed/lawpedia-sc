@@ -56,6 +56,12 @@ export class ArticleListComponent implements OnInit {
   p: number = 1;
   collection: Array<any> = [];
 
+  getCleanContent(content: string): string {
+    // Bersihkan tag <img> dari konten
+    const cleanContent = content.replace(/<img[^>]*>/g, '');
+    return cleanContent;
+  }
+
   // CATEGORY SELECT
   categories: Category[] = [];
   selectedCategory = '';
@@ -164,7 +170,7 @@ export class ArticleListComponent implements OnInit {
         id: article.id,
         title: article.title,
         author: article.author,
-        content: article.content,
+        content: this.getCleanContent(article.content),
         category: article.category,
         views: article.views,
         published: article.published.toDate(),

@@ -116,7 +116,7 @@
             <input
               type="search"
               id="search"
-              class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500"
+              class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-navy2 focus:outline-navy2 focus:border-navy2"
               placeholder="Cari artikel ..."
               name="searchKeyword"
               required
@@ -197,7 +197,7 @@
                       clip-rule="evenodd"
                     />
                   </svg>
-                  <p>{{ article?.author }}</p>
+                  <p class="line-clamp-1">{{ article?.author }}</p>
                 </div>
                 <!-- DATE -->
                 <div class="flex items-center gap-2">
@@ -256,7 +256,7 @@
                   </svg>
 
                   <p>
-                    {{ ratings[i] ? ratings[i] : 'NR' }}
+                    {{ ratings[i] ? ratings[i] : "NR" }}
                   </p>
                 </div>
               </div>
@@ -264,7 +264,7 @@
               <div class="overflow-hidden">
                 <div
                   class="text-sm mb-4 line-clamp-2"
-                  [innerHTML]="article.content"
+                  [innerHTML]="article.content" 
                 ></div>
               </div>
             </div>
