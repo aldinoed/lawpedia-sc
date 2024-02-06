@@ -8,6 +8,9 @@ import { ArticleListComponent } from './pages/article-list/article-list.componen
 import { ArticleDetailComponent } from './pages/article-detail/article-detail.component';
 import { SendArticleComponent } from './pages/send-article/send-article.component';
 import { ArticleSentComponent } from './pages/article-sent/article-sent.component';
+import { HoaxThreadsListComponent } from './pages/hoax-threads-list/hoax-threads-list.component';
+import { HoaxThreadDetailComponent } from './pages/hoax-thread-detail/hoax-thread-detail.component';
+import { ChatbotComponent } from './pages/chatbot/chatbot.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -17,6 +20,9 @@ export const routes: Routes = [
     { path: 'article-sent', component: ArticleSentComponent },
     { path: 'articles', component: ArticleListComponent },
     { path: 'articles/:id', component: ArticleDetailComponent },
+    { path: 'hoax-threads', component: HoaxThreadsListComponent },
+    { path: 'hoax-threads/:id', component: HoaxThreadDetailComponent },
+    { path: 'chatbot', component: ChatbotComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' }
 
   ];
