@@ -47,20 +47,13 @@ interface Sort {
   styleUrl: './article-list.component.css',
 })
 export class ArticleListComponent implements OnInit {
-  articles: Observable<Article[]> = new Observable<Article[]>();
-  popularArticles: Observable<Article[]> = new Observable<Article[]>();
+  articles: Array<any> = [];
+  popularArticles: Array<any> = [];
   rating: Observable<number> = new Observable<number>();
   ratings: number[] = [];
 
   // PAGINATION
   p: number = 1;
-  collection: Array<any> = [];
-
-  getCleanContent(content: string): string {
-    // Bersihkan tag <img> dari konten
-    const cleanContent = content.replace(/<img[^>]*>/g, '');
-    return cleanContent;
-  }
 
   // CATEGORY SELECT
   categories: Category[] = [];
@@ -114,11 +107,10 @@ export class ArticleListComponent implements OnInit {
   // LOAD SORTED ARTICLES
   private loadSortedArticles() {
     this.articleService.getArticles().subscribe((articles) => {
-      // Filter articles based on the selected category
 
-      let filteredArticles = articles;
+      // Filter articles based on the selected category
       if (this.selectedCategory) {
-        filteredArticles = articles.filter(
+        articles = articles.filter(
           (article) =>
             article.category ===
             this.categories.find(
@@ -129,7 +121,7 @@ export class ArticleListComponent implements OnInit {
 
       // Filter articles based on the search keyword
       if (this.searchKeyword) {
-        filteredArticles = articles.filter(
+        articles = articles.filter(
           (article) =>
             article.title
               .toLowerCase()
@@ -141,7 +133,7 @@ export class ArticleListComponent implements OnInit {
       }
 
       // Sort articles based on the selected sort method
-      filteredArticles.sort((a, b) => {
+      articles.sort((a, b) => {
         if (this.selectedSort === 1) {
           return b.published.seconds - a.published.seconds;
         } else if (this.selectedSort === 2) {
@@ -159,18 +151,34 @@ export class ArticleListComponent implements OnInit {
       });
 
       // Get the ratings and subscribe to the Observable<number>
-      filteredArticles.map((article) =>
+      articles.map((article) =>
         this.articleService
           .getArticleRating(article.id)
           .subscribe((rating) => this.ratings.push(rating))
       );
 
       // Map articles for display
-      this.collection = filteredArticles.map((article) => ({
+      this.articles = articles.map((article) => ({
         id: article.id,
         title: article.title,
         author: article.author,
-        content: this.getCleanContent(article.content),
+        content: this.articleService.getCleanContent(article.content),
+        category: article.category,
+        views: article.views,
+        published: article.published.toDate(),
+      }));
+    });
+  }
+
+  // LOAD POPULAR ARTICLES
+  private loadPopularArticles() {
+    this.articleService.getPopularArticles().subscribe((articles) => {
+      articles.sort((a, b) => b.views - a.views);
+      this.popularArticles = articles.map((article) => ({
+        id: article.id,
+        title: article.title,
+        author: article.author,
+        content: this.articleService.getCleanContent(article.content),
         category: article.category,
         views: article.views,
         published: article.published.toDate(),

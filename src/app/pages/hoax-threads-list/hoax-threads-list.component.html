@@ -112,12 +112,12 @@
 
     <!-- ARTICLE CARD LISTS -->
     <div
-      *ngIf="collection && collection.length > 0"
+      *ngIf="hoaxList && hoaxList.length > 0"
       class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-10"
     >
       <ng-container
         *ngFor="
-          let hoax of collection
+          let hoax of hoaxList
             | paginate : { itemsPerPage: 6, currentPage: p };
           let i = index
         "
@@ -126,7 +126,7 @@
           class="p-6 bg-white rounded-lg shadow-card flex flex-col justify-between"
         >
           <div>
-            <span
+            <!-- <span
               class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-sm font-medium"
               [ngClass]="{
                   'bg-blue-100 text-blue-800':
@@ -151,7 +151,7 @@
                     hoax.category === 'Hukum Acara',
                 }"
               >{{ hoax.category }}</span
-            >
+            > -->
             <div class="overflow-hidden mt-4">
               <h5
                 class="mb-2 font-medium tracking-tight text-gray-900 line-clamp-3"
@@ -195,7 +195,7 @@
                   />
                 </svg>
                 <p>
-                  {{ hoax.published | date : "longDate" }}
+                  {{ hoax.published | date:  "longDate" }}
                 </p>
               </div>
               <!-- VIEWS -->
@@ -219,6 +219,15 @@
                 </p>
               </div>
             </div>
+            <!-- HOAX THUMBNAIL -->
+            <div class="relative w-full h-30 mt-4">
+              <img
+                class="object-cover w-50 h-20 rounded-lg"
+                [src]="hoax?.images[0]"
+                alt="thumbnail"
+              />
+            </div>
+
             <!-- HOAX CONTENT -->
             <div class="overflow-hidden">
               <div
@@ -254,7 +263,7 @@
       </ng-container>
     </div>
 
-    <div *ngIf="!collection || collection.length === 0">
+    <div *ngIf="!hoaxList || hoaxList.length === 0">
       <p class="text-sm text-gray-700">Belum ada artikel!</p>
     </div>
 

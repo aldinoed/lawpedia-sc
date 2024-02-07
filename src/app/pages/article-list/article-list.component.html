@@ -134,12 +134,12 @@
 
       <!-- ARTICLE CARD LISTS -->
       <div
-        *ngIf="collection && collection.length > 0"
+        *ngIf="articles && articles.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-10"
       >
         <ng-container
           *ngFor="
-            let article of collection
+            let article of articles
               | paginate : { itemsPerPage: 6, currentPage: p };
             let i = index
           "
@@ -295,7 +295,7 @@
         </ng-container>
       </div>
 
-      <div *ngIf="!collection || collection.length === 0">
+      <div *ngIf="!articles || articles.length === 0">
         <p class="text-sm text-gray-700">Belum ada artikel!</p>
       </div>
 

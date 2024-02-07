@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root',
 })
+
 export class ArticleService {
   private firestore: Firestore = inject(Firestore);
 
@@ -135,6 +136,12 @@ export class ArticleService {
         setDoc(articleRef, { views: article.views + 1 }, { merge: true });
       }
     });
+  }
+
+  getCleanContent(content: string): string {
+    // Bersihkan tag <img> dari konten
+    const cleanContent = content.replace(/<img[^>]*>/g, '');
+    return cleanContent;
   }
 }
 

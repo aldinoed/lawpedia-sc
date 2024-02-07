@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { HoaxService } from '../../services/hoax.service';
 
 @Component({
   selector: 'app-hoax-thread-detail',
@@ -13,16 +14,37 @@ import Swal from 'sweetalert2';
   templateUrl: './hoax-thread-detail.component.html',
   styleUrl: './hoax-thread-detail.component.css',
 })
-export class HoaxThreadDetailComponent {
-  // article: Article | null = null;
-  hoax: any | null = {
-    id: 1,
-    title: 'Ini Judul',
-    content: '<p>Ini Content</p><br><br><br><br><br><br><br><p>End of Content</p>',
-    category: 'Hukum Internasional',
-    views: 100,
-    published: new Date(),
-  };
-  publishedDate: Date = this.hoax?.published;
-  hoaxCategory = 'Hukum Internasional';
+export class HoaxThreadDetailComponent implements OnInit {
+  hoax: any = null;
+  publishedDate: Date = new Date();
+
+  constructor(
+    private route: ActivatedRoute,
+    private hoaxService: HoaxService
+  ) { }
+
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.hoaxService.getHoax(id ? id : '').subscribe((hoax) => {
+      this.hoax = hoax;
+      this.publishedDate = hoax.published.toDate();
+      this.hoaxService.getContentImages(hoax.id).subscribe((images) => {
+        this.hoax.images = images;
+      });
+      this.route.url.subscribe((segments) => {
+        this.hoax.url = segments.map((segment) => segment.path).join('/');
+      });
+    });
+  }
+
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      Swal.fire({
+        title: 'Link copied!',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
+  }
 }

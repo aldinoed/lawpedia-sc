@@ -18,6 +18,7 @@ export class ArticleDetailComponent implements OnInit {
   publishedDate: Date = new Date();
   articleCategory = '';
   rating: number = 0;
+  popularArticles: Array<any> = [];
 
   // RATING COMPONENT
   getInitialName(name: string): string {
@@ -33,8 +34,7 @@ export class ArticleDetailComponent implements OnInit {
   authenticatedUser: string = 'John Doe';  // Authenticated User Data
   userNameLength: number = this.authenticatedUser.length;
 
-  ratingValue = 0; // Rating Data
-
+  ratingValue = 0;
   selectRating(value: number) {
     this.ratingValue = value;
   }
@@ -43,11 +43,13 @@ export class ArticleDetailComponent implements OnInit {
     this.articleService.rateArticle(this.article?.id, this.ratingValue);
   }
 
+  // CONSTUCTOR
   constructor(
     private route: ActivatedRoute,
     private articleService: ArticleService
-  ) {}
+  ) { }
 
+  // INIT
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     this.articleService.getArticle(id ? id : '').subscribe((article) => {
@@ -57,6 +59,23 @@ export class ArticleDetailComponent implements OnInit {
     });
     this.articleService.getArticleRating(id ? id : '').subscribe((rating) => {
       this.rating = rating;
+    });
+    this.loadPopularArticles();
+  }
+
+  // LOAD POPULAR ARTICLES
+  private loadPopularArticles() {
+    this.articleService.getPopularArticles().subscribe((articles) => {
+      articles.sort((a, b) => b.views - a.views);
+      this.popularArticles = articles.map((article) => ({
+        id: article.id,
+        title: article.title,
+        author: article.author,
+        content: this.articleService.getCleanContent(article.content),
+        category: article.category,
+        views: article.views,
+        published: article.published.toDate(),
+      }));
     });
   }
 }
