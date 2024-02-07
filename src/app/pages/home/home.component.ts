@@ -26,7 +26,7 @@ export class HomeComponent {
     {
       name: 'Hoax Threads',
       image: '/assets/hoax-logo.png',
-      href: '/home',
+      href: '/hoax-threads',
     },
     {
       name: 'SpeakUp Threads',
@@ -36,7 +36,7 @@ export class HomeComponent {
     {
       name: 'Chatbot',
       image: '/assets/chat-bot-logo.png',
-      href: '/home',
+      href: '/chatbot-intro',
     },
   ];
 

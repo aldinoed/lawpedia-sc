@@ -5,11 +5,12 @@ import { Article } from '../../services/article.service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-article-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './article-detail.component.html',
   styleUrl: './article-detail.component.css',
 })
@@ -19,6 +20,37 @@ export class ArticleDetailComponent implements OnInit {
   articleCategory = '';
   rating: number = 0;
   popularArticles: Array<any> = [];
+
+  popularArticles: Array<any> = [
+    {
+      id: 'id1',
+      title: 'Judul Artikel Populer 1',
+      author: 'John Doe',
+      views: 100,
+      published: new Date(),
+    },
+    {
+      id: 'id1',
+      title: 'Judul Artikel Populer 1',
+      author: 'John Doe',
+      views: 100,
+      published: new Date(),
+    },
+    {
+      id: 'id1',
+      title: 'Judul Artikel Populer 1 adbajbdka akdbkabd kadkabdka kabdkabdka kabdkabdka',
+      author: 'John Doe',
+      views: 100,
+      published: new Date(),
+    },
+    {
+      id: 'id1',
+      title: 'Judul Artikel Populer 1',
+      author: 'John Doe',
+      views: 100,
+      published: new Date(),
+    },
+  ];
 
   // RATING COMPONENT
   getInitialName(name: string): string {
@@ -31,7 +63,7 @@ export class ArticleDetailComponent implements OnInit {
     return initials;
   }
 
-  authenticatedUser: string = 'John Doe';  // Authenticated User Data
+  authenticatedUser: string = 'John Doe'; // Authenticated User Data
   userNameLength: number = this.authenticatedUser.length;
 
   ratingValue = 0;
