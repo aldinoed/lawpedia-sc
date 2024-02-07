@@ -19,66 +19,69 @@ register();
   styleUrl: './hoax-thread-detail.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class HoaxThreadDetailComponent {
-  // article: Article | null = null;
-  hoax: any | null = {
-    id: 1,
-    title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-    content:
-      '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-    category: 'Hukum Internasional',
-    views: 100,
-    published: new Date(),
-  };
-  publishedDate: Date = this.hoax?.published;
-  hoaxCategory = 'Hukum Internasional';
-  carouselImages: Array<string> = [
-    'https://source.unsplash.com/700x500',
-    'https://source.unsplash.com/700x500',
-    'https://source.unsplash.com/700x500',
-  ];
+// export class HoaxThreadDetailComponent {
+//   // article: Article | null = null;
+//   hoax: any | null = {
+//     id: 1,
+//     title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
+//     content:
+//       '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
+//     category: 'Hukum Internasional',
+//     views: 100,
+//     published: new Date(),
+//   };
+//   publishedDate: Date = this.hoax?.published;
+//   hoaxCategory = 'Hukum Internasional';
+//   carouselImages: Array<string> = [
+//     'https://source.unsplash.com/700x500',
+//     'https://source.unsplash.com/700x500',
+//     'https://source.unsplash.com/700x500',
+//   ];
 
-  latesHoaxData: Array<any> = [
-    {
-      id: 1,
-      title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-      content:
-        '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-      category: 'Hukum Internasional',
-      views: 100,
-      published: new Date(),
-    },
-    {
-      id: 2,
-      title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-      content:
-        '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-      category: 'Hukum Internasional',
-      views: 100,
-      published: new Date(),
-    },
-    {
-      id: 2,
-      title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-      content:
-        '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-      category: 'Hukum Internasional',
-      views: 100,
-      published: new Date(),
-    },
-    {
-      id: 2,
-      title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-      content:
-        '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-      category: 'Hukum Internasional',
-      views: 100,
-      published: new Date(),
-    },
-  ];
+//   latesHoaxData: Array<any> = [
+//     {
+//       id: 1,
+//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
+//       content:
+//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
+//       category: 'Hukum Internasional',
+//       views: 100,
+//       published: new Date(),
+//     },
+//     {
+//       id: 2,
+//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
+//       content:
+//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
+//       category: 'Hukum Internasional',
+//       views: 100,
+//       published: new Date(),
+//     },
+//     {
+//       id: 2,
+//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
+//       content:
+//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
+//       category: 'Hukum Internasional',
+//       views: 100,
+//       published: new Date(),
+//     },
+//     {
+//       id: 2,
+//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
+//       content:
+//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
+//       category: 'Hukum Internasional',
+//       views: 100,
+//       published: new Date(),
+//     },
+//   ];
+// }
+
 export class HoaxThreadDetailComponent implements OnInit {
   hoax: any = null;
   publishedDate: Date = new Date();
+  latestHoaxData: Array<any> = [];
 
   constructor(
     private route: ActivatedRoute,

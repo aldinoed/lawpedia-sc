@@ -21,37 +21,6 @@ export class ArticleDetailComponent implements OnInit {
   rating: number = 0;
   popularArticles: Array<any> = [];
 
-  popularArticles: Array<any> = [
-    {
-      id: 'id1',
-      title: 'Judul Artikel Populer 1',
-      author: 'John Doe',
-      views: 100,
-      published: new Date(),
-    },
-    {
-      id: 'id1',
-      title: 'Judul Artikel Populer 1',
-      author: 'John Doe',
-      views: 100,
-      published: new Date(),
-    },
-    {
-      id: 'id1',
-      title: 'Judul Artikel Populer 1 adbajbdka akdbkabd kadkabdka kabdkabdka kabdkabdka',
-      author: 'John Doe',
-      views: 100,
-      published: new Date(),
-    },
-    {
-      id: 'id1',
-      title: 'Judul Artikel Populer 1',
-      author: 'John Doe',
-      views: 100,
-      published: new Date(),
-    },
-  ];
-
   // RATING COMPONENT
   getInitialName(name: string): string {
     const words = name.split(' ');

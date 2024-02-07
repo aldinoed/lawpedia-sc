@@ -4,8 +4,10 @@
     <p class="text-end mb-4">
       {{ publishedDate | date : "longDate" }}
     </p>
+    
     <!-- ARTICLE TITLE -->
     <h1 class="text-2xl font-bold mb-4">{{ hoax?.title }}</h1>
+
     <!-- ARTICLE AUTHOR, PUBLISED DATE, VIEWS -->
     <div class="mb-4 text-sm">
       <!-- AUTHOR -->
@@ -46,46 +48,17 @@
       </div>
     </div>
 
-    <!-- hoax CATEGORY -->
-    <!-- <ng-container *ngIf="hoax">
-      <span
-        class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-sm font-medium mb-6"
-        [ngClass]="{
-          'bg-blue-100 text-blue-800': hoaxCategory == 'Hukum Internasional',
-          'bg-red-100 text-red-800': hoaxCategory == 'Hukum Administrasi Negara',
-          'bg-yellow-100 text-yellow-800': hoaxCategory == 'Hukum Perdata',
-          'bg-green-100 text-green-800': hoaxCategory == 'Hukum Bisnis',
-          'bg-orange-100 text-orange-800': hoaxCategory == 'Hukum Lingkungan',
-          'bg-pink-100 text-pink-800': hoaxCategory == 'Hukum Pertambangan',
-          'bg-purple-100 text-purple-800': hoaxCategory == 'Hukum Tata Negara',
-          'bg-amber-100 text-amber-800': hoaxCategory == 'Hukum Pidana',
-          'bg-lime-100 text-lime-800': hoaxCategory == 'Hukum Lainnya',
-          'bg-rose-100 text-rose-800': hoaxCategory == 'Hukum Acara',
-        }"
-        >{{ hoaxCategory }}</span
-      >
-    </ng-container> -->
-    <!-- HOAX IMAGES -->
-    <div class="mb-4" *ngFor="let image of hoax.images">
-      <img
-        [src]="image"
-        alt="Images"
-        class="w-full h-30 object-cover rounded-lg"
-      />
-    </div>
-
     <!-- HOAX IMAGE CAROUSEL -->
-
     <swiper-container
       navigation="true"
       pagination="true"
       pagination-clickable="true"
     >
-      <ng-container *ngFor="let carouselImage of carouselImages">
+      <ng-container *ngFor="let image of hoax.images">
         <swiper-slide>
           <div class="flex justify-center">
             <img
-              [src]="carouselImage"
+              [src]="image"
               alt="image"
               class="max-h-96 object-contain"
             />
@@ -204,7 +177,7 @@
   <div class="mt-14">
     <h1 class="text-xl font-semibold mb-6">HOAKS TERBARU</h1>
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <ng-container *ngFor="let latestHoax of latesHoaxData">
+      <ng-container *ngFor="let latestHoax of latestHoaxData">
         <div
           class="p-4 rounded-md border shadow-card cursor-pointer"
           [routerLink]="['/hoax-threads', hoax.id]"
