@@ -61,7 +61,7 @@
           />
         </svg>
 
-        <p>{{ rating ? rating : "NR" }}</p>
+        <p>{{ rating ? rating.toFixed(1) : "NR" }}</p>
       </div>
     </div>
 
@@ -182,7 +182,7 @@
       <ng-container *ngFor="let popularArticle of popularArticles">
         <div
           class="p-4 rounded-md border shadow-card cursor-pointer"
-          [routerLink]="['/articles']"
+          (click)="navigateToArticle(popularArticle.id)"
         >
           <h1 class="font-semibold line-clamp-3 hover:text-black transition">
             {{ popularArticle.title }}
