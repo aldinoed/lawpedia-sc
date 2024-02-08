@@ -8,6 +8,7 @@ module.exports = {
         navy2: "#283845",
         navy1: "#212D3B",
         latte: "#F2D494",
+        latte2: "#dbbf81",
         moca: "#B9AF8C",
         brown: "#B27735",
       },
