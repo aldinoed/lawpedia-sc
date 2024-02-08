@@ -1,1 +1,29 @@
-<p>chatbot works!</p>
+<h1>chatbot works!</h1>
+<h1>CHATBOT</h1>
+<h1>CHATBOT</h1>
+<h1>CHATBOT</h1>
+<h1>CHATBOT</h1>
+
+<!-- NEW CHAT -->
+<!-- <div class="new-chat">
+    <button (click)="newChat()">New Chat</button>
+</div>                                                                                                                       -->
+<select>
+    <option *ngFor="let topic of topics" [value]="topic.id">{{topic.name}}</option>
+</select>
+
+<!-- HISTORY CHATBOT -->
+<!-- <div class="chat-container">
+    <div class="chat-box" *ngFor="let chat of chats">
+        <div class="chat-message" [ngClass]="{'chat-message-left': chat.sender === 'user', 'chat-message-right': chat.sender === 'bot'}">
+            {{chat.message}}
+        </div>
+    </div>
+</div> -->
+
+<!-- INPUT CHATBOT -->
+<!-- <div class="chat-input">
+    <input type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()">
+    <button (click)="sendMessage()">Send</button>
+</div> -->
+

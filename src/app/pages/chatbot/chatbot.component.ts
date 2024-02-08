@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatbotService } from '../../services/chatbot.service';
+import { ChatbotService, Topic } from '../../services/chatbot.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './chatbot.component.html',
   styleUrl: './chatbot.component.css'
 })
 export class ChatbotComponent implements OnInit {
     chatHistory: string[] = [];
-    topic: [] = [];
-
+    
+    topics: Topic[] = [];
+    selectedTopic: string = '';
 
     constructor(private chatbotService: ChatbotService) { }
   
@@ -19,8 +21,12 @@ export class ChatbotComponent implements OnInit {
       this.chatbotService.getChatHistory().subscribe((data: any) => {
         this.chatHistory = data;
       });
-      this.chatbotService.getTopic().subscribe((data: any) => {
-        this.topic = data;
+      this.chatbotService.getTopics().subscribe((data: any) => {
+        this.topics = data.map((topic: Topic) => ({
+          id: topic.id,
+          name: topic.name,
+        }));
+        this.topics.unshift({ id: 1, name: 'Topik Umum' });
       });
     }
 }

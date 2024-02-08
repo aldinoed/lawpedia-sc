@@ -59,7 +59,6 @@ export class ArticleListComponent implements OnInit {
   categories: Category[] = [];
   selectedCategory = '';
   onCategoryChange() {
-    console.log(this.selectedCategory);
     this.loadSortedArticles();
   }
 
