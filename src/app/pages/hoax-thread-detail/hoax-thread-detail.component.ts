@@ -100,6 +100,19 @@ export class HoaxThreadDetailComponent implements OnInit {
         this.hoax.url = segments.map((segment) => segment.path).join('/');
       });
     });
+    this.loadLatestHoax();
+  }
+
+  private loadLatestHoax() {
+    this.hoaxService.getHoaxList().subscribe((hoaxes) => {
+      this.latestHoaxData = hoaxes.map((hoax: any) => ({
+        id: hoax.id,
+        title: hoax.title,
+        content: hoax.content,
+        published: hoax.published.toDate(),
+        views: hoax.views,
+      })).sort((a, b) => b.published.getTime() - a.published.getTime()).slice(0, 4);
+    });
   }
 
   copyToClipboard(text: string) {

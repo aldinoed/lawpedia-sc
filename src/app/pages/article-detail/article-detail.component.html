@@ -89,7 +89,9 @@
     <div [innerHTML]="article?.content" class="text-justify"></div>
   </div>
 
+  <!-- RATING & QUIZ -->
   <div class="mt-14 flex items-center gap-3">
+    <!-- User -->
     <div>
       <ng-container *ngIf="authenticatedUser">
         <div
@@ -147,6 +149,7 @@
         </div>
       </ng-container>
     </div>
+    <!-- Rating -->
     <div>
       <p class="text-gray-600 mb-1">Beri Penilaian</p>
       <div class="flex gap-2 items-center">
@@ -172,6 +175,16 @@
           Simpan
         </button>
       </div>
+    </div>
+    <!-- Quiz -->
+    <div>
+      <p class="text-gray-600 mb-1">Ikuti Kuis</p>
+      <button
+        class="px-3 py-1 text-xs font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+        [routerLink]="['/articles', article?.id, 'quiz']"
+      >
+        Ikuti
+      </button>
     </div>
   </div>
 

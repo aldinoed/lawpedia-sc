@@ -180,12 +180,12 @@
       <ng-container *ngFor="let latestHoax of latestHoaxData">
         <div
           class="p-4 rounded-md border shadow-card cursor-pointer"
-          [routerLink]="['/hoax-threads', hoax.id]"
+          [routerLink]="['/hoax-threads', latestHoax.id]"
         >
           <h5
             class="mb-2 font-medium tracking-tight line-clamp-3 hover:text-black transition"
           >
-            <span class="me-3">[HOAKS]</span>{{ hoax.title }}
+            <span class="me-3">[HOAKS]</span>{{ latestHoax.title }}
           </h5>
           <div class="mt-2 text-xs">
             <!-- AUTHOR -->

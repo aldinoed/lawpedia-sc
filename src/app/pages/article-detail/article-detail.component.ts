@@ -67,7 +67,6 @@ export class ArticleDetailComponent implements OnInit {
   // LOAD POPULAR ARTICLES
   private loadPopularArticles() {
     this.articleService.getPopularArticles().subscribe((articles) => {
-      articles.sort((a, b) => b.views - a.views);
       this.popularArticles = articles.map((article) => ({
         id: article.id,
         title: article.title,
