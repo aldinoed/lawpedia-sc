@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatbotService, Topic } from '../../services/chatbot.service';
 import { CommonModule } from '@angular/common';
-import { ChatbotService } from '../../services/chatbot.service';
 import { initFlowbite } from 'flowbite';
 import 'flowbite';
 import { Router } from '@angular/router';
@@ -14,27 +13,27 @@ import { Router } from '@angular/router';
   styleUrl: './chatbot.component.css',
 })
 export class ChatbotComponent implements OnInit {
-    chatHistory: string[] = [];
-    
-    topics: Topic[] = [];
-    selectedTopic: string = '';
+  chatHistory: string[] = [];
 
-    constructor(private chatbotService: ChatbotService) { }
-  
-    ngOnInit(): void {
-      // Flowbite initiation
-      initFlowbite();
-      this.chatbotService.getChatHistory().subscribe((data: any) => {
-        this.chatHistory = data;
-      });
-      this.chatbotService.getTopics().subscribe((data: any) => {
-        this.topics = data.map((topic: Topic) => ({
-          id: topic.id,
-          name: topic.name,
-        }));
-        this.topics.unshift({ id: 1, name: 'Topik Umum' });
-      });
-    }
+  topics: Topic[] = [];
+  selectedTopic: string = '';
+
+  constructor(private chatbotService: ChatbotService) { }
+
+  ngOnInit(): void {
+    // Flowbite initiation
+    initFlowbite();
+    this.chatbotService.getChatHistory().subscribe((data: any) => {
+      this.chatHistory = data;
+    });
+    this.chatbotService.getTopics().subscribe((data: any) => {
+      this.topics = data.map((topic: Topic) => ({
+        id: topic.id,
+        name: topic.name,
+      }));
+      this.topics.unshift({ id: 1, name: 'Topik Umum' });
+    });
+  }
 }
 
 // Rancangan

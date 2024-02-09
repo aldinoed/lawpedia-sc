@@ -1,1 +1,91 @@
-<p>auth works!</p>
+<!-- auth.component.html -->
+<html lang="en">
+  <body>
+    <div class="login-container">
+      <!-- Log In Section -->
+      <div class="login-form" *ngIf="!showSignup">
+        <h2>Welcome Back</h2>
+        <form (submit)="login()">
+          <label for="login-email">Email</label>
+          <input
+            type="text"
+            id="login-email"
+            name="login-email"
+            placeholder="Enter your Email"
+            required
+            [(ngModel)]="email"
+          />
+
+          <label for="login-password">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            name="login-password"
+            placeholder="Enter your password"
+            required
+            [(ngModel)]="password"
+          />
+
+          <button type="submit">LOGIN</button>
+        </form>
+        <p>
+          You can create an account with
+          <a (click)="toggleSignup()">
+            <i class="fas fa-user-plus"></i> Sign Up
+          </a>
+        </p>
+        <button (click)="googleLogin()">Login with Google</button>
+      </div>
+
+      <!-- Sign Up Section -->
+      <div class="signup-form" id="signup" *ngIf="showSignup">
+        <h2>Welcome to LawVerse</h2>
+        <p>Create a profile to access amazing features!</p>
+        <form (submit)="register()">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+            [(ngModel)]="username"
+          />
+
+          <label for="email">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+            [(ngModel)]="email"
+          />
+
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+            [(ngModel)]="password"
+          />
+
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="Confirm your password"
+            required
+            [(ngModel)]="password"
+          />
+
+          <button type="submit">Create Account</button>
+        </form>
+        <p>You can log in with <a (click)="toggleSignup()">Log In</a></p>
+      </div>
+    </div>
+  </body>
+</html>

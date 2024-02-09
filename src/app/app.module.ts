@@ -34,11 +34,7 @@ import { environment } from '../environments/environment';
 
 // App imports
 import { AppRoutingModule } from './app.routes';
-// import { LoginComponent } from './pages/login/login.component';
-// import { RegisterComponent } from './pages/register/register.component';
 import { FormsModule } from '@angular/forms';
-import { RegisterComponent } from './pages/register/register.component';
-import { LoginComponent } from './pages/login/login.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
@@ -62,7 +58,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     provideStorage(() => getStorage()),
     provideRemoteConfig(() => getRemoteConfig()),
   ],
-  declarations: [AppComponent, RegisterComponent, LoginComponent],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [
     ScreenTrackingService,

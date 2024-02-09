@@ -6,6 +6,8 @@ import {
   NavigationStart,
   Event as NavigationEvent,
 } from '@angular/router';
+import { AuthService } from './services/auth.service';
+import { authGuard } from './services/auth.guard';
 
 @Component({
   selector: 'app-root',
@@ -80,7 +82,7 @@ export class AppComponent implements OnInit {
 
   event$;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private auth: AuthService, private route: ActivatedRoute) {
     this.event$ = this.router.events.subscribe((event: NavigationEvent) => {
       if (event instanceof NavigationStart) {
         console.log(event.url, 'event url');
@@ -95,5 +97,13 @@ export class AppComponent implements OnInit {
 
   ngOnDestroy() {
     this.event$.unsubscribe();
+  }
+
+  isLoggedIn() {
+    return this.auth.isLoggedIn();
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

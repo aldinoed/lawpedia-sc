@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { authGuard } from './services/auth.guard';
 import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
+import { AuthComponent } from './pages/auth/auth.component';
 import { ArticleListComponent } from './pages/article-list/article-list.component';
 import { ArticleDetailComponent } from './pages/article-detail/article-detail.component';
 import { SendArticleComponent } from './pages/send-article/send-article.component';
@@ -16,19 +16,17 @@ import { ChatbotIntroComponent } from './pages/chatbot-intro/chatbot-intro.compo
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'send-article', component: SendArticleComponent },
-    { path: 'article-sent', component: ArticleSentComponent },
+    { path: 'auth', component: AuthComponent },
+    { path: 'send-article', component: SendArticleComponent, canActivate: [authGuard]},
+    { path: 'article-sent', component: ArticleSentComponent, canActivate: [authGuard]},
     { path: 'articles', component: ArticleListComponent },
     { path: 'articles/:id', component: ArticleDetailComponent },
     { path: 'articles/:id/quiz', component: ArticleQuizComponent },
     { path: 'hoax-threads', component: HoaxThreadsListComponent },
     { path: 'hoax-threads/:id', component: HoaxThreadDetailComponent },
-    { path: 'chatbot', component: ChatbotComponent },
+    { path: 'chatbot', component: ChatbotComponent, canActivate: [authGuard]},
     { path: 'chatbot-intro', component: ChatbotIntroComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' }
-
   ];
   
   @NgModule({
