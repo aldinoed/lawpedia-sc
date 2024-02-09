@@ -1,25 +1,23 @@
-<p>article-quiz works!</p>
-<h1>
-    KUIS KUIS KUIS
-</h1>
-<!-- Simple Quiz -->
-<div>
-  <h2>{{ quizData }}</h2>
-  <!-- <p>{{ quiz.description }}</p> -->
-  <div *ngFor="let questionData of quizData">
-    <h3>{{ questionData.question }}</h3>
-    <div *ngFor="let options of questionData.options">
-      <input
-        type="radio"
-        name="{{ questionData.id }}"
-        [value]="options"
-        (change)="onAnswerChange(questionData.id, options)"
-      />
-      <label>{{ options }}</label>
+<main class="px-4 md:px-12 lg:px-20 pb-16 pt-32">
+  <h1 class="text-2xl font-semibold uppercase mb-8">KUIS</h1>
+  <!-- Simple Quiz -->
+  <div>
+    <!-- <h2>{{ quizData | json}}</h2> -->
+    <!-- <p>{{ quiz.description }}</p> -->
+    <!-- <div *ngFor="let questionData of quizData">
+      <h3>{{ questionData.question }}</h3>
+      <div *ngFor="let options of questionData.options">
+        <input
+          type="radio"
+          name="{{ questionData.id }}"
+          [value]="options"
+          (change)="onAnswerChange(questionData.id, options)"
+        />
+        <label>{{ options }}</label>
+      </div>
     </div>
-  </div>
-  <button (click)="submitQuiz()">Submit</button>
-  <!-- <div *ngIf="showResults">
+    <button (click)="submitQuiz()">Submit</button> -->
+    <!-- <div *ngIf="showResults">
     <h2>Results</h2>
     <div *ngFor="let question of quiz.questions">
       <h3>{{ question.label }}</h3>
@@ -27,4 +25,51 @@
       <p>Correct answer: {{ question.correctAnswer.label }}</p>
     </div>
   </div> -->
-</div>
+  </div>
+
+  <div class="flex flex-col gap-10">
+    <ng-container *ngFor="let questionData of quizData">
+      <div>
+        <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
+          {{ questionData.question }}
+        </h3>
+        <ul class="flex flex-col gap-4">
+          <ng-container
+            *ngFor="let options of questionData.options; let i = index"
+          >
+            <li>
+              <input
+                type="radio"
+                [id]="'option-' + questionData.id + '-' + i"
+                name="{{ questionData.id }}"
+                [value]="options"
+                (change)="onAnswerChange(questionData.id, options)"
+                class="hidden peer"
+              />
+              <label
+                [for]="'option-' + questionData.id + '-' + i"
+                class="inline-flex items-center justify-between w-11/12 lg:w-2/3 px-5 py-3 border border-gray-300 rounded-lg cursor-pointer peer-checked:border-brown peer-checked:text-brown hover:text-black hover:bg-gray-100 transition"
+              >
+                <div class="flex items-center gap-4">
+                  <p class="flex">
+                    {{ i === 0 ? "A" : i === 1 ? "B" : i === 2 ? "C" : "D" }}
+                    <span class="ms-1">.</span>
+                  </p>
+                  <div class="w-full">{{ options }}</div>
+                </div>
+              </label>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </ng-container>
+  </div>
+  <div class="mt-8">
+    <button
+      (click)="submitQuiz()"
+      class="px-10 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+    >
+      Submit
+    </button>
+  </div>
+</main>

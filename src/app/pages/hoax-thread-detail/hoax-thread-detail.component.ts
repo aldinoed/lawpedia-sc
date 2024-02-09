@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { HoaxService } from '../../services/hoax.service';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { register } from 'swiper/element/bundle';
 
 register();
@@ -19,65 +19,6 @@ register();
   styleUrl: './hoax-thread-detail.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-// export class HoaxThreadDetailComponent {
-//   // article: Article | null = null;
-//   hoax: any | null = {
-//     id: 1,
-//     title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-//     content:
-//       '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-//     category: 'Hukum Internasional',
-//     views: 100,
-//     published: new Date(),
-//   };
-//   publishedDate: Date = this.hoax?.published;
-//   hoaxCategory = 'Hukum Internasional';
-//   carouselImages: Array<string> = [
-//     'https://source.unsplash.com/700x500',
-//     'https://source.unsplash.com/700x500',
-//     'https://source.unsplash.com/700x500',
-//   ];
-
-//   latesHoaxData: Array<any> = [
-//     {
-//       id: 1,
-//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-//       content:
-//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-//       category: 'Hukum Internasional',
-//       views: 100,
-//       published: new Date(),
-//     },
-//     {
-//       id: 2,
-//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-//       content:
-//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-//       category: 'Hukum Internasional',
-//       views: 100,
-//       published: new Date(),
-//     },
-//     {
-//       id: 2,
-//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-//       content:
-//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-//       category: 'Hukum Internasional',
-//       views: 100,
-//       published: new Date(),
-//     },
-//     {
-//       id: 2,
-//       title: 'Vaksin Covid-19 Dapat Menyebabkan Kerusakan Otak Jangka Panjang',
-//       content:
-//         '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
-//       category: 'Hukum Internasional',
-//       views: 100,
-//       published: new Date(),
-//     },
-//   ];
-// }
-
 export class HoaxThreadDetailComponent implements OnInit {
   hoax: any = null;
   publishedDate: Date = new Date();
@@ -85,8 +26,9 @@ export class HoaxThreadDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private hoaxService: HoaxService
-  ) { }
+    private hoaxService: HoaxService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -105,13 +47,16 @@ export class HoaxThreadDetailComponent implements OnInit {
 
   private loadLatestHoax() {
     this.hoaxService.getHoaxList().subscribe((hoaxes) => {
-      this.latestHoaxData = hoaxes.map((hoax: any) => ({
-        id: hoax.id,
-        title: hoax.title,
-        content: hoax.content,
-        published: hoax.published.toDate(),
-        views: hoax.views,
-      })).sort((a, b) => b.published.getTime() - a.published.getTime()).slice(0, 4);
+      this.latestHoaxData = hoaxes
+        .map((hoax: any) => ({
+          id: hoax.id,
+          title: hoax.title,
+          content: hoax.content,
+          published: hoax.published.toDate(),
+          views: hoax.views,
+        }))
+        .sort((a, b) => b.published.getTime() - a.published.getTime())
+        .slice(0, 4);
     });
   }
 
@@ -123,6 +68,14 @@ export class HoaxThreadDetailComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500,
       });
+    });
+  }
+
+  navigateToHoax(hoaxId: string) {
+    // navigasi ke article detail
+    this.router.navigate(['/hoax-threads', hoaxId]).then(() => {
+      // Setelah navigasi, refresh halaman
+      window.location.reload();
     });
   }
 }

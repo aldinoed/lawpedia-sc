@@ -180,7 +180,7 @@
       <ng-container *ngFor="let latestHoax of latestHoaxData">
         <div
           class="p-4 rounded-md border shadow-card cursor-pointer"
-          [routerLink]="['/hoax-threads', latestHoax.id]"
+          (click)="navigateToHoax(latestHoax.id)"
         >
           <h5
             class="mb-2 font-medium tracking-tight line-clamp-3 hover:text-black transition"
