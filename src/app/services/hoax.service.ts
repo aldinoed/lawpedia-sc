@@ -80,13 +80,3 @@ export interface Hoax {
   published: Date;
   views: number;
 }
-
-
-
-// Rancangan Detail Hoax
-// 1. Judul
-// 2. Gambar
-// 3. Tanggal
-// 4. Share
-// 5. Views
-// 6. Content

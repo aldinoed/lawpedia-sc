@@ -192,11 +192,6 @@ export class HoaxThreadsListComponent implements OnInit {
           hoax.images = images;
         });
       });
-
-      // this.hoaxService.getContentImages(this.hoaxList[1].id).subscribe((images) => {
-      //   this.hoaxList[1].images = images;
-      // });
-      console.log(this.hoaxList);
     });
   }
 }

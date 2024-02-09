@@ -69,17 +69,15 @@ export class ArticleDetailComponent implements OnInit {
   private loadPopularArticles() {
     this.articleService.getPopularArticles().subscribe((articles) => {
       articles.sort((a, b) => b.views - a.views);
-      this.popularArticles = articles
-        .map((article) => ({
-          id: article.id,
-          title: article.title,
-          author: article.author,
-          content: this.articleService.getCleanContent(article.content),
-          category: article.category,
-          views: article.views,
-          published: article.published.toDate(),
-        }))
-        .slice(0, 4); // Batasi jumlah artikel menjadi 4
+      this.popularArticles = articles.map((article) => ({
+        id: article.id,
+        title: article.title,
+        author: article.author,
+        content: this.articleService.getCleanContent(article.content),
+        category: article.category,
+        views: article.views,
+        published: article.published.toDate(),
+      }));
     });
   }
 

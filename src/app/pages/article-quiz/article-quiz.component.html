@@ -1,0 +1,30 @@
+<p>article-quiz works!</p>
+<h1>
+    KUIS KUIS KUIS
+</h1>
+<!-- Simple Quiz -->
+<div>
+  <h2>{{ quizData }}</h2>
+  <!-- <p>{{ quiz.description }}</p> -->
+  <div *ngFor="let questionData of quizData">
+    <h3>{{ questionData.question }}</h3>
+    <div *ngFor="let options of questionData.options">
+      <input
+        type="radio"
+        name="{{ questionData.id }}"
+        [value]="options"
+        (change)="onAnswerChange(questionData.id, options)"
+      />
+      <label>{{ options }}</label>
+    </div>
+  </div>
+  <button (click)="submitQuiz()">Submit</button>
+  <!-- <div *ngIf="showResults">
+    <h2>Results</h2>
+    <div *ngFor="let question of quiz.questions">
+      <h3>{{ question.label }}</h3>
+      <p>Your answer: {{ question.selectedAnswer.label }}</p>
+      <p>Correct answer: {{ question.correctAnswer.label }}</p>
+    </div>
+  </div> -->
+</div>

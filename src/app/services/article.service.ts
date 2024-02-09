@@ -26,6 +26,7 @@ export class ArticleService {
   articles: Observable<Article[]>;
   categories: Observable<ArticleCategory[]>;
   combinedArticles: Observable<any[]>;
+  quizzes: Observable<ArticleQuiz[]>;
 
   constructor() {
     this.articles = collectionData(collection(this.firestore, 'articles'), {
@@ -35,6 +36,9 @@ export class ArticleService {
       collection(this.firestore, 'articleCategory'),
       { idField: 'id' }
     ) as Observable<ArticleCategory[]>;
+    this.quizzes = collectionData(collection(this.firestore, 'articleQuizzes'), {
+      idField: 'id',
+    }) as Observable<ArticleQuiz[]>;
     this.combinedArticles = combineLatest([
       this.articles,
       this.categories,
@@ -46,7 +50,7 @@ export class ArticleService {
           );
           return {
             ...article,
-            category: category ? category.name : null, // Replace null with a default value if needed
+            category: category ? category.name : null,
           };
         });
       })
@@ -60,7 +64,7 @@ export class ArticleService {
   getPopularArticles(): Observable<any[]> {
     return this.combinedArticles.pipe(
       map((articles: Article[]) =>
-        articles.sort((a, b) => b.views - a.views).slice(0, 10)
+        articles.sort((a, b) => b.views - a.views).slice(0, 8)
       )
     );
   }
@@ -71,6 +75,29 @@ export class ArticleService {
       map((articles: Article[]) =>
         articles.find((article) => article.id === id)
       )
+    );
+  }
+  getArticleQuiz(articleId: string): Observable<any> {
+    return this.quizzes.pipe(
+      map((quizzes: any[]) =>
+        quizzes.find((quiz) => quiz.article.id === articleId)
+      ),
+      switchMap((quiz: any) => {
+        if (quiz) {
+          const quizRef = doc(this.firestore, 'articleQuizzes', quiz.id);
+          const quizCollectionRef = collection(this.firestore, 'articleQuizzes', quiz.id, 'quiz');
+          return collectionData(quizCollectionRef, { idField: "id" }).pipe(
+            map((quizData: any[]) => {
+              return {
+                ...quiz,
+                quiz: quizData
+              };
+            })
+          );
+        } else {
+          return of(null);
+        }
+      })
     );
   }
 
@@ -159,4 +186,10 @@ export interface Article {
 export interface ArticleCategory {
   id: string;
   name: string;
+}
+
+export interface ArticleQuiz {
+  id: string;
+  article: Article;
+  quiz: Array<any>;
 }
