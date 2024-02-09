@@ -17,24 +17,49 @@ export class ArticleQuizComponent implements OnInit {
   articleId: string = '';
   submitted: boolean = false;
   selectedAnswers: { [key: string]: string } = {};
+  quizHistory: any;
+  quizHistoryData: any;
 
   constructor(
     private articleService: ArticleService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.articleId = params.get('id') || '';
       this.loadQuiz();
+      // this.getHistory();
     });
+    
   }
 
-  private loadQuiz() {
-    this.articleService.getArticleQuiz(this.articleId).subscribe((quiz) => {
-      this.quizData = quiz.quiz;
-      console.log(this.quizData);
+  private loadQuiz(): void {
+    this.articleService.getArticleQuiz(this.articleId).subscribe(quiz => {
+      this.quizData = quiz;
+
+      this.articleService.getQuizHistory(this.articleId).subscribe((history) => {
+        this.quizHistory = history[0];
+        if (this.quizHistory) {
+          this.articleService.getQuizHistoryDetail(this.articleId, this.quizHistory.id).subscribe((data) => {
+            this.quizHistoryData = data.map((item: any) => {
+              return {
+                ...item,
+                question: item.question.path.split('/').pop(),
+              };
+            });
+            if (this.quizHistoryData) {
+              this.quizData.forEach(question => {
+                const historyItem = this.quizHistoryData.find((item: any) => item.question === question.id);
+                if (historyItem) {
+                  question.userAnswer = historyItem.userAnswer;
+                }
+              });
+            }
+          });
+        }
+      });
     });
   }
 
@@ -42,6 +67,23 @@ export class ArticleQuizComponent implements OnInit {
     // Menyimpan jawaban yang dipilih untuk setiap pertanyaan
     this.selectedAnswers[questionId] = answerId;
   }
+
+  // private getHistory() {
+  //   this.articleService.getQuizHistory(this.articleId).subscribe((history) => {
+  //     this.quizHistory = history[0];
+  //     if (this.quizHistory) {
+  //       this.articleService.getQuizHistoryDetail(this.articleId, this.quizHistory.id).subscribe((data) => {
+  //         this.quizHistoryData = data.map((item: any) => {
+  //           return {
+  //             ...item,
+  //             question: item.question.path.split('/').pop(),
+  //           };
+  //         });
+  //       });
+  //     }
+  //   });
+  // }
+
 
   submitQuiz() {
     // Menandai bahwa kuis sudah disubmit
@@ -54,11 +96,14 @@ export class ArticleQuizComponent implements OnInit {
         score++;
       }
     });
+    score /= this.quizData.length * 100;
+
+    // Menyimpan skor dan jawaban user ke database
+    this.articleService.saveQuizResult(this.articleId, score, this.selectedAnswers);
 
     // Menampilkan skor
-    // alert(`Your score: ${(100 * score) / this.quizData.length}`);
     Swal.fire({
-      title: `Your score: ${(100 * score) / this.quizData.length}`,
+      title: `Your score: ${score}`,
       text: "Berhasil mengerjakan kuis!",
       icon: 'success',
       showCancelButton: true,

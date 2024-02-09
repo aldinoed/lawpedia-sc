@@ -15,6 +15,8 @@ import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
 import { from, combineLatest } from 'rxjs';
 import { query, where } from '@angular/fire/firestore';
 import Swal from 'sweetalert2';
+import { AuthService } from './auth.service';
+import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -22,23 +24,25 @@ import Swal from 'sweetalert2';
 
 export class ArticleService {
   private firestore: Firestore = inject(Firestore);
+  private auth: AuthService = inject(AuthService);
 
+  user$: Observable<any>;
   articles: Observable<Article[]>;
   categories: Observable<ArticleCategory[]>;
   combinedArticles: Observable<any[]>;
-  quizzes: Observable<ArticleQuiz[]>;
 
   constructor() {
+    this.user$ = this.auth.user$;
+
     this.articles = collectionData(collection(this.firestore, 'articles'), {
       idField: 'id',
     }) as Observable<Article[]>;
+
     this.categories = collectionData(
       collection(this.firestore, 'articleCategory'),
       { idField: 'id' }
     ) as Observable<ArticleCategory[]>;
-    this.quizzes = collectionData(collection(this.firestore, 'articleQuizzes'), {
-      idField: 'id',
-    }) as Observable<ArticleQuiz[]>;
+    
     this.combinedArticles = combineLatest([
       this.articles,
       this.categories,
@@ -55,6 +59,7 @@ export class ArticleService {
         });
       })
     );
+
   }
 
   getArticles(): Observable<any[]> {
@@ -78,27 +83,76 @@ export class ArticleService {
     );
   }
   getArticleQuiz(articleId: string): Observable<any> {
-    return this.quizzes.pipe(
-      map((quizzes: any[]) =>
-        quizzes.find((quiz) => quiz.article.id === articleId)
-      ),
-      switchMap((quiz: any) => {
-        if (quiz) {
-          const quizRef = doc(this.firestore, 'articleQuizzes', quiz.id);
-          const quizCollectionRef = collection(this.firestore, 'articleQuizzes', quiz.id, 'quiz');
-          return collectionData(quizCollectionRef, { idField: "id" }).pipe(
-            map((quizData: any[]) => {
-              return {
-                ...quiz,
-                quiz: quizData
-              };
-            })
-          );
+    const quizCollectionRef = collection(this.firestore, 'articles', articleId, 'quiz');
+    return collectionData(quizCollectionRef, { idField: "id" });
+  }
+
+  saveQuizResult(articleId: string, score: number, selectedAnswers: { [key: string]: string }): void {
+    this.auth.user$.subscribe((user) => {
+      if (user) {
+        const uid = user.uid;
+        const quizHistoryRef = collection(this.firestore, 'articles', articleId, 'quizHistory'); 
+  
+        // Tambahkan dokumen untuk menyimpan skor kuis
+        addDoc(quizHistoryRef, {
+          user: uid,
+          score: score,
+        }).then((docRef) => {
+          const quizHistoryId = docRef.id;
+  
+          // Tambahkan subkoleksi "detail" di dalam dokumen quiz history
+          const quizDetailRef = collection(this.firestore, 'articles', articleId, 'quizHistory', quizHistoryId, 'detail');
+  
+          // Tambahkan dokumen untuk setiap pertanyaan dan jawaban pengguna
+          Object.entries(selectedAnswers).forEach(([questionId, userAnswer]) => {
+            addDoc(quizDetailRef, {
+              question: doc(this.firestore, 'articles', articleId, 'quiz', questionId),
+              userAnswer: userAnswer,
+            }).then(() => {
+              Swal.fire({
+                title: 'Berhasil!',
+                text: 'Skor kuis berhasil disimpan!',
+                icon: 'success',
+              });
+            }).catch((error) => {
+              console.error('Error adding document:', error);
+              Swal.fire({
+                title: 'Oops...',
+                text: 'Gagal menyimpan skor kuis. Silakan coba lagi!',
+                icon: 'error',
+              });
+            });
+          });
+        }).catch((error) => {
+          console.error('Error adding document:', error);
+          Swal.fire({
+            title: 'Oops...',
+            text: 'Gagal menyimpan skor kuis. Silakan coba lagi!',
+            icon: 'error',
+          });
+        });
+      }
+    });
+  }
+
+  getQuizHistory(articleId: string): Observable<any> {
+    return this.auth.user$.pipe(
+      switchMap((user) => {
+        if (user) {
+          const uid = user.uid;
+          const quizHistoryRef = collection(this.firestore, 'articles', articleId, 'quizHistory');
+          const q = query(quizHistoryRef, where('user', '==', uid));
+          return collectionData(q, { idField: 'id' });
         } else {
-          return of(null);
+          return of([]);
         }
       })
     );
+  }
+
+  getQuizHistoryDetail(articleId: string, quizHistoryId: string): Observable<any> {
+    const quizHistoryDetailRef = collection(this.firestore, 'articles', articleId, 'quizHistory', quizHistoryId, 'detail');
+    return collectionData(quizHistoryDetailRef, { idField: 'id' });
   }
 
   getArticleCategories(): Observable<any[]> {
@@ -114,12 +168,7 @@ export class ArticleService {
   }
 
   getArticleRating(articleId: any): Observable<number> {
-    const articleRef = doc(this.firestore, 'articles', articleId);
-    const ratingRef = query(
-      collection(this.firestore, 'articleRatings'),
-      where('article', '==', articleRef)
-    );
-
+    const ratingRef = collection(this.firestore, 'articles', articleId, 'ratings');
     return collectionData(ratingRef).pipe(
       map((ratings: any[]) => {
         let ratingValue: number = 0;
@@ -132,27 +181,33 @@ export class ArticleService {
     );
   }
 
+
   rateArticle(articleId: any, rating: number): void {
-    const articleRef = doc(this.firestore, 'articles', articleId);
-    addDoc(collection(this.firestore, 'articleRatings'), {
-      article: articleRef,
-      rating: rating,
-    })
-      .then(() => {
-        Swal.fire({
-          title: 'Berhasil!',
-          text: 'Berhasil memberi rating!',
-          icon: 'success',
+    this.auth.user$.subscribe((user) => {
+      if (user) {
+        const uid = user.uid;
+        const ratingRef = collection(this.firestore, 'articles', articleId, 'ratings');
+        addDoc(ratingRef, {
+          user: uid,
+          rating: rating,
+        }).then(() => {
+          Swal.fire({
+            title: 'Berhasil!',
+            text: 'Berhasil memberi rating!',
+            icon: 'success',
+          });
+        }).catch((error) => {
+          console.error('Error adding document:', error);
+          Swal.fire({
+            title: 'Oops...',
+            text: 'Gagal memberi rating. Silakan coba lagi!',
+            icon: 'error',
+          });
         });
-      })
-      .catch((error) => {
-        console.error('Error adding document:', error);
-        Swal.fire({
-          title: 'Oops...',
-          text: 'Gagal memberi rating. Silakan coba lagi!',
-          icon: 'error',
-        });
-      });
+      } else {
+        console.error('User not authenticated.');
+      }
+    });
   }
 
   updateArticleViews(id: string): void {

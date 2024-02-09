@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-article-detail',
@@ -20,6 +21,7 @@ export class ArticleDetailComponent implements OnInit {
   articleCategory = '';
   rating: number = 0;
   popularArticles: Array<any> = [];
+  quizTaken: boolean = false;
 
   // RATING COMPONENT
   getInitialName(name: string): string {
@@ -41,14 +43,23 @@ export class ArticleDetailComponent implements OnInit {
   }
 
   onRatingSubmit() {
-    this.articleService.rateArticle(this.article?.id, this.ratingValue);
+    if (this.authService.isLoggedIn()) {
+      this.articleService.rateArticle(this.article?.id, this.ratingValue);
+    } else {
+      Swal.fire({
+        title: 'Rating Failed!',
+        text: `You must be logged in to rate this article.`,
+        icon: 'error',
+      });
+    }
   }
 
   // CONSTUCTOR
   constructor(
     private route: ActivatedRoute,
     private articleService: ArticleService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   // INIT
@@ -58,6 +69,9 @@ export class ArticleDetailComponent implements OnInit {
       this.article = article;
       this.publishedDate = article.published.toDate();
       this.articleCategory = article.category;
+      this.articleService.getQuizHistory(article?.id).subscribe((history) => {
+        this.quizTaken = history.length > 0;
+      });
     });
     this.articleService.getArticleRating(id ? id : '').subscribe((rating) => {
       this.rating = rating;
@@ -70,7 +84,7 @@ export class ArticleDetailComponent implements OnInit {
     this.articleService.getPopularArticles().subscribe((articles) => {
       articles.sort((a, b) => b.views - a.views);
       this.popularArticles = articles.map((article) => ({
-        id: article.id,
+        id: article.id,       
         title: article.title,
         author: article.author,
         content: this.articleService.getCleanContent(article.content),
@@ -87,5 +101,17 @@ export class ArticleDetailComponent implements OnInit {
       // Setelah navigasi, refresh halaman
       window.location.reload();
     });
+  }
+
+  takeQuiz() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/articles', this.article?.id, 'quiz']);
+    } else {
+      Swal.fire({
+        title: 'Quiz Failed!',
+        text: `You must be logged in to take the quiz.`,
+        icon: 'error',
+      });
+    }
   }
 }

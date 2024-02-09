@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { GoogleAuthProvider } from '@angular/fire/auth';
+import { GoogleAuthProvider, getAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Firestore, addDoc, collection, doc, getDocs, query, setDoc, where } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  user$: Observable<any>;
 
-  constructor(private fireauth: AngularFireAuth, private router : Router, private firestore: Firestore) { }
-
+  constructor(private fireauth: AngularFireAuth, private router : Router, private firestore: Firestore) { 
+    this.user$ = fireauth.authState;
+  }
+  
   login(email: string, password: string){
     this.fireauth.signInWithEmailAndPassword(email,password).then(()=>{
       localStorage.setItem('token', 'true');
