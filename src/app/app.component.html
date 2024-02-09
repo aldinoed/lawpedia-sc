@@ -1,15 +1,40 @@
-<nav class="bg-white fixed top-0 right-0 left-0 shadow-md z-20">
+<nav class="bg-white fixed top-0 right-0 left-0 shadow-md z-50">
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-4 px-4 lg:px-6"
   >
-    <button [routerLink]="['/home']">
-      <span class="text-2xl font-semibold uppercase whitespace-nowrap text-gold"
-        >L<span class="text-lg font-bold">AW</span></span
+    <div class="flex gap-4">
+      <button
+        data-drawer-target="logo-sidebar"
+        data-drawer-toggle="logo-sidebar"
+        aria-controls="logo-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
-      <span class="text-2xl font-semibold whitespace-nowrap"
-        >H<span class="text-lg font-bold">UB</span></span
-      >
-    </button>
+        <span class="sr-only">Open sidebar</span>
+        <svg
+          class="w-6 h-6"
+          aria-hidden="true"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            fill-rule="evenodd"
+            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+          ></path>
+        </svg>
+      </button>
+      <button [routerLink]="['/home']">
+        <span
+          class="text-2xl font-semibold uppercase whitespace-nowrap text-gold"
+          >L<span class="text-lg font-bold">AW</span></span
+        >
+        <span class="text-2xl font-semibold whitespace-nowrap"
+          >H<span class="text-lg font-bold">UB</span></span
+        >
+      </button>
+    </div>
     <div
       class="flex lg:order-2 items-center space-x-3 lg:space-x-0 rtl:space-x-reverse"
     >
@@ -54,16 +79,16 @@
       >
         <li>
           <a
-            href="/home"
-            class="block py-2 px-3 lg:p-0 text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
+            routerLink="/home"
+            class="block py-2 px-3 lg:p-0 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
           >
             Beranda
           </a>
         </li>
         <li>
           <a
-            href="/home"
-            class="block py-2 px-3 lg:p-0 text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
+            routerLink="/home"
+            class="block py-2 px-3 lg:p-0 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
           >
             Tentang Kami
           </a>
@@ -72,7 +97,7 @@
           <button
             id="dropdownNavbarLink"
             data-dropdown-toggle="dropdownNavbar"
-            class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-gold lg:p-0 lg:w-auto"
+            class="flex items-center justify-between w-full py-2 px-3 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-gold lg:p-0 lg:w-auto"
           >
             Layanan
             <svg
@@ -129,8 +154,8 @@
         </li>
         <li>
           <a
-            href="/home"
-            class="block py-2 px-3 lg:p-0 text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
+            routerLink="/home"
+            class="block py-2 px-3 lg:p-0 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
           >
             Kontak Kami
           </a>
@@ -144,41 +169,43 @@
   <router-outlet> </router-outlet>
 </div>
 
-<footer
-  class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-3 gap-4 bg-latte"
->
-  <div class="flex items-center justify-center md:justify-start">
-    <button [routerLink]="['/home']">
-      <span class="text-2xl font-semibold whitespace-nowrap"
-        >L<span class="text-lg font-bold">AW</span>H<span
-          class="text-lg font-bold"
-          >UB</span
-        ></span
-      >
-    </button>
-  </div>
-
-  <div class="flex justify-center">
-    <div>
-      <p class="mb-3 font-medium text-center md:text-start">Kontak Kami</p>
-      <ng-container *ngFor="let contact of contactData">
-        <div class="flex items-center gap-2 text-sm mb-2">
-          <img [src]="contact.icon" alt="icon" class="h-4" />
-          <p>{{ contact.value }}</p>
-        </div>
-      </ng-container>
+<footer [ngClass]="{ hidden: currentPath === '/chatbot' }">
+  <div
+    class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-3 gap-4 bg-latte"
+  >
+    <div class="flex items-center justify-center md:justify-start">
+      <button [routerLink]="['/home']">
+        <span class="text-2xl font-semibold whitespace-nowrap"
+          >L<span class="text-lg font-bold">AW</span>H<span
+            class="text-lg font-bold"
+            >UB</span
+          ></span
+        >
+      </button>
     </div>
-  </div>
 
-  <div class="flex justify-center md:justify-end">
-    <div>
-      <p class="hidden md:block mb-2 text-transparent">Social Media</p>
-      <ng-container *ngFor="let socialMedia of socialMediaData">
-        <div class="flex items-center gap-2 text-sm mb-2">
-          <img [src]="socialMedia.icon" alt="icon" class="h-4" />
-          <p>{{ socialMedia.value }}</p>
-        </div>
-      </ng-container>
+    <div class="flex justify-center">
+      <div>
+        <p class="mb-3 font-medium text-center md:text-start">Kontak Kami</p>
+        <ng-container *ngFor="let contact of contactData">
+          <div class="flex items-center gap-2 text-sm mb-2">
+            <img [src]="contact.icon" alt="icon" class="h-4" />
+            <p>{{ contact.value }}</p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="flex justify-center md:justify-end">
+      <div>
+        <p class="hidden md:block mb-2 text-transparent">Social Media</p>
+        <ng-container *ngFor="let socialMedia of socialMediaData">
+          <div class="flex items-center gap-2 text-sm mb-2">
+            <img [src]="socialMedia.icon" alt="icon" class="h-4" />
+            <p>{{ socialMedia.value }}</p>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </div>
 </footer>

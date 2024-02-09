@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ArticleService } from '../../services/article.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { collection } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-article-quiz',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './article-quiz.component.html',
-  styleUrl: './article-quiz.component.css'
+  styleUrl: './article-quiz.component.css',
 })
 export class ArticleQuizComponent implements OnInit {
   quizData: Array<any> = [];
@@ -19,13 +20,14 @@ export class ArticleQuizComponent implements OnInit {
 
   constructor(
     private articleService: ArticleService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.articleId = params.get('id') || '';
-      this.loadQuiz();      
+      this.loadQuiz();
     });
   }
 
@@ -47,14 +49,26 @@ export class ArticleQuizComponent implements OnInit {
 
     // Menghitung skor
     let score = 0;
-    this.quizData.forEach(question => {
+    this.quizData.forEach((question) => {
       if (this.selectedAnswers[question.id] === question.answer) {
         score++;
       }
     });
 
     // Menampilkan skor
-    alert(`Your score: ${100*score/this.quizData.length}`);
+    // alert(`Your score: ${(100 * score) / this.quizData.length}`);
+    Swal.fire({
+      title: `Your score: ${(100 * score) / this.quizData.length}`,
+      text: "Berhasil mengerjakan kuis!",
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Kembali',
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        this.router.navigate(['/articles', this.articleId]);
+      }
+    });
   }
-
 }

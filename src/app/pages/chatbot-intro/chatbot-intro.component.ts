@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { initFlowbite } from 'flowbite';
+import 'flowbite';
 
 @Component({
   selector: 'app-chatbot-intro',
@@ -9,4 +11,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './chatbot-intro.component.html',
   styleUrl: './chatbot-intro.component.css',
 })
-export class ChatbotIntroComponent {}
+export class ChatbotIntroComponent implements OnInit {
+  ngOnInit() {
+    initFlowbite();
+  }
+}

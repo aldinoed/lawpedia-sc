@@ -5,7 +5,7 @@ import { Article } from '../../services/article.service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-article-detail',
@@ -47,8 +47,9 @@ export class ArticleDetailComponent implements OnInit {
   // CONSTUCTOR
   constructor(
     private route: ActivatedRoute,
-    private articleService: ArticleService
-  ) { }
+    private articleService: ArticleService,
+    private router: Router
+  ) {}
 
   // INIT
   ngOnInit() {
@@ -67,6 +68,7 @@ export class ArticleDetailComponent implements OnInit {
   // LOAD POPULAR ARTICLES
   private loadPopularArticles() {
     this.articleService.getPopularArticles().subscribe((articles) => {
+      articles.sort((a, b) => b.views - a.views);
       this.popularArticles = articles.map((article) => ({
         id: article.id,
         title: article.title,
@@ -76,6 +78,14 @@ export class ArticleDetailComponent implements OnInit {
         views: article.views,
         published: article.published.toDate(),
       }));
+    });
+  }
+
+  navigateToArticle(articleId: string) {
+    // navigasi ke article detail
+    this.router.navigate(['/articles', articleId]).then(() => {
+      // Setelah navigasi, refresh halaman
+      window.location.reload();
     });
   }
 }

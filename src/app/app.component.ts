@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { initFlowbite } from 'flowbite';
+import {
+  Router,
+  ActivatedRoute,
+  NavigationStart,
+  Event as NavigationEvent,
+} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -70,7 +76,24 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  currentPath: string = '';
+
+  event$;
+
+  constructor(private router: Router) {
+    this.event$ = this.router.events.subscribe((event: NavigationEvent) => {
+      if (event instanceof NavigationStart) {
+        console.log(event.url, 'event url');
+        this.currentPath = event.url;
+      }
+    });
+  }
+
   ngOnInit(): void {
     initFlowbite();
+  }
+
+  ngOnDestroy() {
+    this.event$.unsubscribe();
   }
 }
