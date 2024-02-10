@@ -1,16 +1,7 @@
-<h1>chatbot works!</h1>
-<h1>CHATBOT</h1>
-<h1>CHATBOT</h1>
-<h1>CHATBOT</h1>
-<h1>CHATBOT</h1>
-
 <!-- NEW CHAT -->
 <!-- <div class="new-chat">
     <button (click)="newChat()">New Chat</button>
 </div>                                                                                                                       -->
-<select>
-    <option *ngFor="let topic of topics" [value]="topic.id">{{topic.name}}</option>
-</select>
 
 <!-- HISTORY CHATBOT -->
 <!-- <div class="chat-container">
@@ -27,6 +18,7 @@
     <button (click)="sendMessage()">Send</button>
 </div> -->
 
+<!-- SIDEBAR -->
 <aside
   id="logo-sidebar"
   class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-latte border-r border-gray-200 sm:translate-x-0"
@@ -42,12 +34,25 @@
           <span>Dashboard</span>
         </a>
       </li>
+      <li>
+        <select
+          id="countries"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-latte2 focus:border-latte2 block w-full p-2.5"
+        >
+          <option *ngFor="let topic of topics" [value]="topic.id">
+            {{ topic.name }}
+          </option>
+        </select>
+      </li>
     </ul>
   </div>
 </aside>
 
+<!-- MAIN CONTENTE CHATBOT -->
+
 <main class="px-6 sm:ml-64 h-screen">
   <div class="pt-20 pb-4 flex flex-col justify-between h-full">
+    <!-- APP LOGO -->
     <div class="flex justify-end py-2">
       <h5 class="text-2xl font-medium">
         L<span class="text-lg font-semibold">AWHUB </span
@@ -56,23 +61,23 @@
         >
       </h5>
     </div>
+    <!-- CHAT CONTENT -->
     <div class="lg:px-28 overflow-y-auto pt-1 pb-4">
       <p class="text-center font-medium text-lg">
         Bagaimana saya dapat membantu Anda hari ini?
       </p>
     </div>
+    <!-- QUESTION INPUT -->
     <div class="lg:px-24">
       <form>
-        <label
-          for="search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only"
-          >Search</label
+        <label for="question" class="mb-2 text-sm font-medium sr-only"
+          >Question</label
         >
         <div class="relative">
           <input
-            type="search"
-            id="search"
-            class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            type="text"
+            id="question"
+            class="block w-full p-4 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-latte focus:border-latte"
             placeholder="Tulis pertanyaan Anda ..."
             required
           />
