@@ -5,16 +5,15 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.css'
+  styleUrl: './auth.component.css',
 })
 export class AuthComponent implements OnInit {
-  showSignup: boolean = false;
+  selectedAuth: string = 'login';
   email: string = '';
   password: string = '';
   username: string = '';
@@ -23,17 +22,17 @@ export class AuthComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  toggleSignup(): void {
-    this.showSignup = !this.showSignup;
+  selectAuth(authType: string): void {
+    this.selectedAuth = authType;
   }
 
-  login(){
-    if(this.email == ''){
-      alert("Please enter your email");
+  login() {
+    if (this.email == '') {
+      alert('Please enter your email');
       return;
     }
-    if(this.password == ''){
-      alert("Please enter your password");
+    if (this.password == '') {
+      alert('Please enter your password');
       return;
     }
 
@@ -43,17 +42,17 @@ export class AuthComponent implements OnInit {
     this.password = '';
   }
 
-  register(){
-    if(this.username == ''){
-      alert("Please enter your username");
+  register() {
+    if (this.username == '') {
+      alert('Please enter your username');
       return;
     }
-    if(this.email == ''){
-      alert("Please enter your email");
+    if (this.email == '') {
+      alert('Please enter your email');
       return;
     }
-    if(this.password == ''){
-      alert("Please enter your password");
+    if (this.password == '') {
+      alert('Please enter your password');
       return;
     }
 
@@ -63,7 +62,7 @@ export class AuthComponent implements OnInit {
     this.password = '';
   }
 
-  googleLogin(){
+  googleLogin() {
     this.auth.googleLogin();
   }
 }

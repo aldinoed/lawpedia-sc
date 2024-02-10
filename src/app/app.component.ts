@@ -82,7 +82,11 @@ export class AppComponent implements OnInit {
 
   event$;
 
-  constructor(private router: Router, private auth: AuthService, private route: ActivatedRoute) {
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private route: ActivatedRoute
+  ) {
     this.event$ = this.router.events.subscribe((event: NavigationEvent) => {
       if (event instanceof NavigationStart) {
         console.log(event.url, 'event url');
@@ -105,5 +109,6 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.auth.logout();
+    this.router.navigate(['/auth']);
   }
 }

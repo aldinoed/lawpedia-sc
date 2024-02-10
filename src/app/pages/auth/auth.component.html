@@ -1,91 +1,195 @@
 <!-- auth.component.html -->
-<html lang="en">
-  <body>
-    <div class="login-container">
-      <!-- Log In Section -->
-      <div class="login-form" *ngIf="!showSignup">
-        <h2>Welcome Back</h2>
-        <form (submit)="login()">
-          <label for="login-email">Email</label>
-          <input
-            type="text"
-            id="login-email"
-            name="login-email"
-            placeholder="Enter your Email"
-            required
-            [(ngModel)]="email"
-          />
-
-          <label for="login-password">Password</label>
-          <input
-            type="password"
-            id="login-password"
-            name="login-password"
-            placeholder="Enter your password"
-            required
-            [(ngModel)]="password"
-          />
-
-          <button type="submit">LOGIN</button>
-        </form>
-        <p>
-          You can create an account with
-          <a (click)="toggleSignup()">
-            <i class="fas fa-user-plus"></i> Sign Up
-          </a>
-        </p>
-        <button (click)="googleLogin()">Login with Google</button>
+<main
+  class="px-4 md:px-12 lg:px-20 pb-16 pt-32 flex justify-center items-center min-h-screen"
+>
+  <div class="rounded-lg overflow-hidden md:w-96 min-w-80 shadow-card">
+    <div
+      class="flex flex-col-reverse md:flex-row md:justify-between gap-2 md:gap-6 items-center bg-navy2 px-6 py-4"
+    >
+      <div class="flex flex-col gap-1 text-latte">
+        <h5 class="text-lg font-semibold">Masuk dan Daftar</h5>
+        <div class="mb-1 hidden md:block">
+          <p class="text-xs">Dengan masuk dan daftar Anda dapat</p>
+          <p class="text-xs">mengakses seluruh layanan kami</p>
+        </div>
       </div>
-
-      <!-- Sign Up Section -->
-      <div class="signup-form" id="signup" *ngIf="showSignup">
-        <h2>Welcome to LawVerse</h2>
-        <p>Create a profile to access amazing features!</p>
-        <form (submit)="register()">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Enter your username"
-            required
-            [(ngModel)]="username"
-          />
-
-          <label for="email">E-mail</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-            [(ngModel)]="email"
-          />
-
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter your password"
-            required
-            [(ngModel)]="password"
-          />
-
-          <label for="confirm-password">Confirm Password</label>
-          <input
-            type="password"
-            id="confirm-password"
-            name="confirm-password"
-            placeholder="Confirm your password"
-            required
-            [(ngModel)]="password"
-          />
-
-          <button type="submit">Create Account</button>
-        </form>
-        <p>You can log in with <a (click)="toggleSignup()">Log In</a></p>
+      <div>
+        <h3 class="text-gold text-2xl font-medium">
+          L<span class="text-lg font-semibold">AW</span>H<span
+            class="text-lg font-semibold"
+            >UB</span
+          >
+        </h3>
       </div>
     </div>
-  </body>
-</html>
+    <div class="grid grid-cols-2">
+      <button
+        class="px-2 py-1.5 border border-latte text-center font-semibold transition focus:ring-latte focus:outline-latte"
+        (click)="selectAuth('login')"
+        [ngClass]="{ 'bg-latte text-white': selectedAuth === 'login' }"
+      >
+        Masuk
+      </button>
+      <button
+        class="px-2 py-1.5 border border-latte text-center font-semibold transition focus:ring-latte focus:outline-latte"
+        (click)="selectAuth('register')"
+        [ngClass]="{ 'bg-latte text-white': selectedAuth === 'register' }"
+      >
+        Daftar
+      </button>
+    </div>
+    <!-- Log In Section -->
+    <ng-container *ngIf="selectedAuth === 'login'">
+      <div class="px-6 py-4">
+        <form (submit)="login()">
+          <div>
+            <label
+              for="email"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="login-email"
+              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Masukkan email Anda ..."
+              required
+              [(ngModel)]="email"
+            />
+          </div>
+          <div class="mt-2">
+            <label
+              for="password"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Password</label
+            >
+            <input
+              type="password"
+              id="password"
+              name="login-password"
+              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Masukkan password Anda ..."
+              required
+              [(ngModel)]="password"
+            />
+          </div>
+          <div class="flex flex-col gap-4 mt-6 pb-2">
+            <button
+              type="submit"
+              class="px-2 py-1.5 text-white font-medium bg-navy2 rounded-md hover:bg-navy1 transition focus:outline-navy-2 focus:ring-navy1"
+            >
+              Masuk
+            </button>
+            <p class="text-center text-sm">Atau masuk dengan</p>
+            <button
+              type="button"
+              class="px-2 py-1.5 font-medium flex items-center justify-center gap-2 border border-gray-400 rounded-md hover:bg-gray-100 transition focus:outline-navy-2 focus:ring-navy1"
+              (click)="googleLogin()"
+            >
+              <img
+                src="/assets/google-icon.png"
+                alt="google-icon"
+                class="w-4"
+              />
+              <span> Google</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-container>
+
+    <!-- Sign Up Section -->
+    <ng-container id="signup" *ngIf="selectedAuth === 'register'">
+      <div class="px-6 py-4">
+        <form (submit)="register()">
+          <div>
+            <label
+              for="username"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Username</label
+            >
+            <input
+              type="text"
+              id="username"
+              name="Username"
+              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Masukkan username Anda ..."
+              required
+              [(ngModel)]="username"
+            />
+          </div>
+          <div class="mt-2">
+            <label
+              for="email"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Masukkan email Anda ..."
+              required
+              [(ngModel)]="email"
+            />
+          </div>
+          <div class="mt-2">
+            <label
+              for="password"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Password</label
+            >
+            <input
+              type="password"
+              id="password"
+              name="login-password"
+              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Masukkan password Anda ..."
+              required
+              [(ngModel)]="password"
+            />
+          </div>
+          <div class="mt-2">
+            <label
+              for="confirm-password"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Konfirmasi Password</label
+            >
+            <input
+              type="password"
+              id="confirm-password"
+              name="login-password"
+              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Masukkan password Anda ..."
+              required
+              [(ngModel)]="password"
+            />
+          </div>
+          <div class="flex flex-col gap-4 mt-6 pb-2">
+            <button
+              type="submit"
+              class="px-2 py-1.5 text-white font-medium bg-navy2 rounded-md hover:bg-navy1 transition focus:outline-navy-2 focus:ring-navy1"
+            >
+              Daftar
+            </button>
+            <p class="text-center text-sm">Atau daftar dengan</p>
+            <button
+              type="button"
+              class="px-2 py-1.5 font-medium flex items-center justify-center gap-2 border border-gray-400 rounded-md hover:bg-gray-100 transition focus:outline-navy-2 focus:ring-navy1"
+              (click)="googleLogin()"
+            >
+              <img
+                src="/assets/google-icon.png"
+                alt="google-icon"
+                class="w-4"
+              />
+              <span> Google</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-container>
+  </div>
+</main>

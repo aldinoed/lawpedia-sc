@@ -17,7 +17,7 @@ export class AuthService {
       localStorage.setItem('token', 'true');
       Swal.fire({
         title : "Login Success!",
-        text : `Welcome to LawPedia, ${email}!`
+        text : `Welcome to LawHub, ${email}!`
       })
       this.router.navigate(['home']);
     }, err =>{
@@ -51,7 +51,7 @@ export class AuthService {
       localStorage.setItem('token', 'true');
       Swal.fire({
         title: "Login Success!",
-        text: `Welcome to LawPedia!`
+        text: `Welcome to LawHub!`
       });
       this.router.navigate(['/home']);
     } catch (err) {
