@@ -21,7 +21,7 @@ export const routes: Routes = [
     { path: 'article-sent', component: ArticleSentComponent, canActivate: [authGuard]},
     { path: 'articles', component: ArticleListComponent },
     { path: 'articles/:id', component: ArticleDetailComponent },
-    { path: 'articles/:id/quiz', component: ArticleQuizComponent },
+    { path: 'articles/:id/quiz', component: ArticleQuizComponent, canActivate: [authGuard]},
     { path: 'hoax-threads', component: HoaxThreadsListComponent },
     { path: 'hoax-threads/:id', component: HoaxThreadDetailComponent },
     { path: 'chatbot', component: ChatbotComponent, canActivate: [authGuard]},

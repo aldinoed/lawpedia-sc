@@ -178,8 +178,8 @@
     </div>
   </div>
 
-  <!-- QUIZ -->
-  <div class="mt-14 flex flex-col items-center gap-4">
+  <!-- KERJAKAN QUIZ -->
+  <div *ngIf="!{quizTaken}" class="mt-14 flex flex-col items-center gap-4">
     <div class="p-3 rounded-full bg-navy2 text-white">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -200,9 +200,43 @@
     <p>Kerjakan kuis berikut untuk menguji pemahaman Anda.</p>
     <button
       class="px-10 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
-      [routerLink]="['/articles', article?.id, 'quiz']"
+      (click)="takeQuiz()"
     >
       Kerjakan Kuis
+    </button>
+  </div>
+
+  <!-- QUIZ TELAH SELESAI -->
+  <div *ngIf="{quizTaken}" class="mt-14 flex flex-col items-center gap-4">
+    <div class="p-3 rounded-full bg-navy2 text-white">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-10 h-10"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 13l4 4L19 7"
+        />
+      </svg>
+    </div>
+    <h5 class="text-2xl font-semibold">Kuis telah selesai!</h5>
+    <!-- <p>
+      Anda mendapatkan
+      <span class="font-semibold">{{ quizHistoryData.score }}</span>
+      dari
+      <span class="font-semibold">{{ quizHistoryData.total }}</span>
+      soal.
+    </p> -->
+    <button
+      class="px-10 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+      (click)="takeQuiz()"
+    >
+      Lihat Hasil
     </button>
   </div>
 

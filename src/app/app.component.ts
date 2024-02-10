@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
   ) {
     this.event$ = this.router.events.subscribe((event: NavigationEvent) => {
       if (event instanceof NavigationStart) {
-        console.log(event.url, 'event url');
+        // console.log(event.url, 'event url');
         this.currentPath = event.url;
       }
     });
