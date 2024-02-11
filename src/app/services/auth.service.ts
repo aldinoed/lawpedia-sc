@@ -36,6 +36,7 @@ export class AuthService {
         Swal.fire({
           title: 'Login Success!',
           text: `Welcome to LawHub, ${email}!`,
+          icon: 'success',
         });
         this.router.navigate(['home']);
       },
