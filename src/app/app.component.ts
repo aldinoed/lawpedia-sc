@@ -15,7 +15,7 @@ import { authGuard } from './services/auth.guard';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title = 'lawpedia-sc';
+  title = 'LawSites';
 
   // Navbar
   navLinks: Array<any> = [
