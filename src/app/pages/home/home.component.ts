@@ -19,22 +19,22 @@ export class HomeComponent {
   // Services Data
   servicesData: Array<any> = [
     {
-      name: 'Artikel',
+      name: 'LawLibrary',
       image: '/assets/article-logo.png',
       href: '/articles',
     },
     {
-      name: 'Hoax Threads',
+      name: 'LawFact',
       image: '/assets/hoax-logo.png',
       href: '/hoax-threads',
     },
     {
-      name: 'SpeakUp Threads',
+      name: 'LawSpeak',
       image: '/assets/speak-up-logo.png',
-      href: '/home',
+      href: '/speakup-threads',
     },
     {
-      name: 'Chatbot',
+      name: 'LawBot',
       image: '/assets/chat-bot-logo.png',
       href: '/chatbot-intro',
     },
