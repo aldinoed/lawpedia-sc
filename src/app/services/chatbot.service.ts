@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, switchMap, throwError } from 'rxjs';
+import { Observable, catchError, from, map, of, switchMap, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import {
   Firestore,
@@ -63,6 +63,37 @@ export class ChatbotService {
     return collectionData(chatbotRoomsRef, { idField: 'id' });
   }
 
+  createChatbotRooms(historyId: string, title: string, topicId: string): any {
+    const chatbotRoomsRef = collection(this.firestore, 'chatbotHistory', historyId, 'rooms');
+    const topicRef = doc(this.firestore, 'chatbotTopics', topicId)
+    const roomData = {
+      title: title,
+      topic: topicRef
+    }
+    return addDoc(chatbotRoomsRef, roomData)
+  }
+
+  initiateModel(historyId: string, roomId: string): any {
+    const apiUrl = 'http://localhost:1000';
+  
+    const chatbotRoomRef = doc(this.firestore, 'chatbotHistory', historyId, 'rooms', roomId);
+    return from(getDoc(chatbotRoomRef)).pipe(
+      switchMap((roomDoc: any) => {
+        const topicRef = roomDoc.data().topic;
+        return from(getDoc(topicRef)).pipe(
+          map((topicDoc: any) => {
+            const formData = {
+              topic: topicDoc.data().name
+            };
+            // return formData;
+            return this.http.get<any>(`${apiUrl}/initiate-chat`, { params: formData })
+          })
+        );
+      })
+    );
+  }
+  
+
   getChatbotMessage(historyId: string, roomId: string): Observable<any> {
     const chatbotRoomRef = collection(
       this.firestore,
@@ -99,8 +130,8 @@ export class ChatbotService {
       created: new Date(),
       response: '...',
     };
-    console.log('message:', message);
-
+    console.log("message:", message);
+  
     const addMessagePromise = addDoc(chatbotRoomRef, message);
     const responsePromise = this.http
       .get<any>(`${apiUrl}/chatbot`, { params: formData })
@@ -115,9 +146,8 @@ export class ChatbotService {
         return updateDoc(messageDocRef, updatedMessage)
           .then(() => {
             console.log('Response updated');
-            return docRef.id;
-          })
-          .catch((error) => {
+            return docRef.id; 
+          }).catch(error => {
             console.error('Error updating response:', error);
             // Handle error
             throw error;
@@ -129,6 +159,7 @@ export class ChatbotService {
         throw error;
       });
   }
+  
 }
 
 export interface ChatHistory {
