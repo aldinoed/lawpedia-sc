@@ -82,6 +82,9 @@ export class ChatbotComponent implements OnInit {
         return [];
       })
     ).subscribe();
+
+    console.log(this.chatbotRooms);
+    
   }
 
   private loadTopicList(): void {

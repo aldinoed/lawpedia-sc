@@ -179,7 +179,7 @@
   <router-outlet> </router-outlet>
 </div>
 
-<footer [ngClass]="{ hidden: currentPath === '/chatbot' }">
+<footer [ngClass]="{ hidden: currentPath.includes('/chatbot') }">
   <div
     class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-3 gap-4 bg-latte"
   >
