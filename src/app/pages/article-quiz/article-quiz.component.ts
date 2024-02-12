@@ -49,6 +49,7 @@ export class ArticleQuizComponent implements OnInit {
                 question: item.question.path.split('/').pop(),
               };
             });
+
             if (this.quizHistoryData) {
               this.quizData.forEach(question => {
                 const historyItem = this.quizHistoryData.find((item: any) => item.question === question.id);

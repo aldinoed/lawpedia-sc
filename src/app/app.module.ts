@@ -31,6 +31,7 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { environment } from '../environments/environment';
+import { HttpClientModule } from '@angular/common/http';
 
 // App imports
 import { AppRoutingModule } from './app.routes';
@@ -40,6 +41,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 @NgModule({
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule,
     AppRoutingModule,
     CommonModule,
