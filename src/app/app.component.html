@@ -39,7 +39,7 @@
     >
       <button
         *ngIf="!isLoggedIn()"
-        [routerLink]="['/auth']"
+        [routerLink]="['/authentication']"
         type="button"
         class="text-navy2 hover:text-white border border-navy2 hover:bg-navy2 focus:ring-4 focus:outline-navy1 focus:ring-navy1 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 transition"
       >
@@ -134,27 +134,27 @@
               aria-labelledby="dropdownLargeButton"
             >
               <li>
-                <a href="/articles" class="block px-4 py-2 hover:bg-gray-100"
+                <a href="/lawlibrary" class="block px-4 py-2 hover:bg-gray-100"
                   >LawLibrary</a
                 >
               </li>
               <li>
                 <a
-                  href="/hoax-threads"
+                  href="/lawfact"
                   class="block px-4 py-2 hover:bg-gray-100"
                   >LawFact</a
                 >
               </li>
               <li>
                 <a
-                  href="/speakup-threads"
+                  href="/lawspeak"
                   class="block px-4 py-2 hover:bg-gray-100"
                   >LawSpeak</a
                 >
               </li>
               <li>
                 <a
-                  href="/chatbot-intro"
+                  href="/lawbot/"
                   class="block px-4 py-2 hover:bg-gray-100"
                   >LawBot</a
                 >
@@ -179,7 +179,7 @@
   <router-outlet> </router-outlet>
 </div>
 
-<footer [ngClass]="{ hidden: currentPath.includes('/chatbot') }">
+<footer [ngClass]="{ hidden: currentPath.includes('/lawbot') }">
   <div
     class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-3 gap-4 bg-latte"
   >

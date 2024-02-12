@@ -18,19 +18,19 @@ import { SpeakupThreadDetailComponent } from './pages/speakup-thread-detail/spea
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
-    { path: 'auth', component: AuthComponent },
-    { path: 'send-article', component: SendArticleComponent, canActivate: [authGuard]},
-    { path: 'article-sent', component: ArticleSentComponent, canActivate: [authGuard]},
-    { path: 'articles', component: ArticleListComponent },
-    { path: 'articles/:id', component: ArticleDetailComponent },
-    { path: 'articles/:id/quiz', component: ArticleQuizComponent, canActivate: [authGuard]},
-    { path: 'hoax-threads', component: HoaxThreadsListComponent },
-    { path: 'hoax-threads/:id', component: HoaxThreadDetailComponent },
-    { path: 'chatbot/:id', component: ChatbotComponent, canActivate: [authGuard]},
-    { path: 'chatbot', component: ChatbotComponent, canActivate: [authGuard]},
-    { path: 'chatbot-intro', component: ChatbotIntroComponent },
-    { path: 'speakup-threads', component: SpeakupThreadsListComponent },
-    { path: 'speakup-threads/:id', component: SpeakupThreadDetailComponent },
+    { path: 'authentication', component: AuthComponent },
+    { path: 'lawlibrary/contibute', component: SendArticleComponent, canActivate: [authGuard]},
+    { path: 'lawlibrary/contribute/success', component: ArticleSentComponent, canActivate: [authGuard]},
+    { path: 'lawlibrary', component: ArticleListComponent },
+    { path: 'lawlibrary/:id', component: ArticleDetailComponent },
+    { path: 'lawlibrary/:id/quiz', component: ArticleQuizComponent, canActivate: [authGuard]},
+    { path: 'lawfact', component: HoaxThreadsListComponent },
+    { path: 'lawfact/:id', component: HoaxThreadDetailComponent },
+    { path: 'lawbot/c/:id', component: ChatbotComponent, canActivate: [authGuard]},
+    { path: 'lawbot/c', component: ChatbotComponent, canActivate: [authGuard]},
+    { path: 'lawbot', component: ChatbotIntroComponent },
+    { path: 'lawspeak', component: SpeakupThreadsListComponent },
+    { path: 'lawspeak/:id', component: SpeakupThreadDetailComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' }
   ];
   
