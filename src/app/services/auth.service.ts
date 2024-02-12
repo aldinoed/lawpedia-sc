@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -33,6 +34,9 @@ export class AuthService {
     this.fireauth.signInWithEmailAndPassword(email, password).then(
       () => {
         localStorage.setItem('token', 'true');
+        this.user$.subscribe((user) => {
+          localStorage.setItem('uid', user?.uid);
+        });
         Swal.fire({
           title: 'Login Success!',
           text: `Welcome to LawHub, ${email}!`,
@@ -72,6 +76,9 @@ export class AuthService {
 
       // Set token and navigate to home
       localStorage.setItem('token', 'true');
+      this.user$.subscribe((user) => {
+        localStorage.setItem('uid', user?.uid);
+      });
       Swal.fire({
         title: 'Login Success!',
         text: `Welcome to LawHub!`,
@@ -119,10 +126,18 @@ export class AuthService {
     }
   }
 
+  getUser(uid: string): any {
+    if (uid) {
+      return getDoc(doc(this.firestore, 'users', uid));
+    }
+    return null;
+  }
+
   logout() {
     this.fireauth.signOut().then(
       () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('uid');
         this.router.navigate(['login']);
       },
       (err) => {

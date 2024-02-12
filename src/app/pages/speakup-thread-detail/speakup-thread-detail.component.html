@@ -1,63 +1,69 @@
 <main class="px-4 md:px-12 lg:px-20 pb-16 pt-28">
   <div class="flex flex-col lg:flex-row gap-12">
     <div class="lg:basis-2/3">
+      <!-- MAIN CONTENT -->
       <div class="flex gap-4 px-4 pb-4">
         <div>
           <div
             class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
             [ngClass]="{
             'bg-gray-800 ':
-              speakup.user.length < 11,
+              threadData.authorFullname.length < 11,
             'bg-blue-500 ':
-              speakup.user.length === 11,
+              threadData.authorFullname.length === 11,
             'bg-red-500 ':
-              speakup.user.length === 12,
+              threadData.authorFullname.length === 12,
             'bg-yellow-500 ':
-              speakup.user.length === 13,
+              threadData.authorFullname.length === 13,
             'bg-green-500 ':
-              speakup.user.length === 14,
+              threadData.authorFullname.length === 14,
             'bg-orange-500 ':
-              speakup.user.length === 15,
+              threadData.authorFullname.length === 15,
             'bg-pink-500 ':
-              speakup.user.length === 16,
+              threadData.authorFullname.length === 16,
             'bg-purple-500 ':
-              speakup.user.length === 17,
+              threadData.authorFullname.length === 17,
             'bg-amber-500 ':
-              speakup.user.length === 18,
+              threadData.authorFullname.length === 18,
             'bg-lime-500 ':
-              speakup.user.length === 19,
+              threadData.authorFullname.length === 19,
             'bg-rose-500 ':
-              speakup.user.length === 20,
+              threadData.authorFullname.length === 20,
             'bg-gray-500 ':
-              speakup.user.length > 20,
+              threadData.authorFullname.length > 20,
             
           }"
           >
             <span class="text-lg font-medium text-white">{{
-              getInitialName(speakup.user)
+              getInitialName(threadData.authorFullname)
             }}</span>
           </div>
         </div>
         <div>
+          <!-- MAIN THREAD -->
           <div>
-            <h5 class="text-lg font-bold">{{ speakup.user }}</h5>
+            <h5 class="text-lg font-bold">{{ threadData.authorFullname }}</h5>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">{{ '@' + threadData.authorUsername }}</p>
           </div>
           <div class="mt-4 border-b border-gray-300">
             <div>
               <p class="text-sm text-gray-600">
-                {{ speakup.created_at | date : "mediumDate" }}
+                {{ threadData.createdAt?.toDate() | date : "mediumDate" }}
               </p>
             </div>
             <div class="mt-2">
-              <div class="mb-4" [innerHTML]="speakup.content"></div>
+              <div class="mb-4" [innerHTML]="threadData.content"></div>
             </div>
           </div>
-          <div *ngIf="speakup.updates">
-            <ng-container *ngFor="let update of speakup.updates">
+          <!-- THREAD UPDATES -->
+          <div *ngIf="threadData.updates">
+            <ng-container *ngFor="let update of threadData.updates">
               <div class="mt-4 border-b border-gray-300">
                 <div>
                   <p class="text-sm text-gray-600">
-                    {{ update.created_at | date : "medium" }}
+                    {{ update.createdAt.toDate() | date : "medium" }}
                   </p>
                 </div>
                 <div class="mt-2">
@@ -66,6 +72,7 @@
               </div>
             </ng-container>
           </div>
+          <!-- COMMENT, VIEW, SHARE -->
           <div class="mt-4 flex gap-4 text-gray-500 items-center">
             <!-- COMMENTS -->
             <div
@@ -86,7 +93,7 @@
                 />
               </svg>
 
-              <p class="text-sm">{{ speakup.comments.length }}</p>
+              <p class="text-sm">{{ threadData.comments?.length }}</p>
             </div>
             <!-- VIEWS -->
             <div
@@ -111,7 +118,7 @@
                   d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                 />
               </svg>
-              <p class="text-sm">{{ speakup.views }}</p>
+              <p class="text-sm">{{ threadData.views }}</p>
             </div>
             <!-- SHARE -->
             <button class="p-1 rounded hover:bg-gray-100 transition">
@@ -131,77 +138,155 @@
               </svg>
             </button>
           </div>
+          <!-- CREATE NEW THREAD UPDATE -->
+          <div class="mt-4" *ngIf="threadData.userId === userAuthenticatedId">
+            <form [formGroup]="updateForm" (ngSubmit)="onUpdateSubmit()">
+              <div class="flex gap-4">
+                <div class="flex-1">
+                  <textarea
+                    class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-4 focus:ring-blue-900 transition"
+                    formControlName="content"
+                    placeholder="Tulis update terbaru"
+                  ></textarea>
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    class="px-5 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- COMMENTS AND CATEGORIES -->
     <div class="lg:basis-1/3">
       <!-- Comments -->
-      <div
-        class="rounded-lg py-4 border border-gray-300"
-      >
-        <h3 class="text-xl font-bold mb-4 px-4">
-          Komentar ({{ speakup.comments.length }})
-        </h3>
+      <div class="rounded-lg py-4 border border-gray-300">
+        <h3 class="text-xl font-bold mb-4 px-4">Komentar ({{ threadData.comments?.length }})</h3>
         <div class="max-h-96 overflow-y-auto">
-          <ng-container *ngFor="let comment of speakup.comments">
+          <ng-container *ngFor="let comment of threadData.comments">
+            <!-- comment -->
             <div class="p-4 flex gap-2">
               <div>
-                <div
-                  class="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full"
+                <div class="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full"
                   [ngClass]="{
-                'bg-gray-800 ':
-                  speakup.user.length < 11,
-                'bg-blue-500 ':
-                  speakup.user.length === 11,
-                'bg-red-500 ':
-                  speakup.user.length === 12,
-                'bg-yellow-500 ':
-                  speakup.user.length === 13,
-                'bg-green-500 ':
-                  speakup.user.length === 14,
-                'bg-orange-500 ':
-                  speakup.user.length === 15,
-                'bg-pink-500 ':
-                  speakup.user.length === 16,
-                'bg-purple-500 ':
-                  speakup.user.length === 17,
-                'bg-amber-500 ':
-                  speakup.user.length === 18,
-                'bg-lime-500 ':
-                  speakup.user.length === 19,
-                'bg-rose-500 ':
-                  speakup.user.length === 20,
-                'bg-gray-500 ':
-                  speakup.user.length > 20,
-                
-              }"
-                >
-                  <span class="text-xs font-medium text-white">{{
-                    getInitialName(comment.user)
-                  }}</span>
+                  'bg-gray-800': comment.authorFullname.length < 11,
+                  'bg-blue-500': comment.authorFullname.length === 11,
+                  'bg-red-500': comment.authorFullname.length === 12,
+                  'bg-yellow-500': comment.authorFullname.length === 13,
+                  'bg-green-500': comment.authorFullname.length === 14,
+                  'bg-orange-500': comment.authorFullname.length === 15,
+                  'bg-pink-500': comment.authorFullname.length === 16,
+                  'bg-purple-500': comment.authorFullname.length === 17,
+                  'bg-amber-500': comment.authorFullname.length === 18,
+                  'bg-lime-500': comment.authorFullname.length === 19,
+                  'bg-rose-500': comment.authorFullname.length === 20,
+                  'bg-gray-500': comment.authorFullname.length > 20
+                }">
+                  <span class="text-xs font-medium text-white">{{ getInitialName(comment.authorFullname) }}</span>
                 </div>
               </div>
               <div>
                 <div class="flex gap-2 items-center">
-                  <h5 class="text-sm font-bold">{{ comment.user }}</h5>
+                  <h5 class="text-sm font-bold">{{ comment.authorFullname }}</h5>
                   <p>-</p>
-                  <p class="text-sm">
-                    {{ comment.created_at | date : "mediumDate" }}
-                  </p>
+                  <p class="text-sm">{{ comment.createdAt?.toDate() | date : "mediumDate" }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-600">{{ '@' + comment.authorUsername }}</p>
                 </div>
                 <div class="mt-2">
                   <div class="text-sm mb-4" [innerHTML]="comment.content"></div>
                 </div>
               </div>
+              <!-- replies of comment -->
+              <div class="flex-1">
+                <div class="flex justify-end">
+                  <button class="text-sm text-gray-500 hover:text-navy2 focus:outline-none">Balas</button>
+                </div>
+                <div class="mt-2">
+                  <ng-container *ngFor="let reply of comment.replies">
+                    <div class="p-4 bg-gray-100 rounded-lg mt-2">
+                      <div class="flex gap-2 items-center">
+                        <div>
+                          <div class="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full"
+                            [ngClass]="{
+                            'bg-gray-800': reply.authorFullname.length < 11,
+                            'bg-blue-500': reply.authorFullname.length === 11,
+                            'bg-red-500': reply.authorFullname.length === 12,
+                            'bg-yellow-500': reply.authorFullname.length === 13,
+                            'bg-green-500': reply.authorFullname.length === 14,
+                            'bg-orange-500': reply.authorFullname.length === 15,
+                            'bg-pink-500': reply.authorFullname.length === 16,
+                            'bg-purple-500': reply.authorFullname.length === 17,
+                            'bg-amber-500': reply.authorFullname.length === 18,
+                            'bg-lime-500': reply.authorFullname.length === 19,
+                            'bg-rose-500': reply.authorFullname.length === 20,
+                            'bg-gray-500': reply.authorFullname.length > 20
+                          }">
+                            <span class="text-xs font-medium text-white">{{ getInitialName(reply.authorFullname) }}</span>
+                          </div>
+                        </div>
+                        <div>
+                          <div class="flex gap-2 items-center">
+                            <h5 class="text-sm font-bold">{{ reply.authorFullname }}</h5>
+                            <p>-</p>
+                            <p class="text-sm">{{ reply.createdAt?.toDate() | date : "mediumDate" }}</p>
+                          </div>
+                          <div>
+                            <p class="text-sm text-gray-600">{{ '@' + reply.authorUsername }}</p>
+                          </div>
+                          <div class="mt-2">
+                            <div class="text-sm mb-4" [innerHTML]="reply.content"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <!-- Add New Reply -->
+                <div class="mt-4">
+                  <form [formGroup]="replyForm" (ngSubmit)="onReplySubmit(comment.id)">
+                    <div class="flex gap-4">
+                      <div class="flex-1">
+                        <textarea class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-4 focus:ring-blue-900 transition" formControlName="content" placeholder="Tulis balasan"></textarea>
+                      </div>
+                      <div>
+                        <button type="submit" class="px-5 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition">Balas</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </ng-container>
         </div>
+        <!-- Add New Comment -->
+        <div class="mt-4">
+          <form [formGroup]="commentForm" (ngSubmit)="onCommentSubmit()">
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <textarea class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-4 focus:ring-blue-900 transition" formControlName="content" placeholder="Tulis komentar"></textarea>
+              </div>
+              <div>
+                <button type="submit" class="px-5 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition">Komentar</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
+      
 
       <!-- Kategori -->
       <div class="rounded-lg mt-6 py-4 border border-gray-300">
         <h3 class="text-xl font-bold mb-4 px-4">Kategori</h3>
-        <ng-container *ngFor="let category of categories">
+        <ng-container *ngFor="let category of threadCategories">
           <div class="p-4 flex justify-between gap-4 items-center">
             <div>
               <p class="font-semibold">{{ category.name }}</p>
@@ -217,6 +302,9 @@
           </div>
         </ng-container>
       </div>
+
+      <!-- Form Follow Kategory -->
+      
     </div>
   </div>
 </main>
