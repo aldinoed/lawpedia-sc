@@ -12,14 +12,14 @@ import {
   setDoc,
   getDoc,
   addDoc,
-  updateDoc
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Database, get } from '@angular/fire/database';
 import { AuthService } from './auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatbotService {
   topics: Observable<Topic[]>;
@@ -28,7 +28,8 @@ export class ChatbotService {
     private firestore: Firestore,
     private auth: AuthService,
     private database: Database,
-    private http: HttpClient) {
+    private http: HttpClient
+  ) {
     this.topics = collectionData(collection(this.firestore, 'chatbotTopics'), {
       idField: 'id',
     }) as Observable<Topic[]>;
@@ -39,7 +40,10 @@ export class ChatbotService {
       switchMap((user) => {
         if (user) {
           const uid = user.uid;
-          const chatbotHistoryRef = collection(this.firestore, 'chatbotHistory');
+          const chatbotHistoryRef = collection(
+            this.firestore,
+            'chatbotHistory'
+          );
           const q = query(chatbotHistoryRef, where('userId', '==', uid));
           return collectionData(q, { idField: 'id' });
         } else {
@@ -50,12 +54,24 @@ export class ChatbotService {
   }
 
   getChatbotRooms(historyId: string): Observable<any> {
-    const chatbotRoomsRef = collection(this.firestore, 'chatbotHistory', historyId, 'rooms');
+    const chatbotRoomsRef = collection(
+      this.firestore,
+      'chatbotHistory',
+      historyId,
+      'rooms'
+    );
     return collectionData(chatbotRoomsRef, { idField: 'id' });
   }
 
   getChatbotMessage(historyId: string, roomId: string): Observable<any> {
-    const chatbotRoomRef = collection(this.firestore, 'chatbotHistory', historyId, 'rooms', roomId, 'messages');
+    const chatbotRoomRef = collection(
+      this.firestore,
+      'chatbotHistory',
+      historyId,
+      'rooms',
+      roomId,
+      'messages'
+    );
     return collectionData(chatbotRoomRef, { idField: 'id' });
   }
 
@@ -63,42 +79,56 @@ export class ChatbotService {
     return this.topics;
   }
 
-  sendQuestion(formData: any, historyId: string, roomId: string, question: string): any {
+  sendQuestion(
+    formData: any,
+    historyId: string,
+    roomId: string,
+    question: string
+  ): any {
     const apiUrl = 'http://localhost:1000';
-    const chatbotRoomRef = collection(this.firestore, 'chatbotHistory', historyId, 'rooms', roomId, 'messages');
+    const chatbotRoomRef = collection(
+      this.firestore,
+      'chatbotHistory',
+      historyId,
+      'rooms',
+      roomId,
+      'messages'
+    );
     const message = {
       content: question,
       created: new Date(),
       response: '...',
     };
-    console.log("message:", message);
-  
+    console.log('message:', message);
+
     const addMessagePromise = addDoc(chatbotRoomRef, message);
-    const responsePromise = this.http.get<any>(`${apiUrl}/chatbot`, { params: formData }).toPromise();
+    const responsePromise = this.http
+      .get<any>(`${apiUrl}/chatbot`, { params: formData })
+      .toPromise();
     return Promise.all([addMessagePromise, responsePromise])
       .then(([docRef, response]) => {
         const updatedMessage = {
           response: response['answer'] || 'No response',
         };
-        console.log("updated message:", updatedMessage);
+        console.log('updated message:', updatedMessage);
         const messageDocRef = doc(chatbotRoomRef, docRef.id);
         return updateDoc(messageDocRef, updatedMessage)
           .then(() => {
             console.log('Response updated');
-            return docRef.id; 
-          }).catch(error => {
+            return docRef.id;
+          })
+          .catch((error) => {
             console.error('Error updating response:', error);
             // Handle error
             throw error;
           });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error sending question:', error);
         // Handle error
         throw error;
       });
   }
-  
 }
 
 export interface ChatHistory {
