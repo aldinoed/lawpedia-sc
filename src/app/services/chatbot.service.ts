@@ -41,7 +41,11 @@ export class ChatbotService {
           const uid = user.uid;
           const chatbotHistoryRef = collection(this.firestore, 'chatbotHistory');
           const q = query(chatbotHistoryRef, where('userId', '==', uid));
-          return collectionData(q, { idField: 'id' });
+          if (q) {
+            return collectionData(q, { idField: 'id' });
+          } else {
+            return addDoc(chatbotHistoryRef, {userId: uid});
+          }
         } else {
           return of([]);
         }
