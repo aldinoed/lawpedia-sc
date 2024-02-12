@@ -116,6 +116,7 @@ export class SpeakupThreadsListComponent implements OnInit {
   }
 
   getInitialName(name: string): string {
+    if (!name) return '';
     const words = name.split(' ');
     let initials = '';
     for (let i = 0; i < Math.min(words.length, 2); i++) {
@@ -198,7 +199,7 @@ export class SpeakupThreadsListComponent implements OnInit {
           });
       });
       this.threads = data;
-      console.log('threads: ', this.threads);
+      // console.log('threads: ', this.threads);
     });
 
     this.speakupService.getThreadCategories().subscribe((data) => {
@@ -215,7 +216,7 @@ export class SpeakupThreadsListComponent implements OnInit {
           });
       });
       this.threadCategories = data;
-      console.log('categories: ', this.threadCategories);
+      // console.log('categories: ', this.threadCategories);
     });
 
     // this.speakupService.getCategoryFollowings(this.userAuthenticatedId).subscribe((data: any) => {

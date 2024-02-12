@@ -112,7 +112,7 @@
                   height: 300
                 }"
                 formControlName="content"
-                id="input-content"
+                id="input-content-{{ threadForm.get('content')?.value }}"
                 class="mt-1"
               ></editor>
             </div>
@@ -191,29 +191,29 @@
                 class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
                 [ngClass]="{
             'bg-gray-800 ':
-              thread.authorFullname.length < 11,
+              thread.authorFullname?.length < 11,
             'bg-blue-500 ':
-              thread.authorFullname.length === 11,
+              thread.authorFullname?.length === 11,
             'bg-red-500 ':
-              thread.authorFullname.length === 12,
+              thread.authorFullname?.length === 12,
             'bg-yellow-500 ':
-              thread.authorFullname.length === 13,
+              thread.authorFullname?.length === 13,
             'bg-green-500 ':
-              thread.authorFullname.length === 14,
+              thread.authorFullname?.length === 14,
             'bg-orange-500 ':
-              thread.authorFullname.length === 15,
+              thread.authorFullname?.length === 15,
             'bg-pink-500 ':
-              thread.authorFullname.length === 16,
+              thread.authorFullname?.length === 16,
             'bg-purple-500 ':
-              thread.authorFullname.length === 17,
+              thread.authorFullname?.length === 17,
             'bg-amber-500 ':
-              thread.authorFullname.length === 18,
+              thread.authorFullname?.length === 18,
             'bg-lime-500 ':
-              thread.authorFullname.length === 19,
+              thread.authorFullname?.length === 19,
             'bg-rose-500 ':
-              thread.authorFullname.length === 20,
+              thread.authorFullname?.length === 20,
             'bg-gray-500 ':
-              thread.authorFullname.length > 20,
+              thread.authorFullname?.length > 20,
             
           }"
               >
@@ -271,7 +271,7 @@
                     />
                   </svg>
 
-                  <p class="text-sm">{{ thread.comments.length }}</p>
+                  <p class="text-sm">{{ thread.comments?.length }}</p>
                 </button>
                 <!-- VIEWS -->
                 <button
