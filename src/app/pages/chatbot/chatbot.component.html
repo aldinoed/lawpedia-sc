@@ -2,9 +2,6 @@
 <!-- <div class="new-chat">
     <button (click)="newChat()">New Chat</button>
 </div>                                                                                                                       -->
-<select>
-    <option *ngFor="let topic of topics" [value]="topic.id">{{topic.name}}</option>
-</select>
 
 <!-- HISTORY CHATBOT -->
 <!-- <div class="chat-container">
@@ -21,6 +18,7 @@
     <button (click)="sendMessage()">Send</button>
 </div> -->
 
+<!-- SIDEBAR -->
 <aside
   id="logo-sidebar"
   class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-latte border-r border-gray-200 sm:translate-x-0"
@@ -36,12 +34,25 @@
           <span>{{ room.title }}</span>
         </a>
       </li>
+      <li>
+        <select
+          id="countries"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-latte2 focus:border-latte2 block w-full p-2.5"
+        >
+          <option *ngFor="let topic of topics" [value]="topic.id">
+            {{ topic.name }}
+          </option>
+        </select>
+      </li>
     </ul>
   </div>
 </aside>
 
+<!-- MAIN CONTENTE CHATBOT -->
+
 <main class="px-6 sm:ml-64 h-screen">
   <div class="pt-20 pb-4 flex flex-col justify-between h-full">
+    <!-- APP LOGO -->
     <div class="flex justify-end py-2">
       <h5 class="text-2xl font-medium">
         L<span class="text-lg font-semibold">AWHUB </span

@@ -3,18 +3,13 @@
     class="px-4 md:px-12 lg:px-20 pb-10 pt-24 flex items-center justify-between gap-10 shadow-md"
   >
     <div class="max-w-[35rem]">
-      <h1 class="text-2xl uppercase">
-        L<span class="text-lg font-medium">AW</span>H<span
-          class="text-lg font-medium"
-          >UB</span
-        >
-        <span class="text-gold">
-          H<span class="text-lg font-medium">OAX</span> T<span
-            class="text-lg font-medium"
-            >HREADS</span
-          ></span
+      <h1 class="text-3xl uppercase">
+        L<span class="text-xl font-medium">AW</span
+        ><span class="text-gold"
+          >F<span class="text-xl font-medium">ACT</span></span
         >
       </h1>
+      <h3 class="text-lg font-medium mt-2">From Hoax to Truth</h3>
       <p class="mt-4 mb-4 leading-8">
         Temukan validitas yang akurat dan terpecaya dari berita-berita tidak
         benar yang ada. Disini Anda dapat memastikan informasi yang diterima
@@ -107,24 +102,20 @@
     </div>
 
     <!-- ARTICLE CARD LISTS -->
-    <div
-      *ngIf="hoaxList && hoaxList.length > 0"
-      class="grid grid-cols-1 gap-6"
-    >
+    <div *ngIf="hoaxList && hoaxList.length > 0" class="grid grid-cols-1 gap-6">
       <ng-container
         *ngFor="
-          let hoax of hoaxList
-            | paginate : { itemsPerPage: 5, currentPage: p };
+          let hoax of hoaxList | paginate : { itemsPerPage: 5, currentPage: p };
           let i = index
         "
       >
         <div
-          class="p-4 md:p-6 bg-white rounded-lg shadow-card grid grid-cols-1 md:grid-cols-2 gap-6 "
+          class="p-4 md:p-6 bg-white rounded-lg shadow-card grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           <div>
             <!-- <img src="https://source.unsplash.com/500x500" alt="image" class="w-full max-h-80 object-cover object-center"> -->
             <img
-              src={{hoax.images[0]}}
+              src="{{ hoax.images[0] }}"
               alt="image"
               class="w-full max-h-80 object-cover object-center"
             />
@@ -226,10 +217,7 @@
               </div>
               <!-- HOAX CONTENT -->
               <div class="overflow-hidden">
-                <div
-                  class="mb-4 line-clamp-2"
-                  [innerHTML]="hoax.content"
-                ></div>
+                <div class="mb-4 line-clamp-2" [innerHTML]="hoax.content"></div>
               </div>
             </div>
             <div>

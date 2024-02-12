@@ -13,6 +13,8 @@ import { HoaxThreadsListComponent } from './pages/hoax-threads-list/hoax-threads
 import { HoaxThreadDetailComponent } from './pages/hoax-thread-detail/hoax-thread-detail.component';
 import { ChatbotComponent } from './pages/chatbot/chatbot.component';
 import { ChatbotIntroComponent } from './pages/chatbot-intro/chatbot-intro.component';
+import { SpeakupThreadsListComponent } from './pages/speakup-threads-list/speakup-threads-list.component';
+import { SpeakupThreadDetailComponent } from './pages/speakup-thread-detail/speakup-thread-detail.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -27,6 +29,8 @@ export const routes: Routes = [
     { path: 'chatbot/:id', component: ChatbotComponent, canActivate: [authGuard]},
     { path: 'chatbot', component: ChatbotComponent, canActivate: [authGuard]},
     { path: 'chatbot-intro', component: ChatbotIntroComponent },
+    { path: 'speakup-threads', component: SpeakupThreadsListComponent },
+    { path: 'speakup-threads/:id', component: SpeakupThreadDetailComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' }
   ];
   
