@@ -11,12 +11,13 @@ import {
 } from '@angular/forms';
 import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 import { RouterModule } from '@angular/router';
+import { EditorModule } from '@tinymce/tinymce-angular';
 import { SpeakupService } from '../../services/speakup.service';
 
 @Component({
   selector: 'app-speakup-threads-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, EditorModule],
   templateUrl: './speakup-threads-list.component.html',
   styleUrl: './speakup-threads-list.component.css',
 })
@@ -40,6 +41,7 @@ export class SpeakupThreadsListComponent implements OnInit {
         '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
       comments: 50,
       views: 100,
+      created_at: new Date(),
     },
     {
       id: 2,
@@ -48,6 +50,7 @@ export class SpeakupThreadsListComponent implements OnInit {
         '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
       comments: 50,
       views: 100,
+      created_at: new Date(),
     },
     {
       id: 3,
@@ -56,6 +59,7 @@ export class SpeakupThreadsListComponent implements OnInit {
         '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
       comments: 50,
       views: 100,
+      created_at: new Date(),
     },
   ];
 
@@ -98,6 +102,16 @@ export class SpeakupThreadsListComponent implements OnInit {
     this.searchForm = this.fb.group({
       searchKeyword: '',
     });
+  }
+
+  getInitialName(name: string): string {
+    const words = name.split(' ');
+    let initials = '';
+    for (let i = 0; i < Math.min(words.length, 2); i++) {
+      initials += words[i].charAt(0);
+    }
+
+    return initials;
   }
 
   // ON INIT
