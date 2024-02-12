@@ -40,16 +40,34 @@ export class ChatbotService {
       switchMap((user) => {
         if (user) {
           const uid = user.uid;
-          const chatbotHistoryRef = collection(
-            this.firestore,
-            'chatbotHistory'
-          );
+          const chatbotHistoryRef = collection(this.firestore, 'chatbotHistory');
           const q = query(chatbotHistoryRef, where('userId', '==', uid));
-          if (q) {
-            return collectionData(q, { idField: 'id' });
-          } else {
-            return addDoc(chatbotHistoryRef, {userId: uid});
-          }
+  
+          // Check if chatbot history exists for the user
+          return collectionData(q, { idField: 'id' }).pipe(
+            switchMap((history) => {
+              // If chatbot history exists, return it
+              if (history.length > 0) {
+                return of(history);
+              } else {
+                // If chatbot history doesn't exist, create a new one
+                return from(addDoc(chatbotHistoryRef, { userId: uid })).pipe(
+                  switchMap((docRef) => {
+                    // Fetch the newly created chatbot history
+                    return this.getChatbotHistory();
+                  }),
+                  catchError((error) => {
+                    console.error('Error creating chatbot history:', error);
+                    return of([]);
+                  })
+                );
+              }
+            }),
+            catchError((error) => {
+              console.error('Error fetching chatbot history:', error);
+              return of([]);
+            })
+          );
         } else {
           return of([]);
         }
