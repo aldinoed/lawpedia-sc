@@ -111,8 +111,6 @@ export class ChatbotComponent implements OnInit {
       }));
       // console.log(this.chatbotRooms)
     });
-
-    // this.chatbotService.initiateModel()
   }
 
   private loadChatbotRoom(historyId: string, roomId: string): any {
