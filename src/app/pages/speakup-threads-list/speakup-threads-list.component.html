@@ -69,54 +69,54 @@
   <section class="px-4 md:px-12 lg:px-20 pb-14 pt-8">
     <div class="flex flex-col lg:flex-row gap-12">
       <div class="lg:basis-2/3">
-        <ng-container *ngFor="let speakup of speakupList">
+        <ng-container *ngFor="let thread of threads">
           <div
             class="flex gap-4 border-y border-gray-300 p-4 cursor-pointer hover:bg-gray-50 transition"
-            [routerLink]="['/lawspeak', speakup.id]">
+            [routerLink]="['/lawspeak', thread.id]">
             <div>
               <div
                 class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
                 [ngClass]="{
             'bg-gray-800 ':
-              speakup.user.length < 11,
+              thread.userId.length < 11,
             'bg-blue-500 ':
-              speakup.user.length === 11,
+              thread.userId.length === 11,
             'bg-red-500 ':
-              speakup.user.length === 12,
+              thread.userId.length === 12,
             'bg-yellow-500 ':
-              speakup.user.length === 13,
+              thread.userId.length === 13,
             'bg-green-500 ':
-              speakup.user.length === 14,
+              thread.userId.length === 14,
             'bg-orange-500 ':
-              speakup.user.length === 15,
+              thread.userId.length === 15,
             'bg-pink-500 ':
-              speakup.user.length === 16,
+              thread.userId.length === 16,
             'bg-purple-500 ':
-              speakup.user.length === 17,
+              thread.userId.length === 17,
             'bg-amber-500 ':
-              speakup.user.length === 18,
+              thread.userId.length === 18,
             'bg-lime-500 ':
-              speakup.user.length === 19,
+              thread.userId.length === 19,
             'bg-rose-500 ':
-              speakup.user.length === 20,
+              thread.userId.length === 20,
             'bg-gray-500 ':
-              speakup.user.length > 20,
+              thread.userId.length > 20,
             
           }"
               >
                 <span class="text-lg font-medium text-white">{{
-                  getInitialName(speakup.user)
+                  getInitialName(thread.userId)
                 }}</span>
               </div>
             </div>
             <div>
               <div>
-                <h5 class="text-lg font-bold">{{ speakup.user }}</h5>
+                <h5 class="text-lg font-bold">{{ thread.user }}</h5>
               </div>
               <div class="overflow-hidden mt-4">
                 <div
                   class="text-sm mb-4 line-clamp-10"
-                  [innerHTML]="speakup.content"
+                  [innerHTML]="thread.content"
                 ></div>
               </div>
               <div class="mt-4 flex gap-4 text-gray-500 items-center">
@@ -139,7 +139,7 @@
                     />
                   </svg>
 
-                  <p class="text-sm">{{ speakup.comments }}</p>
+                  <p class="text-sm">{{ thread.comments.length }}</p>
                 </button>
                 <!-- VIEWS -->
                 <button
@@ -164,8 +164,10 @@
                       d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                     />
                   </svg>
-                  <p class="text-sm">{{ speakup.views }}</p>
+                  <p class="text-sm">{{ thread.views }}</p>
                 </button>
+                <!-- DATE -->
+                <p class="text-sm">{{ thread.createdAt.toDate() | date: 'longDate' }}</p>
                 <!-- SHARE -->
                 <button class="p-1 rounded hover:bg-gray-100 transition">
                   <svg
@@ -192,7 +194,7 @@
         <!-- Kategori -->
         <div class="rounded-lg py-4 border border-gray-300">
           <h3 class="text-xl font-bold mb-4 px-4">Kategori</h3>
-          <ng-container *ngFor="let category of categories">
+          <ng-container *ngFor="let category of threadCategories">
             <div class="p-4 flex justify-between gap-4 items-center">
               <div>
                 <p class="font-semibold">{{ category.name }}</p>
