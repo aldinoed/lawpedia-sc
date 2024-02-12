@@ -39,6 +39,7 @@ export class SpeakupThreadsListComponent {
         '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
       comments: 50,
       views: 100,
+      created_at: new Date(),
     },
     {
       id: 2,
@@ -47,6 +48,7 @@ export class SpeakupThreadsListComponent {
         '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
       comments: 50,
       views: 100,
+      created_at: new Date(),
     },
     {
       id: 3,
@@ -55,6 +57,7 @@ export class SpeakupThreadsListComponent {
         '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
       comments: 50,
       views: 100,
+      created_at: new Date(),
     },
   ];
 
