@@ -11,25 +11,17 @@ import {
 } from '@angular/forms';
 import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 import { RouterModule } from '@angular/router';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @Component({
   selector: 'app-speakup-threads-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, EditorModule],
   templateUrl: './speakup-threads-list.component.html',
   styleUrl: './speakup-threads-list.component.css',
 })
 export class SpeakupThreadsListComponent {
-  getInitialName(name: string): string {
-    const words = name.split(' ');
-    let initials = '';
-    for (let i = 0; i < Math.min(words.length, 2); i++) {
-      initials += words[i].charAt(0);
-    }
-
-    return initials;
-  }
-
+  authenticatedUser = 'Cristiano Ronaldo';
   // SPEAKUP THREADS LIST
   speakupList: Array<any> = [
     {
@@ -94,5 +86,15 @@ export class SpeakupThreadsListComponent {
     this.searchForm = this.fb.group({
       searchKeyword: '',
     });
+  }
+
+  getInitialName(name: string): string {
+    const words = name.split(' ');
+    let initials = '';
+    for (let i = 0; i < Math.min(words.length, 2); i++) {
+      initials += words[i].charAt(0);
+    }
+
+    return initials;
   }
 }

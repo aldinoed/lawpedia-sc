@@ -18,12 +18,74 @@
     </div>
   </section>
 
-  <div class="mt-8 px-4 md:px-12 lg:px-20 flex">
+  <div class="mt-8 px-4 md:px-12 lg:px-20 flex flex-col lg:flex-row gap-12">
+    <!-- CREATE THREADS -->
+    <div class="lg:basis-2/3">
+      <h5 class="text-lg font-bold mb-4 px-4">Buat Threads</h5>
+      <div class="flex gap-4 border-gray-300 px-4">
+        <div>
+          <div
+            class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
+            [ngClass]="{
+            'bg-gray-800 ':
+              authenticatedUser.length < 11,
+            'bg-blue-500 ':
+              authenticatedUser.length === 11,
+            'bg-red-500 ':
+              authenticatedUser.length === 12,
+            'bg-yellow-500 ':
+              authenticatedUser.length === 13,
+            'bg-green-500 ':
+              authenticatedUser.length === 14,
+            'bg-orange-500 ':
+              authenticatedUser.length === 15,
+            'bg-pink-500 ':
+              authenticatedUser.length === 16,
+            'bg-purple-500 ':
+              authenticatedUser.length === 17,
+            'bg-amber-500 ':
+              authenticatedUser.length === 18,
+            'bg-lime-500 ':
+              authenticatedUser.length === 19,
+            'bg-rose-500 ':
+              authenticatedUser.length === 20,
+            'bg-gray-500 ':
+              authenticatedUser.length > 20,
+            
+          }"
+          >
+            <span class="text-lg font-medium text-white">{{
+              getInitialName(authenticatedUser)
+            }}</span>
+          </div>
+        </div>
+        <div>
+          <form>
+            <editor
+              apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
+              [init]="{
+                plugins: 'list link image wordcount',
+                menubar: 'insert',
+                height: 300
+              }"
+              formControlName="content"
+              id="input-content"
+            ></editor>
+            <button
+              type="submit"
+              class="inline-flex items-center mt-6 px-5 py-2 text-sm font-medium text-center text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+            >
+              Kirim
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
     <!-- SEARCH FORM INPUT -->
     <form
       [formGroup]="searchForm"
       (ngSubmit)="onSearchSubmit()"
-      class="basis-full md:basis-1/2 lg:basis-1/3"
+      class="lg:basis-1/3"
     >
       <label
         for="default-search"
@@ -70,13 +132,14 @@
   </div>
 
   <!--SPEAKUP LIST -->
-  <section class="px-4 md:px-12 lg:px-20 pb-14 pt-8">
+  <section class="px-4 md:px-12 lg:px-20 pb-14 pt-10">
     <div class="flex flex-col lg:flex-row gap-12">
       <div class="lg:basis-2/3">
         <ng-container *ngFor="let speakup of speakupList">
           <div
             class="flex gap-4 border-y border-gray-300 p-4 cursor-pointer hover:bg-gray-50 transition"
-            [routerLink]="['/lawspeak', speakup.id]">
+            [routerLink]="['/lawspeak', speakup.id]"
+          >
             <div>
               <div
                 class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
