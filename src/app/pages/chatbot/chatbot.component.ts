@@ -27,6 +27,26 @@ export class ChatbotComponent implements OnInit {
 
   question: string = '';
 
+  newChatModal: boolean = false;
+  newChatTitle: string = '';
+  newChatTopic: string = '';
+
+  toggleNewChat(): void {
+    this.newChatModal = !this.newChatModal;
+    // Reset form fields when modal is closed
+    if (!this.newChatModal) {
+      this.newChatTitle = '';
+      this.newChatTopic = '';
+    }
+  }
+
+  createChat(): void {
+    // Implement logic to create new chat here
+    console.log('Creating new chat...');
+    // Close the modal after creating chat
+    this.toggleNewChat();
+  }
+
   private subscriptions: Subscription[] = [];
 
   constructor(

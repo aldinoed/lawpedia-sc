@@ -3,21 +3,6 @@
     <button (click)="newChat()">New Chat</button>
 </div>                                                                                                                       -->
 
-<!-- HISTORY CHATBOT -->
-<!-- <div class="chat-container">
-    <div class="chat-box" *ngFor="let chat of chats">
-        <div class="chat-message" [ngClass]="{'chat-message-left': chat.sender === 'user', 'chat-message-right': chat.sender === 'bot'}">
-            {{chat.message}}
-        </div>
-    </div>
-</div> -->
-
-<!-- INPUT CHATBOT -->
-<!-- <div class="chat-input">
-    <input type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()">
-    <button (click)="sendMessage()">Send</button>
-</div> -->
-
 <!-- SIDEBAR -->
 <aside
   id="logo-sidebar"
@@ -26,7 +11,67 @@
 >
   <div class="h-full px-4 pb-4 overflow-y-auto bg-latte">
     <ul class="space-y-2 font-medium">
-      <li *ngFor="let room of chatbotRooms" >
+      <!-- Buat Conversation baru -->
+      <li>
+        <a
+          (click)="toggleNewChat()"
+          class="flex items-center p-2 rounded-lg hover:bg-latte2 transition"
+        >
+          <span>Buat Conversation Baru</span>
+        </a>
+      </li>
+
+      <!-- Modal New Chat -->
+      <div
+        *ngIf="newChatModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      >
+        <div class="relative w-96 p-4 bg-white rounded-lg shadow-lg">
+          <h3 class="text-lg font-medium">Buat Conversation Baru</h3>
+          <form (ngSubmit)="createChat()" class="flex flex-col space-y-4">
+            <input
+              type="text"
+              id="title"
+              name="title"
+              class="p-2 border border-gray-300 rounded-lg"
+              placeholder="Judul Conversation"
+              required
+              [(ngModel)]="newChatTitle"
+              ngModel
+            />
+            <select
+              id="topic"
+              name="topic"
+              class="p-2 border border-gray-300 rounded-lg"
+              required
+              [(ngModel)]="newChatTopic"
+              ngModel
+            >
+              <option *ngFor="let topic of topics" [value]="topic.id">
+                {{ topic.name }}
+              </option>
+            </select>
+            <div class="flex justify-end space-x-4">
+              <button
+                type="button"
+                (click)="toggleNewChat()"
+                class="p-2 text-sm font-medium text-gray-500 border border-gray-300 rounded-lg"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                class="p-2 text-sm font-medium text-white bg-blue-500 rounded-lg"
+              >
+                Buat
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Daftar Conversation -->
+      <li *ngFor="let room of chatbotRooms">
         <a
           routerLink="/chatbot/{{ room.id }}"
           class="flex items-center p-2 rounded-lg hover:bg-latte2 transition"
@@ -34,21 +79,11 @@
           <span>{{ room.title }}</span>
         </a>
       </li>
-      <li>
-        <select
-          id="countries"
-          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-latte2 focus:border-latte2 block w-full p-2.5"
-        >
-          <option *ngFor="let topic of topics" [value]="topic.id">
-            {{ topic.name }}
-          </option>
-        </select>
-      </li>
     </ul>
   </div>
 </aside>
 
-<!-- MAIN CONTENTE CHATBOT -->
+<!-- MAIN CONTENT CHATBOT -->
 
 <main class="px-6 sm:ml-64 h-screen">
   <div class="pt-20 pb-4 flex flex-col justify-between h-full">
@@ -63,15 +98,20 @@
     </div>
 
     <!-- GET STARTED CHATBOT -->
-    <div class="lg:px-28 overflow-y-auto pt-1 pb-4" *ngIf="roomId$.value.length == 0">
+    <div
+      class="lg:px-28 overflow-y-auto pt-1 pb-4"
+      *ngIf="roomId$.value.length == 0"
+    >
       <p class="text-center font-medium text-lg">
         Pilih topik yang ingin Anda tanyakan
       </p>
     </div>
 
-    
     <!-- NO MESSAGES -->
-    <div class="lg:px-28 overflow-y-auto pt-1 pb-4" *ngIf="roomId$.value.length > 0 && messages.length == 0">
+    <div
+      class="lg:px-28 overflow-y-auto pt-1 pb-4"
+      *ngIf="roomId$.value.length > 0 && messages.length == 0"
+    >
       <p class="text-center font-medium text-lg">
         Bagaimana saya dapat membantu Anda hari ini?
       </p>
@@ -84,7 +124,9 @@
           <div *ngIf="message.content" class="flex justify-end">
             <div class="flex flex-col items-end space-y-1">
               <div class="flex items-center space-x-2">
-                <div class="flex items-center justify-center w-8 h-8 bg-blue-500 rounded-full">
+                <div
+                  class="flex items-center justify-center w-8 h-8 bg-blue-500 rounded-full"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -96,15 +138,21 @@
                     />
                   </svg>
                 </div>
-                <p class="p-2 text-sm text-white bg-blue-500 rounded-lg">{{ message.content }}</p>
+                <p class="p-2 text-sm text-white bg-blue-500 rounded-lg">
+                  {{ message.content }}
+                </p>
               </div>
-              <p class="text-xs text-gray-500">{{ message.timestamp | date: 'shortTime' }}</p>
+              <p class="text-xs text-gray-500">
+                {{ message.timestamp | date : "shortTime" }}
+              </p>
             </div>
           </div>
           <div class="flex justify-start">
             <div class="flex flex-col items-start space-y-1">
               <div class="flex items-center space-x-2">
-                <div class="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-full">
+                <div
+                  class="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-full"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -116,9 +164,13 @@
                     />
                   </svg>
                 </div>
-                <p class="p-2 text-sm text-gray-900 bg-gray-300 rounded-lg">{{ message.response || "..."}}</p>
+                <p class="p-2 text-sm text-gray-900 bg-gray-300 rounded-lg">
+                  {{ message.response || "..." }}
+                </p>
               </div>
-              <p class="text-xs text-gray-500">{{ message.timestamp | date: 'shortTime' }}</p>
+              <p class="text-xs text-gray-500">
+                {{ message.timestamp | date : "shortTime" }}
+              </p>
             </div>
           </div>
         </ng-container>
@@ -156,7 +208,5 @@
         </button>
       </form>
     </div>
-    
   </div>
 </main>
-
