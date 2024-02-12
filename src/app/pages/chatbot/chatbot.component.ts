@@ -43,6 +43,14 @@ export class ChatbotComponent implements OnInit {
   createChat(): void {
     // Implement logic to create new chat here
     console.log('Creating new chat...');
+    console.log('Title:', this.newChatTitle)
+    console.log('Topic:', this.newChatTopic)
+    this.chatbotHistory$.subscribe((history) => {
+      if (history){
+        this.chatbotService.createChatbotRooms(history.id, this.newChatTitle, this.newChatTopic)
+      }
+    })
+    
     // Close the modal after creating chat
     this.toggleNewChat();
   }
@@ -96,11 +104,20 @@ export class ChatbotComponent implements OnInit {
       this.chatbotRooms = data.map((room: any) => ({
         id: room.id,
         title: room.title,
+        topic: room.topic
       }));
+      // console.log(this.chatbotRooms)
     });
+
+    // this.chatbotService.initiateModel()
   }
 
   private loadChatbotRoom(historyId: string, roomId: string): any {
+    this.chatbotService.initiateModel(historyId, roomId).subscribe((data: any) => {
+      data.subscribe((d: any) => {
+        console.log(d)
+      })
+    })
     return this.chatbotService.getChatbotMessage(historyId, roomId).pipe(
       switchMap((data: any) => {
         this.messages = data.map((message: any) => ({
@@ -113,6 +130,7 @@ export class ChatbotComponent implements OnInit {
       })
     );
   }
+
 
   sendQuestion(form: NgForm): void {
     const sub = combineLatest([this.chatbotHistory$, this.roomId$]).pipe(
