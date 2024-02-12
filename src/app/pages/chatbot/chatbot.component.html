@@ -35,31 +35,34 @@
         </a>
       </li>
       <li>
-        <select
-          id="countries"
-          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-latte2 focus:border-latte2 block w-full p-2.5"
-        >
-          <option *ngFor="let topic of topics" [value]="topic.id">
-            {{ topic.name }}
-          </option>
-        </select>
+        
       </li>
     </ul>
   </div>
 </aside>
 
-<!-- MAIN CONTENTE CHATBOT -->
+<!-- MAIN CONTENT CHATBOT -->
 
 <main class="px-6 sm:ml-64 h-screen">
   <div class="pt-20 pb-4 flex flex-col justify-between h-full">
     <!-- APP LOGO -->
-    <div class="flex justify-end py-2">
+    <div class="flex justify-between items-center py-2">
       <h5 class="text-2xl font-medium">
-        L<span class="text-lg font-semibold">AWHUB </span
+        L<span class="text-lg font-semibold">AW</span
         ><span class="text-latte"
-          >C<span class="text-lg font-semibold">HATBOT</span></span
+          >B<span class="text-lg font-semibold">OT</span></span
         >
       </h5>
+      <div>
+        <select
+          id="countries"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-latte2 focus:border-latte2 block w-52 lg:w-56 p-2.5"
+        >
+          <option *ngFor="let topic of topics" [value]="topic.id">
+            {{ topic.name }}
+          </option>
+        </select>
+      </div>
     </div>
     <!-- CHAT CONTENT -->
     <div class="lg:px-28 overflow-y-auto pt-1 pb-4">
