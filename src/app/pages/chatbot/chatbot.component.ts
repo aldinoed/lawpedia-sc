@@ -3,37 +3,119 @@ import { ChatbotService, Topic } from '../../services/chatbot.service';
 import { CommonModule } from '@angular/common';
 import { initFlowbite } from 'flowbite';
 import 'flowbite';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { BehaviorSubject, Subscription, combineLatest, switchMap, take } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './chatbot.component.html',
   styleUrl: './chatbot.component.css',
 })
 export class ChatbotComponent implements OnInit {
-  chatHistory: string[] = [];
+  chatbotHistory$ = new BehaviorSubject<any>(null);
+  chatbotRooms: any[] = [];
+  roomId$: BehaviorSubject<string> = new BehaviorSubject('');
+  messages: any[] = [];
 
   topics: Topic[] = [];
   selectedTopic: string = '';
 
-  constructor(private chatbotService: ChatbotService) { }
+  question: string = '';
+
+  private subscriptions: Subscription[] = [];
+
+  constructor(
+    private chatbotService: ChatbotService,
+    private route: ActivatedRoute,
+    private http: HttpClient) { }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 
   ngOnInit(): void {
-    // Flowbite initiation
-    initFlowbite();
-    this.chatbotService.getChatHistory().subscribe((data: any) => {
-      this.chatHistory = data;
+    this.loadTopicList();
+    this.loadChatbotHistory();
+
+    this.route.paramMap.subscribe((params) => {
+      this.roomId$.next(params.get('id') || '');
     });
-    this.chatbotService.getTopics().subscribe((data: any) => {
-      this.topics = data.map((topic: Topic) => ({
-        id: topic.id,
-        name: topic.name,
-      }));
-      this.topics.unshift({ id: 1, name: 'Topik Umum' });
+
+    combineLatest([this.chatbotHistory$, this.roomId$]).pipe(
+      switchMap(([chatbotHistory, roomId]) => {
+        if (chatbotHistory && roomId) {
+          return this.loadChatbotRoom(chatbotHistory.id, roomId);
+        }
+        return [];
+      })
+    ).subscribe();
+  }
+
+  private loadTopicList(): void {
+    this.chatbotService.getTopics().subscribe((data: Topic[]) => {
+      this.topics = data;
     });
   }
+
+  private loadChatbotHistory(): void {
+    this.chatbotService.getChatbotHistory().subscribe((data: any) => {
+      this.chatbotHistory$.next(data[0]);
+      if (data[0]) {
+        this.loadChatbotRooms(data[0].id);
+      }
+    });
+  }
+
+  private loadChatbotRooms(historyId: string): void {
+    this.chatbotService.getChatbotRooms(historyId).subscribe((data: any) => {
+      this.chatbotRooms = data.map((room: any) => ({
+        id: room.id,
+        title: room.title,
+      }));
+    });
+  }
+
+  private loadChatbotRoom(historyId: string, roomId: string): any {
+    return this.chatbotService.getChatbotMessage(historyId, roomId).pipe(
+      switchMap((data: any) => {
+        this.messages = data.map((message: any) => ({
+          id: message.id,
+          content: message.content,
+          timestamp: message.created ? message.created.toDate() : null,
+          response: message.response,
+        })).sort((a: any, b: any) => a.timestamp - b.timestamp);
+        return [];
+      })
+    );
+  }
+
+  sendQuestion(form: NgForm): void {
+    const sub = combineLatest([this.chatbotHistory$, this.roomId$]).pipe(
+      take(1)
+    ).subscribe(([chatbotHistory, roomId]) => {
+      if (chatbotHistory && roomId) {
+        if (form.valid) {
+          const formData = {
+            question: this.question,
+          };
+          this.chatbotService.sendQuestion(formData, chatbotHistory.id, roomId, this.question).then((docRef: any) => {
+            console.log('Document written with ID: ', docRef.id);
+          }).catch((error: any) => {
+            console.error('Error sending question:', error);
+            // Handle error
+          });
+          this.question = '';
+        }          
+      }
+    });
+    this.subscriptions.push(sub);
+  }
+
 }
 
 // Rancangan
