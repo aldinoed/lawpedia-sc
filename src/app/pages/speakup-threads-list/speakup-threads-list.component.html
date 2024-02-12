@@ -18,12 +18,61 @@
     </div>
   </section>
 
+  <div class="mt-8 px-4 md:px-12 lg:px-20 flex">
+    <!-- SEARCH FORM INPUT -->
+    <form [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()" class="basis-full md:basis-1/2 lg:basis-1/3">
+      <label
+        for="default-search"
+        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+        >Search</label
+      >
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <input
+          type="search"
+          id="search"
+          class="block w-full p-4 ps-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-navy2 focus:border-navy2"
+          placeholder="Cari ..."
+          name="searchKeyword"
+          required
+          formControlName="searchKeyword"
+        />
+        <button
+          type="submit"
+          class="absolute end-2.5 bottom-2.5 bg-navy2 hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 text-white font-medium rounded-lg text-sm px-4 py-2 transition"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+
   <!--SPEAKUP LIST -->
-  <section class="px-4 md:px-12 lg:px-20 py-14">
-    <div class="flex gap-12">
-      <div class="basis-2/3">
+  <section class="px-4 md:px-12 lg:px-20 pb-14 pt-8">
+    <div class="flex flex-col lg:flex-row gap-12">
+      <div class="lg:basis-2/3">
         <ng-container *ngFor="let speakup of speakupList">
-          <div class="flex gap-4 border-y border-gray-300 p-4 cursor-pointer hover:bg-gray-50 transition" [routerLink]="['/speakup-threads', speakup.id]">
+          <div
+            class="flex gap-4 border-y border-gray-300 p-4 cursor-pointer hover:bg-gray-50 transition"
+            [routerLink]="['/speakup-threads', speakup.id]">
             <div>
               <div
                 class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
@@ -139,56 +188,9 @@
           </div>
         </ng-container>
       </div>
-      <div class="basis-1/3">
-        <div>
-          <!-- SEARCH FORM INPUT -->
-          <form [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()">
-            <label
-              for="default-search"
-              class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-              >Search</label
-            >
-            <div class="relative">
-              <div
-                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-              >
-                <svg
-                  class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="search"
-                id="search"
-                class="block w-full p-4 ps-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-navy2 focus:border-navy2"
-                placeholder="Cari ..."
-                name="searchKeyword"
-                required
-                formControlName="searchKeyword"
-              />
-              <button
-                type="submit"
-                class="absolute end-2.5 bottom-2.5 bg-navy2 hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 text-white font-medium rounded-lg text-sm px-4 py-2 transition"
-              >
-                Search
-              </button>
-            </div>
-          </form>
-        </div>
-
+      <div class="lg:basis-1/3">
         <!-- Kategori -->
-        <div class="rounded-lg mt-6 py-4 border border-gray-300">
+        <div class="rounded-lg py-4 border border-gray-300">
           <h3 class="text-xl font-bold mb-4 px-4">Kategori</h3>
           <ng-container *ngFor="let category of categories">
             <div class="p-4 flex justify-between gap-4 items-center">
