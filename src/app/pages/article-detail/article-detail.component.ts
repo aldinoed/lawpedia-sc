@@ -46,6 +46,11 @@ export class ArticleDetailComponent implements OnInit {
   onRatingSubmit() {
     if (this.authService.isLoggedIn()) {
       this.articleService.rateArticle(this.article?.id, this.ratingValue);
+      Swal.fire({
+        title: 'Good Job!',
+        text: `You have successfully rated this article.`,
+        icon: 'success',
+      });
     } else {
       Swal.fire({
         title: 'Rating Failed!',
@@ -101,7 +106,7 @@ export class ArticleDetailComponent implements OnInit {
 
   navigateToArticle(articleId: string) {
     // navigasi ke article detail
-    this.router.navigate(['/articles', articleId]).then(() => {
+    this.router.navigate(['/lawlibrary/detail', articleId]).then(() => {
       // Setelah navigasi, refresh halaman
       window.location.reload();
     });
@@ -117,5 +122,16 @@ export class ArticleDetailComponent implements OnInit {
         icon: 'error',
       });
     }
+  }
+
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      Swal.fire({
+        title: 'Link copied!',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
   }
 }

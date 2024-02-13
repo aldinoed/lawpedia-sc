@@ -15,39 +15,40 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SpeakupService } from '../../services/speakup.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
-import { MatFormField} from '@angular/material/form-field';
+import { MatFormField } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-speakup-threads-list',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    ReactiveFormsModule, 
-    RouterModule, 
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
     EditorModule,
     FormsModule,
     MatInputModule,
     MatSelectModule,
-    MatFormFieldModule,],
+    MatFormFieldModule,
+    NgxPaginationModule,
+  ],
   templateUrl: './speakup-threads-list.component.html',
   styleUrl: './speakup-threads-list.component.css',
 })
 export class SpeakupThreadsListComponent implements OnInit {
-
   threads: Array<any> = [];
-  threadCategories: Array<any> = []
+  threadCategories: Array<any> = [];
   authenticatedUser: string = '';
   userAuthenticatedId: string = localStorage.getItem('uid') || '';
   threadForm: FormGroup;
   followForm: FormGroup;
   searchForm: FormGroup;
   searchKeyword: string = '';
-  
 
   // CONSTRUCTOR
   constructor(
@@ -69,7 +70,8 @@ export class SpeakupThreadsListComponent implements OnInit {
     });
     const uid = localStorage.getItem('uid') || '';
     this.authService.getUser(uid).then((user: any) => {
-      this.authenticatedUser = user.data().username || user.data().fullname || user.data().email || '';
+      this.authenticatedUser =
+        user.data().username || user.data().fullname || user.data().email || '';
     });
   }
 
@@ -125,7 +127,7 @@ export class SpeakupThreadsListComponent implements OnInit {
         createdAt: new Date(),
       });
       Swal.fire({
-        title: 'Berhasil!', 
+        title: 'Berhasil!',
         text: 'Berhasil mengirim thread!',
         icon: 'success',
       }).then(() => {
@@ -143,10 +145,7 @@ export class SpeakupThreadsListComponent implements OnInit {
 
   onFollow(categoryId: string): void {
     try {
-      this.speakupService.followCategory(
-        categoryId,
-        this.userAuthenticatedId,
-      );
+      this.speakupService.followCategory(categoryId, this.userAuthenticatedId);
     } catch (error) {
       Swal.fire({
         title: 'Oops...',
@@ -182,11 +181,10 @@ export class SpeakupThreadsListComponent implements OnInit {
     this.speakupService.getSpeakupThreads().subscribe((threads) => {
       // Filter threads based on the search keyword
       if (this.searchKeyword) {
-        threads = threads.filter(
-          (thread) =>
-            thread['content']
-              .toLowerCase()
-              .includes(this.searchForm.value.searchKeyword.toLowerCase())
+        threads = threads.filter((thread) =>
+          thread['content']
+            .toLowerCase()
+            .includes(this.searchForm.value.searchKeyword.toLowerCase())
         );
       }
 
@@ -200,7 +198,6 @@ export class SpeakupThreadsListComponent implements OnInit {
             )?.id
         );
       }
-      
 
       // Sort threads based on the selected sort
       threads.sort((a, b) => {
@@ -229,9 +226,11 @@ export class SpeakupThreadsListComponent implements OnInit {
           thread['authorUsername'] = user.data().username || '';
         });
 
-        this.speakupService.getThreadCategory(thread['category']).then((category: any) => {
-          thread['categoryName'] = category.data().name || '';
-        });
+        this.speakupService
+          .getThreadCategory(thread['category'])
+          .then((category: any) => {
+            thread['categoryName'] = category.data().name || '';
+          });
 
         this.speakupService
           .getSpeakupComments(thread.id)
@@ -252,7 +251,8 @@ export class SpeakupThreadsListComponent implements OnInit {
 
       this.threads = threads;
     });
-    
   }
 
+  // PAGINATION
+  p: number = 1;
 }
