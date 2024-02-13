@@ -15,74 +15,29 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SpeakupService } from '../../services/speakup.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { MatFormField} from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-speakup-threads-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, EditorModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    RouterModule, 
+    EditorModule,
+    FormsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatFormFieldModule,],
   templateUrl: './speakup-threads-list.component.html',
   styleUrl: './speakup-threads-list.component.css',
 })
 export class SpeakupThreadsListComponent implements OnInit {
-
-  // SPEAKUP THREADS LIST
-  // speakupList: Array<any> = [
-  //   {
-  //     id: 1,
-  //     user: 'John Doe',
-  //     content:
-  //       '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
-  //     comments: 50,
-  //     views: 100,
-  //     created_at: new Date(),
-  //   },
-  //   {
-  //     id: 2,
-  //     user: 'John Doe',
-  //     content:
-  //       '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
-  //     comments: 50,
-  //     views: 100,
-  //     created_at: new Date(),
-  //   },
-  //   {
-  //     id: 3,
-  //     user: 'John Doe',
-  //     content:
-  //       '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</p><br><p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo deleniti totam sit natus laudantium corrupti ratione cumque culpa quas blanditiis.</b></p>',
-  //     comments: 50,
-  //     views: 100,
-  //     created_at: new Date(),
-  //   },
-  // ];
-
-  // SEARCH FORM
-  searchForm: FormGroup;
-  searchKeyword: string = '';
-  onSearchSubmit(): void {
-    this.searchKeyword = this.searchForm.value.searchKeyword;
-    // this.loadSortedArticles();
-  }
-
-  // CATEGORY LIST
-  // categories: Array<any> = [
-  //   {
-  //     name: 'Kategori 1',
-  //     followers: 100,
-  //   },
-  //   {
-  //     name: 'Kategori 2',
-  //     followers: 200,
-  //   },
-  //   {
-  //     name: 'Kategori 3',
-  //     followers: 150,
-  //   },
-  //   {
-  //     name: 'Kategori 4',
-  //     followers: 60,
-  //   },
-  // ];
 
   threads: Array<any> = [];
   threadCategories: Array<any> = []
@@ -90,6 +45,9 @@ export class SpeakupThreadsListComponent implements OnInit {
   userAuthenticatedId: string = localStorage.getItem('uid') || '';
   threadForm: FormGroup;
   followForm: FormGroup;
+  searchForm: FormGroup;
+  searchKeyword: string = '';
+  
 
   // CONSTRUCTOR
   constructor(
@@ -115,6 +73,12 @@ export class SpeakupThreadsListComponent implements OnInit {
     });
   }
 
+  // ON INIT
+  ngOnInit(): void {
+    this.loadSortedThreads();
+    this.loadThreadCategories();
+  }
+
   getInitialName(name: string): string {
     if (!name) return '';
     const words = name.split(' ');
@@ -124,6 +88,31 @@ export class SpeakupThreadsListComponent implements OnInit {
     }
 
     return initials;
+  }
+
+  // CATEGORY SELECT
+  selectedCategory = '';
+  onCategoryChange() {
+    this.loadSortedThreads();
+  }
+
+  // SORT SELECT
+  sortLists: any[] = [
+    { value: 1, viewValue: 'Waktu Publish Desc' },
+    { value: 2, viewValue: 'Waktu Publish Asc' },
+    { value: 3, viewValue: 'Jumlah View Desc' },
+    { value: 4, viewValue: 'Jumlah View Asc' },
+    { value: 5, viewValue: 'Title Desc' },
+    { value: 6, viewValue: 'Title Asc' },
+  ];
+  selectedSort = 1;
+  onSortChange() {
+    this.loadSortedThreads();
+  }
+
+  onSearchSubmit(): void {
+    this.searchKeyword = this.searchForm.value.searchKeyword;
+    this.loadSortedThreads();
   }
 
   onThreadSubmit(): void {
@@ -166,13 +155,75 @@ export class SpeakupThreadsListComponent implements OnInit {
       });
       console.error('Error adding document: ', error);
     }
+    this.loadThreadCategories();
+    this.loadSortedThreads();
   }
-  
 
-  // ON INIT
-  ngOnInit(): void {
-    this.speakupService.getSpeakupThreads().subscribe((data) => {
-      data.map((thread) => {
+  private loadThreadCategories(): void {
+    this.speakupService.getThreadCategories().subscribe((data) => {
+      data.map((category) => {
+        this.speakupService
+          .getCategoryFollowers(category.id)
+          .subscribe((followers) => {
+            category['followers'] = followers.length;
+            followers.map((follower) => {
+              if (follower['userId'] === this.userAuthenticatedId) {
+                category['isFollowed'] = true;
+              }
+            });
+          });
+      });
+      this.threadCategories = data;
+      this.threadCategories.unshift({ id: '', name: 'Semua Kategori' });
+    });
+  }
+
+  private loadSortedThreads(): void {
+    this.speakupService.getSpeakupThreads().subscribe((threads) => {
+      // Filter threads based on the search keyword
+      if (this.searchKeyword) {
+        threads = threads.filter(
+          (thread) =>
+            thread['content']
+              .toLowerCase()
+              .includes(this.searchForm.value.searchKeyword.toLowerCase())
+        );
+      }
+
+      // Filter threads based on the selected category
+      if (this.selectedCategory) {
+        threads = threads.filter(
+          (thread) =>
+            thread['category'].id ===
+            this.threadCategories.find(
+              (category) => category.id === this.selectedCategory
+            )?.id
+        );
+      }
+      
+
+      // Sort threads based on the selected sort
+      threads.sort((a, b) => {
+        switch (this.selectedSort) {
+          case 1:
+            return b['createdAt'] - a['createdAt'];
+          case 2:
+            return a['createdAt'] - b['createdAt'];
+          case 3:
+            return b['views'] - a['views'];
+          case 4:
+            return a['views'] - b['views'];
+          case 5:
+            return b['title'].localeCompare(a['title']);
+          case 6:
+            return a['title'].localeCompare(b['title']);
+          default:
+            return 0;
+        }
+      });
+
+      // Map threads with additional data
+      threads.map((thread) => {
         this.authService.getUser(thread['userId']).then((user: any) => {
           thread['authorFullname'] = user.data().fullname || '';
           thread['authorUsername'] = user.data().username || '';
@@ -198,31 +249,10 @@ export class SpeakupThreadsListComponent implements OnInit {
             });
           });
       });
-      this.threads = data;
-      // console.log('threads: ', this.threads);
+
+      this.threads = threads;
     });
-
-    this.speakupService.getThreadCategories().subscribe((data) => {
-      data.map((category) => {
-        this.speakupService
-          .getCategoryFollowers(category.id)
-          .subscribe((followers) => {
-            category['followers'] = followers.length;
-            followers.map((follower) => {
-              if (follower['userId'] === this.userAuthenticatedId) {
-                category['isFollowed'] = true;
-              }
-            });
-          });
-      });
-      this.threadCategories = data;
-      // console.log('categories: ', this.threadCategories);
-    });
-
-    // this.speakupService.getCategoryFollowings(this.userAuthenticatedId).subscribe((data: any) => {
-    //   console.log('followings: ', data);
-    // });
-
+    
   }
 
 }

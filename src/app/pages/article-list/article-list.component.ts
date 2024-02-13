@@ -46,6 +46,7 @@ interface Sort {
   templateUrl: './article-list.component.html',
   styleUrl: './article-list.component.css',
 })
+
 export class ArticleListComponent implements OnInit {
   articles: Array<any> = [];
   popularArticles: Array<any> = [];
