@@ -37,6 +37,7 @@ export class ArticleDetailComponent implements OnInit {
   authenticatedUser: string = 'John Doe'; // Authenticated User Data
   userNameLength: number = this.authenticatedUser.length;
 
+  userRating = 0;
   ratingValue = 0;
   selectRating(value: number) {
     this.ratingValue = value;
@@ -60,7 +61,7 @@ export class ArticleDetailComponent implements OnInit {
     private articleService: ArticleService,
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) { }
 
   // INIT
   ngOnInit() {
@@ -71,6 +72,9 @@ export class ArticleDetailComponent implements OnInit {
       this.articleCategory = article.category;
       this.articleService.getQuizHistory(article?.id).subscribe((history) => {
         this.quizTaken = history.length > 0;
+      });
+      this.articleService.getUserRating(article?.id).subscribe((rating) => {
+        this.ratingValue = rating;
       });
     });
     this.articleService.getArticleRating(id ? id : '').subscribe((rating) => {
@@ -84,7 +88,7 @@ export class ArticleDetailComponent implements OnInit {
     this.articleService.getPopularArticles().subscribe((articles) => {
       articles.sort((a, b) => b.views - a.views);
       this.popularArticles = articles.map((article) => ({
-        id: article.id,       
+        id: article.id,
         title: article.title,
         author: article.author,
         content: this.articleService.getCleanContent(article.content),
@@ -105,7 +109,7 @@ export class ArticleDetailComponent implements OnInit {
 
   takeQuiz() {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/articles', this.article?.id, 'quiz']);
+      this.router.navigate(['/lawlibrary/detail', this.article?.id, 'quiz']);
     } else {
       Swal.fire({
         title: 'Quiz Failed!',

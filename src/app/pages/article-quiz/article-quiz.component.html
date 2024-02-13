@@ -1,7 +1,7 @@
 <main class="px-4 md:px-12 lg:px-20 pb-16 pt-32">
   <h1 class="text-2xl font-semibold uppercase mb-8">KUIS</h1>
   <!-- SKOR -->
-  <div class="flex items-center justify-between mb-8">
+  <div *ngIf="quizHistoryData" class="flex items-center justify-between mb-8">
     <div class="flex items-center gap-4">
       <p class="text-lg font-medium text-gray-900 dark:text-white">Skor:</p>
       <p class="text-lg font-medium text-green-500 dark:text-green-400">{{ quizHistory.score }}</p>

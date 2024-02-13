@@ -125,7 +125,7 @@ export class SpeakupThreadsListComponent implements OnInit {
         createdAt: new Date(),
       });
       Swal.fire({
-        title: 'Berhasil!',
+        title: 'Berhasil!', 
         text: 'Berhasil mengirim thread!',
         icon: 'success',
       }).then(() => {

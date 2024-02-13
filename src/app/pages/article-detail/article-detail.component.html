@@ -179,7 +179,7 @@
   </div>
 
   <!-- KERJAKAN QUIZ -->
-  <div *ngIf="!{quizTaken}" class="mt-14 flex flex-col items-center gap-4">
+  <div *ngIf="!quizTaken" class="mt-14 flex flex-col items-center gap-4">
     <div class="p-3 rounded-full bg-navy2 text-white">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +207,7 @@
   </div>
 
   <!-- QUIZ TELAH SELESAI -->
-  <div *ngIf="{quizTaken}" class="mt-14 flex flex-col items-center gap-4">
+  <div *ngIf="quizTaken" class="mt-14 flex flex-col items-center gap-4">
     <div class="p-3 rounded-full bg-navy2 text-white">
       <svg
         xmlns="http://www.w3.org/2000/svg"

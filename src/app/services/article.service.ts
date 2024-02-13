@@ -10,7 +10,7 @@ import {
   addDoc,
 } from '@angular/fire/firestore';
 import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
-import { switchMap, map, toArray } from 'rxjs/operators';
+import { switchMap, map, toArray, take } from 'rxjs/operators';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
 import { from, combineLatest } from 'rxjs';
 import { query, where } from '@angular/fire/firestore';
@@ -181,28 +181,50 @@ export class ArticleService {
     );
   }
 
+  getUserRating(articleId: any): Observable<number> {
+    return this.auth.user$.pipe(
+      switchMap((user) => {
+        if (user) {
+          const uid = user.uid;
+          const ratingRef = collection(this.firestore, 'articles', articleId, 'ratings');
+          const q = query(ratingRef, where('user', '==', uid));
+          return collectionData(q, { idField: 'id' }).pipe(
+            map((ratings: any[]) => {
+              if (ratings.length > 0) {
+                return ratings[0].rating;
+              } else {
+                return 0;
+              }
+            })
+          );
+        } else {
+          return of(0);
+        }
+      })
+    );
+  }
+
 
   rateArticle(articleId: any, rating: number): void {
-    this.auth.user$.subscribe((user) => {
+    this.auth.user$.pipe(
+      take(1) // Ambil hanya satu nilai dan kemudian selesaikan langganan
+    ).subscribe((user) => {
       if (user) {
         const uid = user.uid;
         const ratingRef = collection(this.firestore, 'articles', articleId, 'ratings');
-        addDoc(ratingRef, {
-          user: uid,
-          rating: rating,
-        }).then(() => {
-          Swal.fire({
-            title: 'Berhasil!',
-            text: 'Berhasil memberi rating!',
-            icon: 'success',
-          });
-        }).catch((error) => {
-          console.error('Error adding document:', error);
-          Swal.fire({
-            title: 'Oops...',
-            text: 'Gagal memberi rating. Silakan coba lagi!',
-            icon: 'error',
-          });
+        const q = query(ratingRef, where('user', '==', uid));
+        collectionData(q, { idField: 'id' }).subscribe((ratings: any[]) => {
+          if (ratings.length > 0) {
+            ratings.forEach((ratingDoc) => {
+              const ratingDocRef = doc(ratingRef, ratingDoc.id);
+              setDoc(ratingDocRef, { rating: rating }, { merge: true });
+            });
+          } else {
+            addDoc(ratingRef, {
+              user: uid,
+              rating: rating,
+            })
+          }
         });
       } else {
         console.error('User not authenticated.');
