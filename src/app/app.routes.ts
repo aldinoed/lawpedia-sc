@@ -17,25 +17,25 @@ import { SpeakupThreadsListComponent } from './pages/speakup-threads-list/speaku
 import { SpeakupThreadDetailComponent } from './pages/speakup-thread-detail/speakup-thread-detail.component';
 
 export const routes: Routes = [
-    { path: 'home', component: HomeComponent },
-    { path: 'authentication', component: AuthComponent },
-    { path: 'lawlibrary/contibute', component: SendArticleComponent, canActivate: [authGuard]},
-    { path: 'lawlibrary/contribute/success', component: ArticleSentComponent, canActivate: [authGuard]},
-    { path: 'lawlibrary', component: ArticleListComponent },
-    { path: 'lawlibrary/:id', component: ArticleDetailComponent },
-    { path: 'lawlibrary/:id/quiz', component: ArticleQuizComponent, canActivate: [authGuard]},
-    { path: 'lawfact', component: HoaxThreadsListComponent },
-    { path: 'lawfact/:id', component: HoaxThreadDetailComponent },
-    { path: 'lawbot/c/:id', component: ChatbotComponent, canActivate: [authGuard]},
-    { path: 'lawbot/c', component: ChatbotComponent, canActivate: [authGuard]},
-    { path: 'lawbot', component: ChatbotIntroComponent },
-    { path: 'lawspeak', component: SpeakupThreadsListComponent },
-    { path: 'lawspeak/:id', component: SpeakupThreadDetailComponent },
-    { path: '', redirectTo: '/home', pathMatch: 'full' }
-  ];
-  
-  @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
-  })
-  export class AppRoutingModule { }
+  { path: 'home', component: HomeComponent },
+  { path: 'authentication', component: AuthComponent },
+  { path: 'lawlibrary/contibute', component: SendArticleComponent, canActivate: [authGuard] },
+  { path: 'lawlibrary/contribute/success', component: ArticleSentComponent, canActivate: [authGuard] },
+  { path: 'lawlibrary/detail/:id/quiz', component: ArticleQuizComponent, canActivate: [authGuard] },
+  { path: 'lawlibrary/detail/:id', component: ArticleDetailComponent },
+  { path: 'lawlibrary', component: ArticleListComponent },
+  { path: 'lawfact', component: HoaxThreadsListComponent },
+  { path: 'lawfact/:id', component: HoaxThreadDetailComponent },
+  { path: 'lawbot/c/:id', component: ChatbotComponent, canActivate: [authGuard] },
+  { path: 'lawbot/c', component: ChatbotComponent, canActivate: [authGuard] },
+  { path: 'lawbot', component: ChatbotIntroComponent },
+  { path: 'lawspeak', component: SpeakupThreadsListComponent },
+  { path: 'lawspeak/:id', component: SpeakupThreadDetailComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
