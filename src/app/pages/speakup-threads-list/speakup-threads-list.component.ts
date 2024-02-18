@@ -21,11 +21,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
 import { NgxPaginationModule } from 'ngx-pagination';
-<<<<<<< HEAD
 import { Firestore, doc } from '@angular/fire/firestore';
-=======
 import { initFlowbite } from 'flowbite';
->>>>>>> 962a0cd59ce85e93a8e7b2afdfb68d46c7d57ccc
 
 @Component({
   selector: 'app-speakup-threads-list',

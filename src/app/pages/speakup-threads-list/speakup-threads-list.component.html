@@ -20,75 +20,6 @@
   </section>
 
   <div class="mt-8 px-4 md:px-12 lg:px-20 flex justify-center">
-<<<<<<< HEAD
-    <!-- CREATE THREADS -->
-    <div>
-      <!-- <h5 class="text-lg font-bold mb-4 px-4">Buat Threads</h5> -->
-      <div class="flex gap-4 border-gray-300 px-4">
-        <div>
-          <div
-            class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
-            [ngClass]="{
-            'bg-gray-800 ':
-              authenticatedUser.length < 11,
-            'bg-blue-500 ':
-              authenticatedUser.length === 11,
-            'bg-red-500 ':
-              authenticatedUser.length === 12,
-            'bg-yellow-500 ':
-              authenticatedUser.length === 13,
-            'bg-green-500 ':
-              authenticatedUser.length === 14,
-            'bg-orange-500 ':
-              authenticatedUser.length === 15,
-            'bg-pink-500 ':
-              authenticatedUser.length === 16,
-            'bg-purple-500 ':
-              authenticatedUser.length === 17,
-            'bg-amber-500 ':
-              authenticatedUser.length === 18,
-            'bg-lime-500 ':
-              authenticatedUser.length === 19,
-            'bg-rose-500 ':
-              authenticatedUser.length === 20,
-            'bg-gray-500 ':
-              authenticatedUser.length > 20,
-            
-          }"
-          >
-            <span class="text-lg font-medium text-white">{{
-              getInitialName(authenticatedUser)
-            }}</span>
-          </div>
-        </div>
-        <div>
-          <form
-            [formGroup]="threadForm"
-            (ngSubmit)="onThreadSubmit()"
-            class="space-y-4"
-          >
-            <div class="grid grid-cols-1 gap-4">
-              
-              <div>
-                <label
-                  for="select-category"
-                  class="block text-sm font-medium text-gray-700"
-                  >Kategori</label
-                >
-                <select
-                  formControlName="category"
-                  id="select-category"
-                  class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-                >
-                  <option
-                    *ngFor="let item of threadCategories; let i = index"
-                    [ngValue]="item.id"
-                  >
-                    {{ i === 0 ? "Pilih Kategori" : item.name }}
-                  </option>
-                </select>
-              </div>
-=======
     <button
       class="flex items-center gap-2 px-6 py-2 font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
       (click)="setCreateModalOpen(1)"
@@ -120,21 +51,7 @@
           (ngSubmit)="onThreadSubmit()"
           class="space-y-4"
         >
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label
-                for="input-title"
-                class="block text-sm font-medium text-gray-700"
-                >Judul</label
-              >
-              <input
-                type="text"
-                formControlName="title"
-                id="input-title"
-                class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-              />
->>>>>>> 962a0cd59ce85e93a8e7b2afdfb68d46c7d57ccc
-            </div>
+          <div class="grid grid-cols-1 gap-4">
             <div>
               <label
                 for="select-category"
