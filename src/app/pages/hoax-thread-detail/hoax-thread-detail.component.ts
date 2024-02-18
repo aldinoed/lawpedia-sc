@@ -43,6 +43,7 @@ export class HoaxThreadDetailComponent implements OnInit {
       });
     });
     this.loadLatestHoax();
+    
   }
 
   private loadLatestHoax() {
@@ -73,7 +74,7 @@ export class HoaxThreadDetailComponent implements OnInit {
 
   navigateToHoax(hoaxId: string) {
     // navigasi ke article detail
-    this.router.navigate(['/hoax-threads', hoaxId]).then(() => {
+    this.router.navigate(['/lawfact', hoaxId]).then(() => {
       // Setelah navigasi, refresh halaman
       window.location.reload();
     });

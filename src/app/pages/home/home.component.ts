@@ -21,22 +21,22 @@ export class HomeComponent {
     {
       name: 'LawLibrary',
       image: '/assets/article-logo.png',
-      href: '/articles',
+      href: '/lawlibrary',
     },
     {
       name: 'LawFact',
       image: '/assets/hoax-logo.png',
-      href: '/hoax-threads',
+      href: '/lawfact',
     },
     {
       name: 'LawSpeak',
       image: '/assets/speak-up-logo.png',
-      href: '/speakup-threads',
+      href: '/lawspeak',
     },
     {
       name: 'LawBot',
       image: '/assets/chat-bot-logo.png',
-      href: '/chatbot-intro',
+      href: '/lawbot',
     },
   ];
 

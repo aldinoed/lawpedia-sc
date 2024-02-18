@@ -19,9 +19,9 @@
     </div>
   </section>
 
-  <div class="mt-8 px-4 md:px-12 lg:px-20 flex flex-col lg:flex-row gap-12">
+  <div class="mt-8 px-4 md:px-12 lg:px-20 flex justify-center">
     <!-- CREATE THREADS -->
-    <div class="lg:basis-2/3">
+    <div>
       <!-- <h5 class="text-lg font-bold mb-4 px-4">Buat Threads</h5> -->
       <div class="flex gap-4 border-gray-300 px-4">
         <div>
@@ -66,37 +66,39 @@
             (ngSubmit)="onThreadSubmit()"
             class="space-y-4"
           >
-            <div>
-              <label
-                for="input-title"
-                class="block text-sm font-medium text-gray-700"
-                >Judul</label
-              >
-              <input
-                type="text"
-                formControlName="title"
-                id="input-title"
-                class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-              />
-            </div>
-            <div>
-              <label
-                for="select-category"
-                class="block text-sm font-medium text-gray-700"
-                >Kategori</label
-              >
-              <select
-                formControlName="category"
-                id="select-category"
-                class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-              > 
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="input-title"
+                  class="block text-sm font-medium text-gray-700"
+                  >Judul</label
+                >
+                <input
+                  type="text"
+                  formControlName="title"
+                  id="input-title"
+                  class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                />
+              </div>
+              <div>
+                <label
+                  for="select-category"
+                  class="block text-sm font-medium text-gray-700"
+                  >Kategori</label
+                >
+                <select
+                  formControlName="category"
+                  id="select-category"
+                  class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                >
                   <option
                     *ngFor="let item of threadCategories; let i = index"
                     [ngValue]="item.id"
                   >
-                    {{ (i === 0) ?  'Pilih Kategori' : item.name }}
+                    {{ i === 0 ? "Pilih Kategori" : item.name }}
                   </option>
-              </select>
+                </select>
+              </div>
             </div>
             <div>
               <label
@@ -126,91 +128,96 @@
         </div>
       </div>
     </div>
-
-    <!-- SEARCH FORM INPUT -->
-    <form
-      [formGroup]="searchForm"
-      (ngSubmit)="onSearchSubmit()"
-      class="lg:basis-1/3"
-    >
-      <label
-        for="default-search"
-        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >Search</label
-      >
-      <div class="relative">
-        <div
-          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-        >
-          <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-            />
-          </svg>
-        </div>
-        <input
-          type="search"
-          id="search"
-          class="block w-full p-4 ps-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-navy2 focus:border-navy2"
-          placeholder="Cari ..."
-          name="searchKeyword"
-          required
-          formControlName="searchKeyword"
-        />
-        <button
-          type="submit"
-          class="absolute end-2.5 bottom-2.5 bg-navy2 hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 text-white font-medium rounded-lg text-sm px-4 py-2 transition"
-        >
-          Search
-        </button>
-      </div>
-    </form>
   </div>
 
   <!--SPEAKUP LIST -->
   <section class="px-4 md:px-12 lg:px-20 pb-14 pt-10">
-    <div class="flex gap-4">
+    <div class="flex flex-col lg:flex-row gap-4 lg:justify-between">
       <!-- FILTER CATEGORY -->
-      <mat-form-field>
-        <mat-label>Pilih Kategori</mat-label>
-        <mat-select
-          [(value)]="selectedCategory"
-          (selectionChange)="onCategoryChange()"
+      <div class="flex gap-4 items-center">
+        <mat-form-field>
+          <mat-label>Pilih Kategori</mat-label>
+          <mat-select
+            [(value)]="selectedCategory"
+            (selectionChange)="onCategoryChange()"
+          >
+            @for (category of threadCategories; track category) {
+            <mat-option [value]="category.id">{{ category.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <!-- SORTING  -->
+        <mat-form-field>
+          <mat-label>Urut Berdasarkan</mat-label>
+          <mat-select
+            [(value)]="selectedSort"
+            (selectionChange)="onSortChange()"
+          >
+            <mat-option *ngFor="let sort of sortLists" [value]="sort.value">
+              {{ sort.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- SEARCH FORM INPUT -->
+      <form
+        [formGroup]="searchForm"
+        (ngSubmit)="onSearchSubmit()"
+        class="lg:basis-1/3"
+      >
+        <label
+          for="default-search"
+          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >Search</label
         >
-          @for (category of threadCategories; track category) {
-          <mat-option [value]="category.id">{{
-            category.name
-          }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <!-- SORTING  -->
-      <mat-form-field>
-        <mat-label>Urut Berdasarkan</mat-label>
-        <mat-select
-          [(value)]="selectedSort"
-          (selectionChange)="onSortChange()"
-        >
-          <mat-option *ngFor="let sort of sortLists" [value]="sort.value">
-            {{ sort.viewValue }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <div class="relative">
+          <div
+            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+          >
+            <svg
+              class="w-4 h-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+          <input
+            type="search"
+            id="search"
+            class="block w-full p-4 ps-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-navy2 focus:border-navy2"
+            placeholder="Cari ..."
+            name="searchKeyword"
+            required
+            formControlName="searchKeyword"
+          />
+          <button
+            type="submit"
+            class="absolute end-2.5 bottom-2.5 bg-navy2 hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 text-white font-medium rounded-lg text-sm px-4 py-2 transition"
+          >
+            Search
+          </button>
+        </div>
+      </form>
     </div>
 
-    <div class="flex flex-col lg:flex-row gap-12">
+    <div class="flex flex-col lg:flex-row gap-12 mt-6">
       <div class="lg:basis-2/3">
-        <ng-container *ngFor="let thread of threads">
+        <ng-container
+          *ngFor="
+            let thread of threads
+              | paginate : { itemsPerPage: 8, currentPage: p };
+            let i = index
+          "
+        >
           <div
             class="flex gap-4 border-y border-gray-300 p-4 cursor-pointer hover:bg-gray-50 transition"
             [routerLink]="['/lawspeak', thread.id]"
@@ -348,6 +355,13 @@
             </div>
           </div>
         </ng-container>
+        <!-- PAGINATION CONTROLLER -->
+        <div class="flex justify-center mt-14">
+          <pagination-controls
+            (pageChange)="p = $event"
+            [responsive]="true"
+          ></pagination-controls>
+        </div>
       </div>
       <div class="lg:basis-1/3">
         <div class="rounded-lg py-4 border border-gray-300">
@@ -364,7 +378,7 @@
                   [value]="category.id"
                   (click)="onFollow(category.id)"
                 >
-                  {{ category.isFollowed ? "Unfollow" : "Follow"}}
+                  {{ category.isFollowed ? "Unfollow" : "Follow" }}
                 </button>
               </div>
             </div>

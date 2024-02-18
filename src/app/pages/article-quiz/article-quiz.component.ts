@@ -24,7 +24,7 @@ export class ArticleQuizComponent implements OnInit {
     private articleService: ArticleService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -32,35 +32,40 @@ export class ArticleQuizComponent implements OnInit {
       this.loadQuiz();
       // this.getHistory();
     });
-    
   }
 
   private loadQuiz(): void {
-    this.articleService.getArticleQuiz(this.articleId).subscribe(quiz => {
+    this.articleService.getArticleQuiz(this.articleId).subscribe((quiz) => {
       this.quizData = quiz;
 
-      this.articleService.getQuizHistory(this.articleId).subscribe((history) => {
-        this.quizHistory = history[0];
-        if (this.quizHistory) {
-          this.articleService.getQuizHistoryDetail(this.articleId, this.quizHistory.id).subscribe((data) => {
-            this.quizHistoryData = data.map((item: any) => {
-              return {
-                ...item,
-                question: item.question.path.split('/').pop(),
-              };
-            });
+      this.articleService
+        .getQuizHistory(this.articleId)
+        .subscribe((history) => {
+          this.quizHistory = history[0];
+          if (this.quizHistory) {
+            this.articleService
+              .getQuizHistoryDetail(this.articleId, this.quizHistory.id)
+              .subscribe((data) => {
+                this.quizHistoryData = data.map((item: any) => {
+                  return {
+                    ...item,
+                    question: item.question.path.split('/').pop(),
+                  };
+                });
 
-            if (this.quizHistoryData) {
-              this.quizData.forEach(question => {
-                const historyItem = this.quizHistoryData.find((item: any) => item.question === question.id);
-                if (historyItem) {
-                  question.userAnswer = historyItem.userAnswer;
+                if (this.quizHistoryData) {
+                  this.quizData.forEach((question) => {
+                    const historyItem = this.quizHistoryData.find(
+                      (item: any) => item.question === question.id
+                    );
+                    if (historyItem) {
+                      question.userAnswer = historyItem.userAnswer;
+                    }
+                  });
                 }
               });
-            }
-          });
-        }
-      });
+          }
+        });
     });
   }
 
@@ -85,7 +90,6 @@ export class ArticleQuizComponent implements OnInit {
   //   });
   // }
 
-
   submitQuiz() {
     // Menandai bahwa kuis sudah disubmit
     this.submitted = true;
@@ -100,21 +104,25 @@ export class ArticleQuizComponent implements OnInit {
     score = (score / this.quizData.length) * 100;
 
     // Menyimpan skor dan jawaban user ke database
-    this.articleService.saveQuizResult(this.articleId, score, this.selectedAnswers);
+    this.articleService.saveQuizResult(
+      this.articleId,
+      score,
+      this.selectedAnswers
+    );
 
-    // Menampilkan skor
-    Swal.fire({
-      title: `Your score: ${score}`,
-      text: "Berhasil mengerjakan kuis!",
-      icon: 'success',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Kembali',
-    }).then((result) => {
-      if (!result.isConfirmed) {
-        this.router.navigate(['/articles', this.articleId]);
-      }
-    });
+    // // Menampilkan skor
+    // Swal.fire({
+    //   title: `Your score: ${score}`,
+    //   text: "Berhasil mengerjakan kuis!",
+    //   icon: 'success',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#3085d6',
+    //   confirmButtonText: 'OK',
+    //   cancelButtonText: 'Kembali',
+    // }).then((result) => {
+    //   if (!result.isConfirmed) {
+    //     this.router.navigate(['/articles', this.articleId]);
+    //   }
+    // });
   }
 }
