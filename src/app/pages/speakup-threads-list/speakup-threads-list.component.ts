@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { Firestore, doc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-speakup-threads-list',
@@ -41,6 +42,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
   styleUrl: './speakup-threads-list.component.css',
 })
 export class SpeakupThreadsListComponent implements OnInit {
+  firestore: Firestore = inject(Firestore);
   threads: Array<any> = [];
   threadCategories: Array<any> = [];
   authenticatedUser: string = '';
@@ -119,10 +121,13 @@ export class SpeakupThreadsListComponent implements OnInit {
 
   onThreadSubmit(): void {
     try {
+      const categoryRef = '';
+      if (this.threadForm.value.category !== '') {
+        const categoryRef = doc(this.firestore, 'articleCategory/' + this.threadForm.value.category)
+      } 
       this.speakupService.addSpeakupThread({
-        title: this.threadForm.value.title || '',
         content: this.threadForm.value.content,
-        category: this.threadForm.value.category || '',
+        category: categoryRef,
         userId: localStorage.getItem('uid') || '',
         createdAt: new Date(),
       });
@@ -226,11 +231,13 @@ export class SpeakupThreadsListComponent implements OnInit {
           thread['authorUsername'] = user.data().username || '';
         });
 
-        this.speakupService
-          .getThreadCategory(thread['category'])
-          .then((category: any) => {
-            thread['categoryName'] = category.data().name || '';
-          });
+        if (thread['category']) {
+          this.speakupService
+            .getThreadCategory(thread['category'])
+            .then((category: any) => {
+              thread['categoryName'] = category.data().name;
+            });
+        }
 
         this.speakupService
           .getSpeakupComments(thread.id)

@@ -42,8 +42,5 @@ export class HomeComponent {
 
   constructor() {
     this.items$ = collectionData(collection(this.firestore, 'test'));
-    this.items$.subscribe((data) => {
-      console.log(data);
-    });
   }
 }

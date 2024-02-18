@@ -33,20 +33,6 @@ import { ArticleCategory } from '../../services/article.service';
 export class SendArticleComponent implements OnInit {
   form: FormGroup;
   firestore: Firestore = inject(Firestore);
-
-  // ARTICLE CATEGORY LIST
-  // articleCategories = [
-  //   'Hukum Internasional',
-  //   'Hukum Bisnis',
-  //   'Hukum Administrasi Negara',
-  //   'Hukum Lingkungan',
-  //   'Hukum Perdata',
-  //   'Hukum Pertambangan',
-  //   'Hukum Pidana',
-  //   'Hukum Tata Negara',
-  //   'Hukum Acaran',
-  //   'Hukum Lainnya',
-  // ];
   categories: Category[] = [];
 
   constructor(
@@ -86,7 +72,7 @@ export class SendArticleComponent implements OnInit {
         text: 'Berhasil mengirim artikel!',
         icon: 'success',
       }).then(() => {
-        this.router.navigate(['article-sent']);
+        this.router.navigate(['lawlibrary/contribute/success']);
       });
     } catch (e) {
       console.error('Error adding document: ', e);

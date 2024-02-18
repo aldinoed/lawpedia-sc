@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { authGuard } from './services/auth.guard';
+import { adminGuard } from './services/auth.guard';
 import { HomeComponent } from './pages/home/home.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { ArticleListComponent } from './pages/article-list/article-list.component';
@@ -15,11 +16,13 @@ import { ChatbotComponent } from './pages/chatbot/chatbot.component';
 import { ChatbotIntroComponent } from './pages/chatbot-intro/chatbot-intro.component';
 import { SpeakupThreadsListComponent } from './pages/speakup-threads-list/speakup-threads-list.component';
 import { SpeakupThreadDetailComponent } from './pages/speakup-thread-detail/speakup-thread-detail.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'authentication', component: AuthComponent },
-  { path: 'lawlibrary/contibute', component: SendArticleComponent, canActivate: [authGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
+  { path: 'lawlibrary/contribute', component: SendArticleComponent, canActivate: [authGuard] },
   { path: 'lawlibrary/contribute/success', component: ArticleSentComponent, canActivate: [authGuard] },
   { path: 'lawlibrary/detail/:id/quiz', component: ArticleQuizComponent, canActivate: [authGuard] },
   { path: 'lawlibrary/detail/:id', component: ArticleDetailComponent },

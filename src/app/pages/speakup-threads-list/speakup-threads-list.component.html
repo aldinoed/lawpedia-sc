@@ -66,20 +66,8 @@
             (ngSubmit)="onThreadSubmit()"
             class="space-y-4"
           >
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="input-title"
-                  class="block text-sm font-medium text-gray-700"
-                  >Judul</label
-                >
-                <input
-                  type="text"
-                  formControlName="title"
-                  id="input-title"
-                  class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-                />
-              </div>
+            <div class="grid grid-cols-1 gap-4">
+              
               <div>
                 <label
                   for="select-category"
@@ -281,7 +269,7 @@
                 ></div>
               </div>
               <!-- badge category -->
-              <div class="mt-4">
+              <div class="mt-4" *ngIf="thread.categoryName">
                 <span
                   class="px-2 py-1 text-xs font-medium text-white bg-navy2 rounded-full"
                   >{{ thread.categoryName }}</span
