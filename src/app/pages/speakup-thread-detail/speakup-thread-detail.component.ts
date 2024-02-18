@@ -4,8 +4,15 @@ import { RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { SpeakupService } from '../../services/speakup.service';
 import { AuthService } from '../../services/auth.service';
-import { Form, FormsModule, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  Form,
+  FormsModule,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import Swal from 'sweetalert2';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-speakup-thread-detail',
@@ -50,6 +57,9 @@ export class SpeakupThreadDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    initFlowbite(); //flowbite initiation
+    this.replyModalOpen = -1;
+
     const id = this.route.snapshot.paramMap.get('id') || '';
     this.speakupService.getSpeakupThread(id).then((thread) => {
       this.threadData = thread.data();
@@ -59,7 +69,9 @@ export class SpeakupThreadDetailComponent implements OnInit {
       });
 
       this.speakupService.getSpeakupUpdates(id).subscribe((updates) => {
-        this.threadData.updates = updates.sort((a, b) => a['createdAt'] - b['createdAt']);
+        this.threadData.updates = updates.sort(
+          (a, b) => a['createdAt'] - b['createdAt']
+        );
       });
 
       this.speakupService.getSpeakupComments(id).subscribe((comments) => {
@@ -68,17 +80,23 @@ export class SpeakupThreadDetailComponent implements OnInit {
             comment['authorUsername'] = user.data().username || '';
             comment['authorFullname'] = user.data().fullname || '';
           });
-          this.speakupService.getSpeakupReplies(id, comment['id']).subscribe((replies) => {
-            replies.map((reply) => {
-              this.authService.getUser(reply['userId']).then((user: any) => {
-                reply['authorUsername'] = user.data().username || '';
-                reply['authorFullname'] = user.data().fullname || '';
+          this.speakupService
+            .getSpeakupReplies(id, comment['id'])
+            .subscribe((replies) => {
+              replies.map((reply) => {
+                this.authService.getUser(reply['userId']).then((user: any) => {
+                  reply['authorUsername'] = user.data().username || '';
+                  reply['authorFullname'] = user.data().fullname || '';
+                });
               });
+              comment['replies'] = replies.sort(
+                (a, b) => a['createdAt'] - b['createdAt']
+              );
             });
-            comment['replies'] = replies.sort((a, b) => a['createdAt'] - b['createdAt']);
-          });
         });
-        this.threadData.comments = comments.sort((a, b) => b['createdAt'] - a['createdAt']);
+        this.threadData.comments = comments.sort(
+          (a, b) => b['createdAt'] - a['createdAt']
+        );
       });
 
       console.log(this.threadData);
@@ -87,15 +105,14 @@ export class SpeakupThreadDetailComponent implements OnInit {
     this.speakupService.getThreadCategories().subscribe((data) => {
       data.map((category) => {
         this.speakupService
-        .getCategoryFollowers(category.id)
-        .subscribe((followers) => {
-          category['followers'] = followers.length;
-        });
+          .getCategoryFollowers(category.id)
+          .subscribe((followers) => {
+            category['followers'] = followers.length;
+          });
       });
       this.threadCategories = data;
       console.log('categories: ', this.threadCategories);
     });
-    
   }
 
   onUpdateSubmit() {
@@ -137,7 +154,7 @@ export class SpeakupThreadDetailComponent implements OnInit {
     }
   }
 
-  onReplySubmit(commentId: string) {
+  onReplySubmit(commentId: string, idx: number) {
     const id = this.route.snapshot.paramMap.get('id') || '';
     try {
       this.speakupService.addSpeakupReply(id, commentId, {
@@ -147,6 +164,8 @@ export class SpeakupThreadDetailComponent implements OnInit {
       });
       // window.location.reload();
       this.replyForm.reset();
+      this.setReplyModalOpen(-1);
+      this.addCommentRepliesOpen(idx);
     } catch (error) {
       Swal.fire({
         title: 'Oops...',
@@ -154,6 +173,25 @@ export class SpeakupThreadDetailComponent implements OnInit {
         icon: 'error',
       });
       console.error('Error adding document: ', error);
+      this.setReplyModalOpen(-1);
+    }
+  }
+
+  // REPLY COMMENT MODAL
+  replyModalOpen: number = -1;
+  setReplyModalOpen(openId: number) {
+    this.replyModalOpen = openId;
+  }
+
+  // OPEN COMMENT REPLIES
+  commentRepliesOpen: Array<number> = [-1];
+  addCommentRepliesOpen(openId: number) {
+    this.commentRepliesOpen.push(openId);
+  }
+  removeCommentRepliesOpen(openId: number) {
+    const index = this.commentRepliesOpen.indexOf(openId);
+    if (index !== -1) {
+      this.commentRepliesOpen.splice(index, 1);
     }
   }
 }

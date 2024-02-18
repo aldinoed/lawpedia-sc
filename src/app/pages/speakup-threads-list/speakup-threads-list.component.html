@@ -20,112 +20,105 @@
   </section>
 
   <div class="mt-8 px-4 md:px-12 lg:px-20 flex justify-center">
-    <!-- CREATE THREADS -->
-    <div>
-      <!-- <h5 class="text-lg font-bold mb-4 px-4">Buat Threads</h5> -->
-      <div class="flex gap-4 border-gray-300 px-4">
-        <div>
-          <div
-            class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden rounded-full"
-            [ngClass]="{
-            'bg-gray-800 ':
-              authenticatedUser.length < 11,
-            'bg-blue-500 ':
-              authenticatedUser.length === 11,
-            'bg-red-500 ':
-              authenticatedUser.length === 12,
-            'bg-yellow-500 ':
-              authenticatedUser.length === 13,
-            'bg-green-500 ':
-              authenticatedUser.length === 14,
-            'bg-orange-500 ':
-              authenticatedUser.length === 15,
-            'bg-pink-500 ':
-              authenticatedUser.length === 16,
-            'bg-purple-500 ':
-              authenticatedUser.length === 17,
-            'bg-amber-500 ':
-              authenticatedUser.length === 18,
-            'bg-lime-500 ':
-              authenticatedUser.length === 19,
-            'bg-rose-500 ':
-              authenticatedUser.length === 20,
-            'bg-gray-500 ':
-              authenticatedUser.length > 20,
-            
-          }"
-          >
-            <span class="text-lg font-medium text-white">{{
-              getInitialName(authenticatedUser)
-            }}</span>
-          </div>
-        </div>
-        <div>
-          <form
-            [formGroup]="threadForm"
-            (ngSubmit)="onThreadSubmit()"
-            class="space-y-4"
-          >
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="input-title"
-                  class="block text-sm font-medium text-gray-700"
-                  >Judul</label
-                >
-                <input
-                  type="text"
-                  formControlName="title"
-                  id="input-title"
-                  class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div>
-                <label
-                  for="select-category"
-                  class="block text-sm font-medium text-gray-700"
-                  >Kategori</label
-                >
-                <select
-                  formControlName="category"
-                  id="select-category"
-                  class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-                >
-                  <option
-                    *ngFor="let item of threadCategories; let i = index"
-                    [ngValue]="item.id"
-                  >
-                    {{ i === 0 ? "Pilih Kategori" : item.name }}
-                  </option>
-                </select>
-              </div>
+    <button
+      class="flex items-center gap-2 px-6 py-2 font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+      (click)="setCreateModalOpen(1)"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-5 h-5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 4.5v15m7.5-7.5h-15"
+        />
+      </svg>
+      <span>Buat Threads</span>
+    </button>
+    <!-- CREATE THREADS MODAL -->
+    <div
+      *ngIf="createModalOpen === 1"
+      class="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50"
+    >
+      <div class="bg-white py-4 px-6 rounded-lg">
+        <form
+          [formGroup]="threadForm"
+          (ngSubmit)="onThreadSubmit()"
+          class="space-y-4"
+        >
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                for="input-title"
+                class="block text-sm font-medium text-gray-700"
+                >Judul</label
+              >
+              <input
+                type="text"
+                formControlName="title"
+                id="input-title"
+                class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+              />
             </div>
             <div>
               <label
-                for="input-content"
+                for="select-category"
                 class="block text-sm font-medium text-gray-700"
-                >Konten</label
+                >Kategori</label
               >
-              <editor
-                apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
-                [init]="{
-                  plugins: 'list link image wordcount',
-                  menubar: 'insert',
-                  height: 300
-                }"
-                formControlName="content"
-                id="input-content-{{ threadForm.get('content')?.value }}"
-                class="mt-1"
-              ></editor>
+              <select
+                formControlName="category"
+                id="select-category"
+                class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+              >
+                <option
+                  *ngFor="let item of threadCategories; let i = index"
+                  [ngValue]="item.id"
+                >
+                  {{ i === 0 ? "Pilih Kategori" : item.name }}
+                </option>
+              </select>
             </div>
+          </div>
+          <div>
+            <label
+              for="input-content"
+              class="block text-sm font-medium text-gray-700"
+              >Konten</label
+            >
+            <editor
+              apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
+              [init]="{
+                plugins: 'list link image wordcount',
+                menubar: 'insert',
+                height: 300
+              }"
+              formControlName="content"
+              id="input-content-{{ threadForm.get('content')?.value }}"
+              class="mt-1"
+            ></editor>
+          </div>
+          <div>
             <button
               type="submit"
               class="inline-flex items-center px-5 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
             >
               Kirim
             </button>
-          </form>
-        </div>
+            <button
+              type="button"
+              (click)="setCreateModalOpen(0)"
+              class="ms-2 inline-flex items-center px-5 py-2 text-sm font-medium border border-navy2 rounded-full hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+            >
+              Batal
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

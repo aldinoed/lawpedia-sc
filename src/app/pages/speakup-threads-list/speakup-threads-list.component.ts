@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-speakup-threads-list',
@@ -79,6 +80,7 @@ export class SpeakupThreadsListComponent implements OnInit {
   ngOnInit(): void {
     this.loadSortedThreads();
     this.loadThreadCategories();
+    initFlowbite(); //flowbite initiation
   }
 
   getInitialName(name: string): string {
@@ -255,4 +257,10 @@ export class SpeakupThreadsListComponent implements OnInit {
 
   // PAGINATION
   p: number = 1;
+
+  // CREATE THREADS MODAL
+  createModalOpen: number = 0;
+  setCreateModalOpen(isOpen: number) {
+    this.createModalOpen = isOpen;
+  }
 }
