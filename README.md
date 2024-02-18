@@ -1,27 +1,75 @@
-# LawpediaSc
+### HOW TO RUN LAWSITES MAIN SERVER
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.0.
+This repository contains an Angular project integrated with Firebase for backend services. The project aims to [provide a brief description of the project and its purpose].
 
-## Development server
+#### Installation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. **Clone Repository**: 
+   ```
+   git clone https://github.com/aldinoed/lawpedia-sc.git
+   ```
+2. **Navigate to Project Directory**: 
+   ```
+   cd lawpedia-sc
+   ```
+3. **Install Dependencies**: 
+   ```
+   npm install
+   ```
 
-## Code scaffolding
+#### Running the Application
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Run the following command for a dev server: 
+  ```
+  ng serve
+  ```
+- Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### HOW TO RUN LAWSITES AI SERVER
 
-## Running unit tests
+This repository contains a FastAPI Python server project.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+#### Installation
 
-## Running end-to-end tests
+1. **Clone Repository**: 
+   ```
+   git clone https://github.com/khanzafa/lawbot.git
+   ```
+2. **Navigate to Project Directory**: 
+   ```
+   cd lawbot
+   ```
+3. **Create Virtual Environment**: 
+   ```
+   python -m venv venv
+   ```
+4. **Activate Virtual Environment**:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+   - On Windows: 
+     ```
+     venv\Scripts\activate
+     ```
+   - On macOS and Linux: 
+     ```
+     source venv/bin/activate
+     ```
+5. **Install Dependencies**: 
+   ```
+   pip install -r requirements.txt
+   ```
 
-## Further help
+#### Running the Server
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Run the FastAPI server using the following command:
+  ```
+  uvicorn app:app --reload --port=1000
+  ```
+- The server will start locally at `http://127.0.0.1:1000/`.
+
+#### API Documentation
+
+- Access the Swagger documentation for the API at `http://127.0.0.1:1000/docs`.
+
+---
