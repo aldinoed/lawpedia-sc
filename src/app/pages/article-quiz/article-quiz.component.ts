@@ -97,7 +97,7 @@ export class ArticleQuizComponent implements OnInit {
         score++;
       }
     });
-    score /= this.quizData.length * 100;
+    score = (score / this.quizData.length) * 100;
 
     // Menyimpan skor dan jawaban user ke database
     this.articleService.saveQuizResult(this.articleId, score, this.selectedAnswers);
