@@ -169,10 +169,12 @@
         <h3 class="text-xl font-bold mb-4 px-4">
           Komentar ({{ threadData.comments?.length }})
         </h3>
-        <div class="max-h-96 overflow-y-auto">
-          <ng-container *ngFor="let comment of threadData.comments">
+        <div class="max-h-[30rem] overflow-y-auto">
+          <ng-container
+            *ngFor="let comment of threadData.comments; let i = index"
+          >
             <!-- comment -->
-            <div class="p-4">
+            <div class="px-4 pt-4">
               <div class="flex gap-2">
                 <div>
                   <div
@@ -197,42 +199,113 @@
                     }}</span>
                   </div>
                 </div>
-                <div>
+                <div class="w-full">
                   <div class="flex gap-2 items-center">
                     <h5 class="text-sm font-bold">
                       {{ comment.authorFullname }}
                     </h5>
-                    <p>-</p>
-                    <p class="text-sm">
-                      {{ comment.createdAt?.toDate() | date : "mediumDate" }}
-                    </p>
-                  </div>
-                  <div>
                     <p class="text-sm text-gray-600">
                       {{ "@" + comment.authorUsername }}
                     </p>
                   </div>
                   <div class="mt-2">
+                    <div class="text-sm" [innerHTML]="comment.content"></div>
+                  </div>
+                  <div class="mt-2 flex items-center gap-10">
+                    <p class="text-xs font-thin">
+                      {{ comment.createdAt?.toDate() | date : "mediumDate" }}
+                    </p>
+                    <button
+                      class="text-xs font-thin hover:text-black focus:ring-navy2"
+                      type="button"
+                      (click)="setReplyModalOpen(i)"
+                    >
+                      Balas
+                    </button>
+                    <!-- REPLY FORM MODAL -->
                     <div
-                      class="text-sm mb-4"
-                      [innerHTML]="comment.content"
-                    ></div>
+                      *ngIf="replyModalOpen === i"
+                      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center"
+                    >
+                      <div
+                        class="relative w-96 p-4 bg-white rounded-lg shadow-lg"
+                      >
+                        <div class="mb-4 flex justify-between items-center">
+                          <h3 class="text-lg font-medium">Balas Komentar</h3>
+                          <button (click)="setReplyModalOpen(-1)">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="w-6 h-6"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <form
+                          [formGroup]="replyForm"
+                          (ngSubmit)="onReplySubmit(comment.id, i)"
+                          class="relative"
+                        >
+                          <input
+                            type="text"
+                            id="user_question"
+                            name="user_question"
+                            class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gold focus:border-gold"
+                            placeholder="Tulis balasan"
+                            required
+                            formControlName="content"
+                          />
+                          <button
+                            type="submit"
+                            class="absolute end-2.5 bottom-4 focus:ring-4 focus:outline-none focus:ring-gold font-medium rounded-lg text-sm hover:text-black"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              class="w-5 h-5"
+                            >
+                              <path
+                                d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z"
+                              />
+                            </svg>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div class="ms-10 mt-2 mb-4">
+                <button
+                  *ngIf="!commentRepliesOpen.includes(i)"
+                  (click)="addCommentRepliesOpen(i)"
+                  class="text-xs font-thin hover:text-black focus:ring-navy2"
+                >
+                  - Lihat balasan -
+                </button>
+                <button
+                  *ngIf="commentRepliesOpen.includes(i)"
+                  (click)="removeCommentRepliesOpen(i)"
+                  class="text-xs font-thin hover:text-black focus:ring-navy2"
+                >
+                  - Tutup balasan -
+                </button>
+              </div>
               <!-- replies of comment -->
               <div class="flex-1">
-                <div class="flex justify-end">
-                  <button
-                    class="text-sm text-gray-500 hover:text-navy2 focus:outline-none"
-                  >
-                    Balas
-                  </button>
-                </div>
-                <div class="mt-2 ml-4">
+                <div *ngIf="commentRepliesOpen.includes(i)" class="mt-2 ml-10">
                   <ng-container *ngFor="let reply of comment.replies">
-                    <div class="p-4 bg-gray-100 rounded-lg mt-2">
-                      <div class="flex gap-2 items-center">
+                    <div class="mb-4">
+                      <div class="flex gap-2">
                         <div>
                           <div
                             class="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full"
@@ -266,83 +339,27 @@
                             <h5 class="text-sm font-bold">
                               {{ reply.authorFullname }}
                             </h5>
-                            <p>-</p>
-                            <p class="text-sm">
-                              {{
-                                reply.createdAt?.toDate() | date : "mediumDate"
-                              }}
-                            </p>
-                          </div>
-                          <div>
                             <p class="text-sm text-gray-600">
                               {{ "@" + reply.authorUsername }}
                             </p>
                           </div>
                           <div class="mt-2">
                             <div
-                              class="text-sm mb-4"
+                              class="text-sm"
                               [innerHTML]="reply.content"
                             ></div>
+                          </div>
+                          <div class="mt-2">
+                            <p class="text-xs font-thin">
+                              {{
+                                reply.createdAt?.toDate() | date : "mediumDate"
+                              }}
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </ng-container>
-                </div>
-                <!-- Add New Reply -->
-                <div class="mt-4 ml-4">
-                  <!-- <form
-                    [formGroup]="replyForm"
-                    (ngSubmit)="onReplySubmit(comment.id)"
-                  >
-                    <div class="flex gap-4">
-                      <div class="flex-1">
-                        <textarea
-                          class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-4 focus:ring-blue-900 transition"
-                          formControlName="content"
-                          placeholder="Tulis balasan"
-                        ></textarea>
-                      </div>
-                      <div>
-                        <button
-                          type="submit"
-                          class="px-5 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
-                        >
-                          Balas
-                        </button>
-                      </div>
-                    </div>
-                  </form> -->
-                  <form
-                    [formGroup]="replyForm"
-                    (ngSubmit)="onReplySubmit(comment.id)"
-                    class="relative"
-                  >
-                    <input
-                      type="text"
-                      id="user_question"
-                      name="user_question"
-                      class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gold focus:border-gold"
-                      placeholder="Tulis balasan"
-                      required
-                      formControlName="content"
-                    />
-                    <button
-                      type="submit"
-                      class="absolute end-2.5 bottom-4 focus:ring-4 focus:outline-none focus:ring-gold font-medium rounded-lg text-sm hover:text-black"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z"
-                        />
-                      </svg>
-                    </button>
-                  </form>
                 </div>
               </div>
             </div>
@@ -403,7 +420,7 @@
       </div>
 
       <!-- Kategori -->
-      <div class="rounded-lg mt-6 py-4 border border-gray-300">
+      <!-- <div class="rounded-lg mt-6 py-4 border border-gray-300">
         <h3 class="text-xl font-bold mb-4 px-4">Kategori</h3>
         <ng-container *ngFor="let category of threadCategories">
           <div class="p-4 flex justify-between gap-4 items-center">
@@ -420,7 +437,7 @@
             </div>
           </div>
         </ng-container>
-      </div>
+      </div> -->
 
       <!-- Form Follow Kategory -->
     </div>

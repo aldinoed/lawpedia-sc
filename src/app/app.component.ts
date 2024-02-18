@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
   contactData: Array<any> = [
     {
       icon: '/assets/email-logo.png',
-      value: 'lawhub@gmail.com',
+      value: 'lawsites@gmail.com',
     },
     {
       icon: '/assets/phone-logo.png',
@@ -70,11 +70,11 @@ export class AppComponent implements OnInit {
   socialMediaData: Array<any> = [
     {
       icon: '/assets/instagram-icon.png',
-      value: 'lawhub_id',
+      value: 'lawsites_id',
     },
     {
       icon: '/assets/facebook-icon.png',
-      value: 'lawhub_id',
+      value: 'lawsites_id',
     },
   ];
 

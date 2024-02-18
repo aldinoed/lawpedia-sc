@@ -49,7 +49,7 @@ export class AuthService {
         });
         Swal.fire({
           title: 'Login Success!',
-          text: `Welcome to LawHub, ${email}!`,
+          text: `Welcome to LawSites, ${email}!`,
           icon: 'success',
         });
         this.router.navigate(['home']);
@@ -103,7 +103,7 @@ export class AuthService {
       });
       Swal.fire({
         title: 'Login Success!',
-        text: `Welcome to LawHub!`,
+        text: `Welcome to LawSites!`,
         icon: 'success',
       });
       this.router.navigate(['/home']);

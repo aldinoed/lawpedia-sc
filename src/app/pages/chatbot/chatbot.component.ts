@@ -4,7 +4,13 @@ import { CommonModule } from '@angular/common';
 import { initFlowbite } from 'flowbite';
 import 'flowbite';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { BehaviorSubject, Subscription, combineLatest, switchMap, take } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subscription,
+  combineLatest,
+  switchMap,
+  take,
+} from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -43,14 +49,18 @@ export class ChatbotComponent implements OnInit {
   createChat(): void {
     // Implement logic to create new chat here
     console.log('Creating new chat...');
-    console.log('Title:', this.newChatTitle)
-    console.log('Topic:', this.newChatTopic)
+    console.log('Title:', this.newChatTitle);
+    console.log('Topic:', this.newChatTopic);
     this.chatbotHistory$.subscribe((history) => {
-      if (history){
-        this.chatbotService.createChatbotRooms(history.id, this.newChatTitle, this.newChatTopic)
+      if (history) {
+        this.chatbotService.createChatbotRooms(
+          history.id,
+          this.newChatTitle,
+          this.newChatTopic
+        );
       }
-    })
-    
+    });
+
     // Close the modal after creating chat
     this.toggleNewChat();
   }
@@ -60,13 +70,16 @@ export class ChatbotComponent implements OnInit {
   constructor(
     private chatbotService: ChatbotService,
     private route: ActivatedRoute,
-    private http: HttpClient) { }
+    private http: HttpClient
+  ) {}
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   ngOnInit(): void {
+    initFlowbite(); //Flowbite initiation
+    
     this.loadTopicList();
     this.loadChatbotHistory();
 
@@ -74,14 +87,16 @@ export class ChatbotComponent implements OnInit {
       this.roomId$.next(params.get('id') || '');
     });
 
-    combineLatest([this.chatbotHistory$, this.roomId$]).pipe(
-      switchMap(([chatbotHistory, roomId]) => {
-        if (chatbotHistory && roomId) {
-          return this.loadChatbotRoom(chatbotHistory.id, roomId);
-        }
-        return [];
-      })
-    ).subscribe();    
+    combineLatest([this.chatbotHistory$, this.roomId$])
+      .pipe(
+        switchMap(([chatbotHistory, roomId]) => {
+          if (chatbotHistory && roomId) {
+            return this.loadChatbotRoom(chatbotHistory.id, roomId);
+          }
+          return [];
+        })
+      )
+      .subscribe();
   }
 
   private loadTopicList(): void {
@@ -104,54 +119,59 @@ export class ChatbotComponent implements OnInit {
       this.chatbotRooms = data.map((room: any) => ({
         id: room.id,
         title: room.title,
-        topic: room.topic
+        topic: room.topic,
       }));
       // console.log(this.chatbotRooms)
     });
   }
 
   private loadChatbotRoom(historyId: string, roomId: string): any {
-    this.chatbotService.initiateModel(historyId, roomId).subscribe((data: any) => {
-      data.subscribe((d: any) => {
-        console.log(d)
-      })
-    })
+    this.chatbotService
+      .initiateModel(historyId, roomId)
+      .subscribe((data: any) => {
+        data.subscribe((d: any) => {
+          console.log(d);
+        });
+      });
     return this.chatbotService.getChatbotMessage(historyId, roomId).pipe(
       switchMap((data: any) => {
-        this.messages = data.map((message: any) => ({
-          id: message.id,
-          content: message.content,
-          timestamp: message.created ? message.created.toDate() : null,
-          response: message.response,
-        })).sort((a: any, b: any) => a.timestamp - b.timestamp);
+        this.messages = data
+          .map((message: any) => ({
+            id: message.id,
+            content: message.content,
+            timestamp: message.created ? message.created.toDate() : null,
+            response: message.response,
+          }))
+          .sort((a: any, b: any) => a.timestamp - b.timestamp);
         return [];
       })
     );
   }
 
-
   sendQuestion(form: NgForm): void {
-    const sub = combineLatest([this.chatbotHistory$, this.roomId$]).pipe(
-      take(1)
-    ).subscribe(([chatbotHistory, roomId]) => {
-      if (chatbotHistory && roomId) {
-        if (form.valid) {
-          const formData = {
-            question: this.question,
-          };
-          this.chatbotService.sendQuestion(formData, chatbotHistory.id, roomId, this.question).then((docRef: any) => {
-            console.log('Document written with ID: ', docRef.id);
-          }).catch((error: any) => {
-            console.error('Error sending question:', error);
-            // Handle error
-          });
-          this.question = '';
-        }          
-      }
-    });
+    const sub = combineLatest([this.chatbotHistory$, this.roomId$])
+      .pipe(take(1))
+      .subscribe(([chatbotHistory, roomId]) => {
+        if (chatbotHistory && roomId) {
+          if (form.valid) {
+            const formData = {
+              question: this.question,
+            };
+            this.chatbotService
+              .sendQuestion(formData, chatbotHistory.id, roomId, this.question)
+              .then((docRef: any) => {
+                console.log('Document written with ID: ', docRef.id);
+              })
+              .catch((error: any) => {
+                console.error('Error sending question:', error);
+                // Handle error
+              });
+            this.question = '';
+          }
+        }
+      });
     this.subscriptions.push(sub);
   }
-
 }
 
 // Rancangan

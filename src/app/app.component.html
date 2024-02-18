@@ -8,7 +8,8 @@
         data-drawer-toggle="logo-sidebar"
         aria-controls="logo-sidebar"
         type="button"
-        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        [ngClass]="{ hidden: !currentPath.includes('/lawbot') }"
       >
         <span class="sr-only">Open sidebar</span>
         <svg
@@ -95,7 +96,7 @@
         </li>
         <li>
           <a
-            routerLink="/home"
+            href="/home#about"
             class="block py-2 px-3 lg:p-0 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
           >
             Tentang Kami
@@ -139,23 +140,17 @@
                 >
               </li>
               <li>
-                <a
-                  href="/lawfact"
-                  class="block px-4 py-2 hover:bg-gray-100"
+                <a href="/lawfact" class="block px-4 py-2 hover:bg-gray-100"
                   >LawFact</a
                 >
               </li>
               <li>
-                <a
-                  href="/lawspeak"
-                  class="block px-4 py-2 hover:bg-gray-100"
+                <a href="/lawspeak" class="block px-4 py-2 hover:bg-gray-100"
                   >LawSpeak</a
                 >
               </li>
               <li>
-                <a
-                  href="/lawbot/"
-                  class="block px-4 py-2 hover:bg-gray-100"
+                <a href="/lawbot/" class="block px-4 py-2 hover:bg-gray-100"
                   >LawBot</a
                 >
               </li>
@@ -164,7 +159,7 @@
         </li>
         <li>
           <a
-            routerLink="/home"
+            href="/home#contact"
             class="block py-2 px-3 lg:p-0 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-gold transition"
           >
             Kontak Kami
