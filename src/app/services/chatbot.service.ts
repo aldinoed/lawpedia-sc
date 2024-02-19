@@ -15,6 +15,15 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { Database, get } from '@angular/fire/database';
+import {
+  Storage,
+  ref,
+  listAll,
+  getDownloadURL,
+  uploadBytes,
+  uploadBytesResumable,
+  uploadString,
+} from '@angular/fire/storage';
 import { AuthService } from './auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -28,7 +37,8 @@ export class ChatbotService {
     private firestore: Firestore,
     private auth: AuthService,
     private database: Database,
-    private http: HttpClient
+    private http: HttpClient,
+    private storage: Storage
   ) {
     this.topics = collectionData(collection(this.firestore, 'chatbotTopics'), {
       idField: 'id',
@@ -128,7 +138,7 @@ export class ChatbotService {
     return collectionData(chatbotRoomRef, { idField: 'id' });
   }
 
-  getTopics(): Observable<Topic[]> {
+  getTopics(): Observable<any[]> {
     return this.topics;
   }
 
@@ -181,7 +191,17 @@ export class ChatbotService {
         throw error;
       });
   }
-  
+
+  addNewDocument(file: File, topic: string): any {
+    const storageRef = ref(this.storage, `${topic}/${file.name}`);
+    return uploadBytes(storageRef, file);
+  }
+
+  getDocuments(topic: string): any {
+    const storageRef = ref(this.storage, `chatbot-documents/topic/${topic}`);
+    return listAll(storageRef);
+  }
+
 }
 
 export interface ChatHistory {

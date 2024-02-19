@@ -82,6 +82,33 @@ export class ArticleService {
       )
     );
   }
+
+  getArticleDrafts(): Observable<any[]> {
+    return collectionData(collection(this.firestore, 'articleDrafts'), {
+      idField: 'id',
+    });
+  }
+
+  addArticle(article: any): void {
+    addDoc(collection(this.firestore, 'articleDrafts'), article);
+  }
+
+  publishArticle(articleId: string): void {
+    const articleRef = doc(this.firestore, 'articleDrafts', articleId);
+    getDoc(articleRef).then((doc) => {
+      if (doc.exists()) {
+        addDoc(collection(this.firestore, 'articles'), doc.data())
+        .then(() => {
+          return setDoc(articleRef, { status: 'Disetujui' }, { merge: true });
+        })
+        .catch((error) => {
+          console.error('Error adding document:', error);
+        });
+      }
+    });
+  }
+
+
   getArticleQuiz(articleId: string): Observable<any> {
     const quizCollectionRef = collection(this.firestore, 'articles', articleId, 'quiz');
     return collectionData(quizCollectionRef, { idField: "id" });

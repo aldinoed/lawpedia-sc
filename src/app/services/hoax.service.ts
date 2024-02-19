@@ -9,8 +9,15 @@ import {
   setDoc,
   addDoc,
 } from '@angular/fire/firestore'
-import { Storage } from '@angular/fire/storage';
-import { getDownloadURL, ref, listAll } from '@angular/fire/storage';
+import { 
+  Storage, 
+  getDownloadURL, 
+  ref, 
+  listAll,
+  uploadBytes,
+  uploadBytesResumable,
+  uploadString, 
+} from '@angular/fire/storage';
 import { Observable, combineLatest, map } from 'rxjs';
 import { from } from 'rxjs';
 
@@ -70,6 +77,19 @@ export class HoaxService {
       }
     });
   }
+
+  addHoax(data: any): Promise<any> {
+    return addDoc(collection(this.firestore, 'hoaxList'), data);
+  }
+
+  updateHoax(data: any, id: string): Promise<any> {
+    return setDoc(doc(this.firestore, 'hoaxList', id), data);
+  }
+
+  addHoaxImage(id: string, file: File): Promise<any> {
+    return uploadBytes(ref(this.storage, `content/media/${id}/${file.name}`), file);
+  }
+
 }
 
 export interface Hoax {

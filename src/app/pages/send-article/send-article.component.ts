@@ -58,15 +58,17 @@ export class SendArticleComponent implements OnInit {
 
   async onSubmit() {
     try {
-      await addDoc(collection(this.firestore, 'articles'), {
+      const data = {
         author: this.form.value.author,
         title: this.form.value.title,
         content: this.form.value.content,
         category: doc(this.firestore, 'articleCategory/' + this.form.value.category),
         views: 0,
         published: new Date(),
-        // formatedPublished: new Date().toLocaleDateString(),
-      });
+        status: 'Ditinjau',
+      }
+      this.articleService.addArticle(data);
+      // await addDoc(collection(this.firestore, 'articles'), data);
       Swal.fire({
         title: 'Berhasil!',
         text: 'Berhasil mengirim artikel!',

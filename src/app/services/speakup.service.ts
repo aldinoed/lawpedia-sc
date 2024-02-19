@@ -34,6 +34,10 @@ export class SpeakupService {
     return getDoc(doc(this.firestore, 'speakupThreads', threadId));
   }
 
+  deleteSpeakupThread(threadId: string) {
+    return deleteDoc(doc(this.firestore, 'speakupThreads', threadId));
+  }
+
   getSpeakupUpdates(threadId: string) {
     return collectionData(collection(this.firestore, 'speakupThreads', threadId, 'updates'), { idField: 'id' });
   }
