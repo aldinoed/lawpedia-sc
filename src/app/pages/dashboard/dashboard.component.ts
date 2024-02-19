@@ -14,14 +14,15 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-
+import { initFlowbite } from 'flowbite';
+import { RouterModule } from '@angular/router';;
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
   articleLength!: number;

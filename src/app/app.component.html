@@ -1,4 +1,7 @@
-<nav class="bg-white fixed top-0 right-0 left-0 shadow-md z-50">
+<nav
+  *ngIf="!currentPath.includes('/dashboard')"
+  class="bg-white fixed top-0 right-0 left-0 shadow-md z-50"
+>
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-4 px-4 lg:px-6"
   >
@@ -170,11 +173,15 @@
   </div>
 </nav>
 
-<div class="min-h-screen">
+<div *ngIf="!currentPath.includes('/dashboard')" class="min-h-screen">
   <router-outlet> </router-outlet>
 </div>
 
-<footer [ngClass]="{ hidden: currentPath.includes('/lawbot') }">
+<footer
+  *ngIf="
+    !currentPath.includes('/dashboard') && !currentPath.includes('/lawbot')
+  "
+>
   <div
     class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-3 gap-4 bg-latte"
   >
@@ -214,3 +221,101 @@
     </div>
   </div>
 </footer>
+
+<!-- LAYOUT FOR DASHBOARD -->
+
+<!-- SIDEBAR -->
+<ng-container *ngIf="currentPath.includes('/dashboard')">
+  <aside
+    id="default-sidebar"
+    class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+    aria-label="Sidebar"
+  >
+    <div class="h-full px-5 py-5 overflow-y-auto bg-navy2 text-white">
+      <button [routerLink]="['/home']" class="mb-4 ms-2">
+        <span class="text-2xl font-semibold uppercase whitespace-nowrap"
+          >L<span class="text-lg font-bold">AW</span></span
+        >
+        <span class="text-2xl font-semibold whitespace-nowrap text-gold"
+          >S<span class="text-lg font-bold">ITES</span></span
+        >
+      </button>
+      <ul class="space-y-2 font-medium">
+        <li *ngFor="let sidebarLink of sidebarLinks">
+          <a
+            routerLink="{{ sidebarLink.href }}"
+            class="flex items-center p-2 rounded-lg hover:bg-navy1 group"
+          >
+            <img [src]="sidebarLink.icon" alt="icon" class="h-5 w-5" />
+            <span class="ms-3">{{ sidebarLink.name }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="px-10 pt-4 pb-10 sm:ml-64 min-h-screen">
+    <!-- PROFILE ICON CONTAINER -->
+    <div class="flex justify-between md:justify-end items-center">
+      <!-- TOGGLE SIDEBAR BUTTON -->
+      <button
+        data-drawer-target="default-sidebar"
+        data-drawer-toggle="default-sidebar"
+        aria-controls="default-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+      >
+        <span class="sr-only">Open sidebar</span>
+        <svg
+          class="w-6 h-6"
+          aria-hidden="true"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            fill-rule="evenodd"
+            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+          ></path>
+        </svg>
+      </button>
+      <div
+        class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden rounded-full"
+        [ngClass]="{
+            'bg-gray-800 ':
+              authenticatedUser.length < 11,
+            'bg-blue-500 ':
+              authenticatedUser.length === 11,
+            'bg-red-500 ':
+              authenticatedUser.length === 12,
+            'bg-yellow-500 ':
+              authenticatedUser.length === 13,
+            'bg-green-500 ':
+              authenticatedUser.length === 14,
+            'bg-orange-500 ':
+              authenticatedUser.length === 15,
+            'bg-pink-500 ':
+              authenticatedUser.length === 16,
+            'bg-purple-500 ':
+              authenticatedUser.length === 17,
+            'bg-amber-500 ':
+              authenticatedUser.length === 18,
+            'bg-lime-500 ':
+              authenticatedUser.length === 19,
+            'bg-rose-500 ':
+              authenticatedUser.length === 20,
+            'bg-gray-500 ':
+              authenticatedUser.length > 20,
+            
+          }"
+      >
+        <span class="font-medium text-white">{{
+          getInitialName(authenticatedUser)
+        }}</span>
+      </div>
+    </div>
+    <!-- END OF PROFILE ICON CONTAINER -->
+    <router-outlet> </router-outlet>
+  </div>
+</ng-container>

@@ -111,4 +111,42 @@ export class AppComponent implements OnInit {
     this.auth.logout();
     this.router.navigate(['/authentication']);
   }
+
+  // Sidebar Link
+  sidebarLinks: Array<any> = [
+    {
+      name: 'LawLibrary',
+      href: '/dashboard',
+      icon: '/assets/lawlibrary-icon.png',
+    },
+    {
+      name: 'LawFact',
+      href: '/dashboard',
+      icon: '/assets/lawfact-icon.png',
+    },
+    {
+      name: 'LawSpeak',
+      href: '/dashboard',
+      icon: '/assets/lawspeak-icon.png',
+    },
+    {
+      name: 'LawBot',
+      href: '/dashboard',
+      icon: '/assets/lawbot-icon.png',
+    },
+  ];
+
+  authenticatedUser = 'Jajang Sutarman'; // Authenticated User
+
+  // PROFILE ICON
+  getInitialName(name: string): string {
+    if (!name) return '';
+    const words = name.split(' ');
+    let initials = '';
+    for (let i = 0; i < Math.min(words.length, 2); i++) {
+      initials += words[i].charAt(0);
+    }
+
+    return initials;
+  }
 }
