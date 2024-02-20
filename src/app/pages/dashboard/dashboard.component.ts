@@ -6,7 +6,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { SpeakupService } from '../../services/speakup.service';
 import { HoaxService } from '../../services/hoax.service';
 import { ChatbotService } from '../../services/chatbot.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -25,10 +25,13 @@ import { RouterModule } from '@angular/router';;
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
+  activeTab: string = '';
   articleLength!: number;
   speakupLength!: number;
   hoaxLength!: number;
+  documentLength: number = 0;
   hoaxForm: FormGroup;
+  analyticCards: Array<any> = [];
 
   constructor(
     private articleService: ArticleService,
@@ -38,7 +41,9 @@ export class DashboardComponent implements OnInit {
     private hoaxService: HoaxService,
     private chatbotService: ChatbotService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     this.hoaxForm = this.formBuilder.group({
       author: '',
@@ -48,9 +53,22 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    initFlowbite();
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.getActiveTab();
+      }
+    });
+
     this.articleService.getArticles().subscribe((articles) => {
       this.articleLength = articles.length;
-      console.log('articleLength:', this.articleLength);
+      // console.log('articleLength:', this.articleLength);
+      this.analyticCards.push({
+        name: 'Jumlah Artikel Terunggah',
+        amount: this.articleLength,
+      });
     });
  
     this.articleService.getArticleDrafts().subscribe((drafts) => {
@@ -61,22 +79,66 @@ export class DashboardComponent implements OnInit {
       this.speakupLength = threads.length;
       console.log('speakup:', threads);
       console.log('speakupLength:', this.speakupLength);
+      this.analyticCards.push({
+        name: 'Jumlah Speakup Threads Terunggah',
+        amount: this.speakupLength,
+      });
     });
 
     this.hoaxService.getHoaxList().subscribe((hoaxes) => {
       this.hoaxLength = hoaxes.length;
       console.log('hoaxes:', hoaxes);
       console.log('hoaxLength:', this.hoaxLength);
+      this.analyticCards.push({
+        name: 'Jumlah Informasi Hoaks Terunggah',
+        amount: this.hoaxLength,
+      });
     });
 
     this.chatbotService.getTopics().subscribe((topics) => {
-      console.log('topics:', topics);
+      // console.log('topics:', topics);
       topics.forEach((topic) => {
         console.log('topic:', topic.path);
+        this.chatbotService.getDocuments(topic.path).then((documents: any) => {
+          console.log('topic', topic.name, 'panjang dokumen:', documents.prefixes.length);
+          this.documentLength += documents.prefixes.length;
+        });
+      });
+      this.analyticCards.push({
+        name: 'Jumlah Dokumen Chatbot terunggah',
+        amount: this.documentLength,
       });
     });
     
   }
+
+  getActiveTab(): void {
+    const path = this.route.snapshot.firstChild?.routeConfig?.path;
+    if (path) {
+      this.activeTab = path.split('/')[1]; // Ambil bagian kedua dari path untuk menentukan tab yang aktif
+    }
+  }
+
+  // ANALYTIC CARD DATA
+  // analyticCards: Array<any> = [
+  //   {
+  //     name: 'Jumlah artikel terunggah',
+  //     amount: 755,
+  //   },
+  //   {
+  //     name: 'Jumlah hoaks threads terunggah',
+  //     amount: 755,
+  //   },
+  //   {
+  //     name: 'Jumlah Speakup threads terunggah',
+  //     amount: 755,
+  //   },
+  //   {
+  //     name: 'Jumlah Sumber Literasi terunggah',
+  //     amount: 755,
+  //   },
+  // ];
+
   // ARTICLE SECTION
 
 

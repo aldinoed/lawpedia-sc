@@ -198,7 +198,7 @@ export class ChatbotService {
   }
 
   getDocuments(topic: string): any {
-    const storageRef = ref(this.storage, `chatbot-documents/topic/${topic}`);
+    const storageRef = ref(this.storage, topic);
     return listAll(storageRef);
   }
 
