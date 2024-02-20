@@ -38,9 +38,12 @@ import { AppRoutingModule } from './app.routes';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+import { DataTablesModule } from 'angular-datatables';
+
 @NgModule({
   imports: [
     BrowserModule,
+    DataTablesModule,
     HttpClientModule,
     RouterModule,
     AppRoutingModule,

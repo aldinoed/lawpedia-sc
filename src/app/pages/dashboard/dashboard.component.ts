@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleService } from '../../services/article.service';
 import { AuthService } from '../../services/auth.service';
@@ -6,7 +12,13 @@ import { DashboardService } from '../../services/dashboard.service';
 import { SpeakupService } from '../../services/speakup.service';
 import { HoaxService } from '../../services/hoax.service';
 import { ChatbotService } from '../../services/chatbot.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  NavigationStart,
+  Event as NavigationEvent,
+} from '@angular/router';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -15,12 +27,27 @@ import {
   Validators,
 } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
-import { RouterModule } from '@angular/router';;
+import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { DataTablesModule } from 'angular-datatables';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    // BrowserModule,
+    DataTablesModule,
+    MatTableModule,
+    MatPaginatorModule,
+    EditorModule,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -33,6 +60,8 @@ export class DashboardComponent implements OnInit {
   hoaxForm: FormGroup;
   analyticCards: Array<any> = [];
 
+  currentPath: string = '';
+
   constructor(
     private articleService: ArticleService,
     private authService: AuthService,
@@ -43,17 +72,25 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {
     this.hoaxForm = this.formBuilder.group({
       author: '',
       title: '',
       content: '',
     });
+
+    this.currentPath = this.router.url;
+  }
+  ngAfterViewInit(): void {
+    throw new Error('Method not implemented.');
   }
 
+  // ngOnDestroy() {
+  //   this.event$.unsubscribe();
+  // }
+
   ngOnInit(): void {
-    
     initFlowbite();
 
     this.router.events.subscribe((event) => {
@@ -70,7 +107,7 @@ export class DashboardComponent implements OnInit {
         amount: this.articleLength,
       });
     });
- 
+
     this.articleService.getArticleDrafts().subscribe((drafts) => {
       console.log('drafts:', drafts);
     });
@@ -100,7 +137,12 @@ export class DashboardComponent implements OnInit {
       topics.forEach((topic) => {
         console.log('topic:', topic.path);
         this.chatbotService.getDocuments(topic.path).then((documents: any) => {
-          console.log('topic', topic.name, 'panjang dokumen:', documents.prefixes.length);
+          console.log(
+            'topic',
+            topic.name,
+            'panjang dokumen:',
+            documents.prefixes.length
+          );
           this.documentLength += documents.prefixes.length;
         });
       });
@@ -109,7 +151,6 @@ export class DashboardComponent implements OnInit {
         amount: this.documentLength,
       });
     });
-    
   }
 
   getActiveTab(): void {
@@ -140,7 +181,34 @@ export class DashboardComponent implements OnInit {
   // ];
 
   // ARTICLE SECTION
+  articleSearchInput = '';
 
+  articles: Array<any> = [
+    {
+      title: 'Lorem ipsum dolor sit amet',
+      status: 'diterima',
+    },
+    {
+      title: 'Lorem ipsum dolor sit amet',
+      status: 'diterima',
+    },
+    {
+      title: 'Lorem ipsum dolor sit amet',
+      status: 'ditinjau',
+    },
+    {
+      title: 'Lorem ipsum dolor sit amet',
+      status: 'ditinjau',
+    },
+    {
+      title: 'Hukum Mendukung Israel',
+      status: 'ditinjau',
+    },
+    {
+      title: 'Hukum Korupsi Uang Beasiswa',
+      status: 'ditinjau',
+    },
+  ];
 
   // HOAX SECTION
   private createHoax() {
@@ -150,7 +218,7 @@ export class DashboardComponent implements OnInit {
       content: this.hoaxForm.value.content,
       published: new Date(),
       views: 0,
-    }
+    };
     this.hoaxService.addHoax(data);
   }
 
@@ -159,15 +227,104 @@ export class DashboardComponent implements OnInit {
       author: this.hoaxForm.value.author,
       title: this.hoaxForm.value.title,
       content: this.hoaxForm.value.content,
-    }
+    };
     this.hoaxService.updateHoax(data, hoaxId);
   }
 
+  hoaxSearchInput = '';
+
+  hoaxList: Array<any> = [
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+  ];
+
+  createLawfactClicked: boolean = false;
+  onCreateLawfactClick(status: boolean) {
+    this.createLawfactClicked = status;
+  }
+
   // SPEAKUP SECTION
+  speakupSearchInput = '';
 
-
+  speakupList: Array<any> = [
+    {
+      username: 'John Doe',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      username: 'John Doe',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      username: 'John Doe',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      username: 'John Doe',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+    {
+      username: 'John Doe',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+    },
+  ];
 
   // CHATBOT SECTION
+  chatbotSearchInput = '';
 
+  chatbotList: Array<any> = [
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+      category: 'Hukum Tata Negara',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+      category: 'Hukum Tata Negara',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+      category: 'Hukum Tata Negara',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+      category: 'Hukum Tata Negara',
+    },
+    {
+      title:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+      category: 'Hukum Tata Negara',
+    },
+  ];
 
+  createLawbotClicked: boolean = false;
+  onCreateLawbotClick(status: boolean) {
+    this.createLawbotClicked = status;
+  }
 }

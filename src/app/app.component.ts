@@ -115,6 +115,11 @@ export class AppComponent implements OnInit {
   // Sidebar Link
   sidebarLinks: Array<any> = [
     {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: '/assets/dashboard-icon.gif',
+    },
+    {
       name: 'LawLibrary',
       href: '/dashboard/lawlibrary',
       icon: '/assets/lawlibrary-icon.png',
