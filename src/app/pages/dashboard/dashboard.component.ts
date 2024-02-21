@@ -29,7 +29,6 @@ import {
 import { initFlowbite } from 'flowbite';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { DataTablesModule } from 'angular-datatables';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EditorModule } from '@tinymce/tinymce-angular';
@@ -44,7 +43,6 @@ import Swal from 'sweetalert2';
     ReactiveFormsModule,
     RouterModule,
     // BrowserModule,
-    DataTablesModule,
     MatTableModule,
     MatPaginatorModule,
     EditorModule,
@@ -59,7 +57,15 @@ export class DashboardComponent implements OnInit {
   hoaxLength!: number;
   documentLength: number = 0;
   hoaxForm: FormGroup;
+  articleSearchForm: FormGroup;
+  hoaxSearchForm: FormGroup;
+  speakupSearchForm: FormGroup;
+  chatbotSearchForm: FormGroup;
   analyticCards: Array<any> = [];
+  articleDrafts: Array<any> = [];
+  hoaxList: Array<any> = [];
+  speakupList: Array<any> = [];
+  chatbotList: Array<any> = [];
 
   currentPath: string = '';
 
@@ -80,7 +86,19 @@ export class DashboardComponent implements OnInit {
       title: '',
       content: '',
     });
-
+    this.articleSearchForm = this.formBuilder.group({
+      searchKeyword: '',
+    });
+    this.hoaxSearchForm = this.formBuilder.group({
+      searchKeyword: '',
+    });
+    this.speakupSearchForm = this.formBuilder.group({
+      searchKeyword: '',
+    });
+    this.chatbotSearchForm = this.formBuilder.group({
+      searchKeyword: '',
+    });
+  
     this.currentPath = this.router.url;
   }
   ngAfterViewInit(): void {
@@ -109,29 +127,31 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    this.articleService.getArticleDrafts().subscribe((drafts) => {
-      console.log('drafts:', drafts);
-    });
+    this.loadArticleDrafts();
 
-    this.speakupService.getSpeakupThreads().subscribe((threads) => {
-      this.speakupLength = threads.length;
-      console.log('speakup:', threads);
-      console.log('speakupLength:', this.speakupLength);
-      this.analyticCards.push({
-        name: 'Jumlah Speakup Threads Terunggah',
-        amount: this.speakupLength,
-      });
-    });
+    // this.speakupService.getSpeakupThreads().subscribe((threads) => {
+    //   this.speakupLength = threads.length;
+    //   console.log('speakup:', threads);
+    //   console.log('speakupLength:', this.speakupLength);
+    //   this.analyticCards.push({
+    //     name: 'Jumlah Speakup Threads Terunggah',
+    //     amount: this.speakupLength,
+    //   });
+    // });
 
-    this.hoaxService.getHoaxList().subscribe((hoaxes) => {
-      this.hoaxLength = hoaxes.length;
-      console.log('hoaxes:', hoaxes);
-      console.log('hoaxLength:', this.hoaxLength);
-      this.analyticCards.push({
-        name: 'Jumlah Informasi Hoaks Terunggah',
-        amount: this.hoaxLength,
-      });
-    });
+    this.loadSpeakupThreads();
+
+    // this.hoaxService.getHoaxList().subscribe((hoaxes) => {
+    //   this.hoaxLength = hoaxes.length;
+    //   console.log('hoaxes:', hoaxes);
+    //   console.log('hoaxLength:', this.hoaxLength);
+    //   this.analyticCards.push({
+    //     name: 'Jumlah Informasi Hoaks Terunggah',
+    //     amount: this.hoaxLength,
+    //   });
+    // });
+
+    this.loadHoaxes();
 
     this.chatbotService.getTopics().subscribe((topics) => {
       // console.log('topics:', topics);
@@ -161,55 +181,33 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // ANALYTIC CARD DATA
-  // analyticCards: Array<any> = [
-  //   {
-  //     name: 'Jumlah artikel terunggah',
-  //     amount: 755,
-  //   },
-  //   {
-  //     name: 'Jumlah hoaks threads terunggah',
-  //     amount: 755,
-  //   },
-  //   {
-  //     name: 'Jumlah Speakup threads terunggah',
-  //     amount: 755,
-  //   },
-  //   {
-  //     name: 'Jumlah Sumber Literasi terunggah',
-  //     amount: 755,
-  //   },
-  // ];
-
   // ARTICLE SECTION
-  articleSearchInput = '';
+  private loadArticleDrafts() {
+    this.articleService.getArticleDrafts().subscribe((drafts) => {
+      // Filter articles based on the search keyword
+      console.log('articleSearchInput:', this.articleSearchInput);
+      if (this.articleSearchInput) {
+        drafts = drafts.filter(
+          (draft) =>
+            draft.title
+              .toLowerCase()
+              .includes(this.articleSearchForm.value.searchKeyword.toLowerCase())
+        );
+      }
+      console.log('drafts:', drafts);
+      this.articleDrafts = drafts;
+    });
+  }
 
-  articles: Array<any> = [
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'diterima',
-    },
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'diterima',
-    },
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'ditinjau',
-    },
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'ditinjau',
-    },
-    {
-      title: 'Hukum Mendukung Israel',
-      status: 'ditinjau',
-    },
-    {
-      title: 'Hukum Korupsi Uang Beasiswa',
-      status: 'ditinjau',
-    },
-  ];
+  onAcceptArticle(articleId: string) {
+    this.articleService.publishArticle(articleId);
+  }
+  
+  articleSearchInput = '';
+  onSearchArticle() {
+    this.articleSearchInput = this.articleSearchForm.value.searchKeyword;
+    this.loadArticleDrafts();
+  }
 
   // HOAX SECTION
   private createHoax() {
@@ -232,30 +230,39 @@ export class DashboardComponent implements OnInit {
     this.hoaxService.updateHoax(data, hoaxId);
   }
 
-  hoaxSearchInput = '';
+  deleteHoax(hoaxId: string) {
+    this.hoaxService.deleteHoax(hoaxId);
+  }
 
-  hoaxList: Array<any> = [
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-  ];
+  private loadHoaxes() {
+    this.hoaxService.getHoaxList().subscribe((hoaxes) => {
+      // Filter hoaxes based on the search keyword
+      console.log('hoaxSearchInput:', this.hoaxSearchInput);
+      if (this.hoaxSearchInput) {
+        hoaxes = hoaxes.filter(
+          (hoax) =>
+            hoax.title
+              .toLowerCase()
+              .includes(this.hoaxSearchForm.value.searchKeyword.toLowerCase())
+        );
+      }
+
+      this.hoaxLength = hoaxes.length;
+      this.analyticCards.push({
+        name: 'Jumlah Informasi Hoaks Terunggah',
+        amount: this.hoaxLength,
+      });
+
+      this.hoaxList = hoaxes;
+      console.log('hoaxList:', this.hoaxList);
+    });
+  }
+
+  hoaxSearchInput = '';
+  onSearchHoax() {
+    this.hoaxSearchInput = this.hoaxSearchForm.value.searchKeyword;
+    this.loadHoaxes();
+  }
 
   createLawfactClicked: boolean = false;
   onCreateLawfactClick(status: boolean) {
@@ -286,35 +293,72 @@ export class DashboardComponent implements OnInit {
   }
 
   // SPEAKUP SECTION
-  speakupSearchInput = '';
+  private loadSpeakupThreads() {
+    this.speakupService.getSpeakupThreads().subscribe((threads) => {
+      this.speakupLength = threads.length;
+      this.analyticCards.push({
+        name: 'Jumlah Speakup Threads Terunggah',
+        amount: this.speakupLength,
+      });
 
-  speakupList: Array<any> = [
-    {
-      username: 'John Doe',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      username: 'John Doe',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      username: 'John Doe',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      username: 'John Doe',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-    {
-      username: 'John Doe',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-    },
-  ];
+      threads.map((thread) => {
+        this.authService.getUser(thread['userId']).then((user: any) => {
+          thread['authorUsername'] = user.data().username || '';
+          thread['authorFullname'] = user.data().fullname || '';
+        });
+      });
+
+      // Filter threads based on the search keyword
+      if (this.speakupSearchInput) {
+        threads = threads.filter(
+          (thread) =>
+            thread['id']
+              .toLowerCase()
+              .includes(this.speakupSearchForm.value.searchKeyword.toLowerCase())
+        );
+      }
+      this.speakupList = threads;
+      console.log('speakupList:', this.speakupList);
+    });
+  }
+
+  deleteSpeakupThread(threadId: string) {
+    this.speakupService.deleteSpeakupThread(threadId);
+  }
+
+  speakupSearchInput = '';
+  onSearchSpeakup() {
+    this.speakupSearchInput = this.speakupSearchForm.value.searchKeyword;
+    this.loadSpeakupThreads();
+  }
+
+  // speakupList: Array<any> = [
+  //   {
+  //     username: 'John Doe',
+  //     content:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //   },
+  //   {
+  //     username: 'John Doe',
+  //     content:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //   },
+  //   {
+  //     username: 'John Doe',
+  //     content:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //   },
+  //   {
+  //     username: 'John Doe',
+  //     content:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //   },
+  //   {
+  //     username: 'John Doe',
+  //     content:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //   },
+  // ];
 
   onLawspeakDeleteClick() {
     Swal.fire({
@@ -342,33 +386,34 @@ export class DashboardComponent implements OnInit {
   // CHATBOT SECTION
   chatbotSearchInput = '';
 
-  chatbotList: Array<any> = [
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-      category: 'Hukum Tata Negara',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-      category: 'Hukum Tata Negara',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-      category: 'Hukum Tata Negara',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-      category: 'Hukum Tata Negara',
-    },
-    {
-      title:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-      category: 'Hukum Tata Negara',
-    },
-  ];
+  // CHATBOT SECTION
+  // chatbotList: Array<any> = [
+  //   {
+  //     title:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //     category: 'Hukum Tata Negara',
+  //   },
+  //   {
+  //     title:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //     category: 'Hukum Tata Negara',
+  //   },
+  //   {
+  //     title:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //     category: 'Hukum Tata Negara',
+  //   },
+  //   {
+  //     title:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //     category: 'Hukum Tata Negara',
+  //   },
+  //   {
+  //     title:
+  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
+  //     category: 'Hukum Tata Negara',
+  //   },
+  // ];
 
   createLawbotClicked: boolean = false;
   onCreateLawbotClick(status: boolean) {
@@ -398,3 +443,5 @@ export class DashboardComponent implements OnInit {
     });
   }
 }
+
+

@@ -29,7 +29,7 @@
     <h1 class="text-3xl font-medium text-moca">LawLibrary</h1>
   </div>
 
-  <div class="mt-6 max-w-sm">
+  <form [formGroup]="articleSearchForm" (ngSubmit)="onSearchArticle()" class="mt-6 max-w-sm">
     <label for="voice-search" class="sr-only">Search</label>
     <div class="relative w-full">
       <div
@@ -41,11 +41,11 @@
         class="bg-gray-50 border border-moca text-sm rounded-lg focus:ring-moca focus:border-moca block w-full p-2.5 placeholder:text-moca"
         placeholder="Cari judul..."
         required
-        [(ngModel)]="articleSearchInput"
+        name="searchKeyword"
+        formControlName="searchKeyword"
       />
       <button
-        type="button"
-        disabled
+        type="submit"
         class="absolute inset-y-0 end-0 flex items-center pe-3"
       >
         <svg
@@ -64,7 +64,7 @@
         </svg>
       </button>
     </div>
-  </div>
+  </form>
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -76,7 +76,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let article of articles">
+        <ng-container *ngFor="let article of articleDrafts">
           <tr class="odd:bg-white even:bg-gray-100 border-b">
             <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
               {{ article.title }}
@@ -95,6 +95,7 @@
             <td class="px-6 py-4">
               <div class="flex gap-1">
                 <button
+                  (click)="onAcceptArticle(article.id)"
                   class="p-1 bg-moca text-white rounded hover:bg-opacity-85 transition focus:outline-gold"
                 >
                   <svg
@@ -138,6 +139,7 @@
     </table>
   </div>
 </div>
+<!-- LAWLIBRARY TAB END -->
 
 <!-- LAWSPEAK ACTIVE TAB -->
 <div *ngIf="currentPath.includes('/dashboard/lawspeak')">
@@ -145,7 +147,7 @@
     <h1 class="text-3xl font-medium text-moca">LawSpeak</h1>
   </div>
 
-  <div class="mt-6 max-w-sm">
+  <form [formGroup]="speakupSearchForm" (ngSubmit)="onSearchSpeakup()" class="mt-6 max-w-sm">
     <label for="voice-search" class="sr-only">Search</label>
     <div class="relative w-full">
       <div
@@ -155,13 +157,13 @@
         type="text"
         id="voice-search"
         class="bg-gray-50 border border-moca text-sm rounded-lg focus:ring-moca focus:border-moca block w-full p-2.5 placeholder:text-moca"
-        placeholder="Cari username..."
+        placeholder="Cari id thread ..."
         required
-        [(ngModel)]="articleSearchInput"
+        formControlName="searchKeyword"
+        name="searchKeyword"
       />
       <button
-        type="button"
-        disabled
+        type="submit"
         class="absolute inset-y-0 end-0 flex items-center pe-3"
       >
         <svg
@@ -180,13 +182,14 @@
         </svg>
       </button>
     </div>
-  </div>
+  </form>
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
       <thead class="text-xs text-white uppercase bg-moca">
         <tr>
-          <th scope="col" class="px-6 py-3">Username</th>
+          <th scope="col" class="px-6 py-3">Id Thread</th>
+          <th scope="col" class="px-6 py-3">Author</th>
           <th scope="col" class="px-6 py-3">Konten</th>
           <th scope="col" class="px-6 py-3">Aksi</th>
         </tr>
@@ -195,13 +198,17 @@
         <ng-container *ngFor="let speakup of speakupList">
           <tr class="odd:bg-white even:bg-gray-100 border-b">
             <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-              {{ speakup.username }}
+              {{ speakup.id }}
+            </th>
+            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+              {{ speakup.authorUsername }}
             </th>
             <td class="px-6 py-4">
               {{ speakup.content }}
             </td>
             <td class="px-6 py-4">
               <button
+                (click)="deleteSpeakupThread(speakup.id)"
                 class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
                 (click)="onLawspeakDeleteClick()"
               >
@@ -227,6 +234,7 @@
     </table>
   </div>
 </div>
+<!-- LAWSPEAK TAB END -->
 
 <!-- LAWFACT ACTIVE TAB -->
 <div *ngIf="currentPath.includes('/dashboard/lawfact')">
@@ -236,7 +244,7 @@
     </div>
 
     <div class="mt-6 flex justify-between items-center">
-      <div>
+      <form [formGroup]="hoaxSearchForm" (ngSubmit)="onSearchHoax()">
         <label for="voice-search" class="sr-only">Search</label>
         <div class="relative w-64 md:w-72">
           <div
@@ -248,11 +256,11 @@
             class="bg-gray-50 border border-moca text-sm rounded-lg focus:ring-moca focus:border-moca block w-full p-2.5 placeholder:text-moca"
             placeholder="Cari judul..."
             required
-            [(ngModel)]="hoaxSearchInput"
+            name="searchKeyword"
+            formControlName="searchKeyword"
           />
           <button
-            type="button"
-            disabled
+            type="submit"
             class="absolute inset-y-0 end-0 flex items-center pe-3"
           >
             <svg
@@ -271,9 +279,9 @@
             </svg>
           </button>
         </div>
-      </div>
+      </form>
 
-      <div>
+      <form>
         <button
           class="py-1.5 px-5 rounded-full bg-moca text-white flex items-center gap-1 hover:bg-opacity-90 focus:outline-gold"
           (click)="onCreateLawfactClick(true)"
@@ -294,7 +302,7 @@
             />
           </svg>
         </button>
-      </div>
+      </form>
     </div>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
@@ -313,6 +321,7 @@
               </th>
               <td class="px-6 py-4">
                 <button
+                  (click)="deleteHoax(hoax.id)"
                   class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
                   (click)="onLawfactDeleteClick()"
                 >
@@ -609,3 +618,4 @@
     </div>
   </ng-container>
 </div>
+<!-- LAWBOT TAB END -->

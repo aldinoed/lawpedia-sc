@@ -8,6 +8,7 @@ import {
   doc,
   setDoc,
   addDoc,
+  deleteDoc,
 } from '@angular/fire/firestore'
 import { 
   Storage, 
@@ -84,6 +85,10 @@ export class HoaxService {
 
   updateHoax(data: any, id: string): Promise<any> {
     return setDoc(doc(this.firestore, 'hoaxList', id), data);
+  }
+
+  deleteHoax(id: string): Promise<any> {
+    return deleteDoc(doc(this.firestore, 'hoaxList', id));
   }
 
   addHoaxImage(id: string, file: File): Promise<any> {

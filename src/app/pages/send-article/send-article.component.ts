@@ -64,7 +64,7 @@ export class SendArticleComponent implements OnInit {
         content: this.form.value.content,
         category: doc(this.firestore, 'articleCategory/' + this.form.value.category),
         views: 0,
-        published: new Date(),
+        uploaded: new Date(),
         status: 'Ditinjau',
       }
       this.articleService.addArticle(data);

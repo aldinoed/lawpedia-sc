@@ -4,7 +4,6 @@ import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import emailjs from '@emailjs/browser';
 import {
   FormsModule,
   ReactiveFormsModule,
