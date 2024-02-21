@@ -79,4 +79,53 @@
       </ng-container>
     </div>
   </section>
+
+  <section id="services" class="bg-white px-4 md:px-12 lg:px-20 py-20">
+    <div class="py-8 lg:py-16 px-4 mx-auto max-w-[35rem]">
+      <div>
+        <h1
+          class="text-3xl font-bold underline underline-offset-8 decoration-latte text-center"
+        >
+          Hubungi Kami
+        </h1>
+      </div>
+      <div class="space-y-8 mt-6">
+        <div class="mt-4">
+          <label for="subject" class="block mb-2 text-sm font-medium"
+            >Subject</label
+          >
+          <input
+            type="text"
+            id="subject"
+            class="block p-3 w-full text-sm bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:outline-gold"
+            placeholder="Tulis subject pesan..."
+            required
+            [(ngModel)]="subject"
+          />
+        </div>
+        <div class="sm:col-span-2 mt-4">
+          <label for="message" class="block mb-2 text-sm font-medium"
+            >Isi Pesan</label
+          >
+          <textarea
+            id="message"
+            rows="6"
+            class="block p-2.5 w-full text-sm bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:outline-gold"
+            placeholder="Tulis pesan..."
+            [(ngModel)]="body"
+          ></textarea>
+        </div>
+        <div class="mt-8">
+          <a
+            href="mailto:lawsites06@gmail.com?subject={{ subject }}&body={{
+              body
+            }}"
+            class="py-3 px-5 text-sm font-medium text-center bg-navy2 text-white rounded-lg sm:w-fit focus:outline-navy2"
+          >
+            Send message
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>

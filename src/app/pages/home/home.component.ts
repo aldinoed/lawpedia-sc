@@ -1,18 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import emailjs from '@emailjs/browser';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   items$: Observable<any[]>;
   firestore: Firestore = inject(Firestore);
 
@@ -40,7 +49,15 @@ export class HomeComponent {
     },
   ];
 
-  constructor() {
+  //CONTACT
+  subject: string = '';
+  body: string = '';
+
+  constructor(private fb: FormBuilder) {
     this.items$ = collectionData(collection(this.firestore, 'test'));
+  }
+
+  ngOnInit(): void {
+    initFlowbite();
   }
 }
