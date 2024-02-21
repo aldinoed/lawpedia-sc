@@ -33,6 +33,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
@@ -261,6 +262,29 @@ export class DashboardComponent implements OnInit {
     this.createLawfactClicked = status;
   }
 
+  onLawfactDeleteClick() {
+    Swal.fire({
+      title: 'Yakin ingin menghapus?',
+      text: 'Data tidak akan bisa dikembalikan!',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Batal',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Delete Logic Here
+
+        Swal.fire({
+          title: 'Berhasil!',
+          text: 'Data berhasil dihapus.',
+          icon: 'success',
+        });
+      }
+    });
+  }
+
   // SPEAKUP SECTION
   speakupSearchInput = '';
 
@@ -291,6 +315,29 @@ export class DashboardComponent implements OnInit {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
     },
   ];
+
+  onLawspeakDeleteClick() {
+    Swal.fire({
+      title: 'Yakin ingin menghapus?',
+      text: 'Data tidak akan bisa dikembalikan!',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Batal',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Delete Logic Here
+
+        Swal.fire({
+          title: 'Berhasil!',
+          text: 'Data berhasil dihapus.',
+          icon: 'success',
+        });
+      }
+    });
+  }
 
   // CHATBOT SECTION
   chatbotSearchInput = '';
@@ -326,5 +373,28 @@ export class DashboardComponent implements OnInit {
   createLawbotClicked: boolean = false;
   onCreateLawbotClick(status: boolean) {
     this.createLawbotClicked = status;
+  }
+
+  onLawbotDeleteClick() {
+    Swal.fire({
+      title: 'Yakin ingin menghapus?',
+      text: 'Data tidak akan bisa dikembalikan!',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Batal',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Delete Logic Here
+
+        Swal.fire({
+          title: 'Berhasil!',
+          text: 'Data berhasil dihapus.',
+          icon: 'success',
+        });
+      }
+    });
   }
 }

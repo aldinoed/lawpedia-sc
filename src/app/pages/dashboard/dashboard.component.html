@@ -203,6 +203,7 @@
             <td class="px-6 py-4">
               <button
                 class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
+                (click)="onLawspeakDeleteClick()"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -313,6 +314,7 @@
               <td class="px-6 py-4">
                 <button
                   class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
+                  (click)="onLawfactDeleteClick()"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -519,6 +521,7 @@
                   </button>
                   <button
                     class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
+                    (click)="onLawbotDeleteClick()"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -544,7 +547,7 @@
     </div>
   </ng-container>
 
-  <!-- LAWFACT CREATE -->
+  <!-- LAWBOT CREATE -->
   <ng-container *ngIf="createLawbotClicked === true">
     <div>
       <button
