@@ -208,9 +208,8 @@
             </td>
             <td class="px-6 py-4">
               <button
-                (click)="deleteSpeakupThread(speakup.id)"
                 class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
-                (click)="onLawspeakDeleteClick()"
+                (click)="onLawspeakDeleteClick(speakup.id)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -321,9 +320,8 @@
               </th>
               <td class="px-6 py-4">
                 <button
-                  (click)="deleteHoax(hoax.id)"
                   class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
-                  (click)="onLawfactDeleteClick()"
+                  (click)="onLawfactDeleteClick(hoax.id)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -374,11 +372,13 @@
     </div>
     <div class="mt-6">
       <!-- FORM -->
-      <form>
+      <form [formGroup]="hoaxForm" (ngSubmit)="onCreateHoax()">
         <label for="input-title" class="block font-medium mb-2">Judul</label>
         <input
           type="text"
           id="input-title"
+          name="input-title"
+          formControlName="title"
           class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
         />
 
@@ -388,7 +388,9 @@
         <input
           class="block w-full text-sm border-2 border-gray-200 rounded-lg cursor-pointer"
           id="file_input"
+          name="file_input"
           type="file"
+          formControlName="media"
         />
 
         <label for="input-content" class="block font-medium mb-2 mt-4"
@@ -402,6 +404,8 @@
             height: 600
           }"
           id="input-content"
+          name="input-content"
+          formControlName="content"
         ></editor>
 
         <button

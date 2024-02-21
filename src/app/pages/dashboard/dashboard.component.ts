@@ -210,15 +210,18 @@ export class DashboardComponent implements OnInit {
   }
 
   // HOAX SECTION
-  private createHoax() {
-    const data = {
-      author: this.hoaxForm.value.author,
-      title: this.hoaxForm.value.title,
-      content: this.hoaxForm.value.content,
-      published: new Date(),
-      views: 0,
-    };
-    this.hoaxService.addHoax(data);
+  onCreateHoax() {
+    const userId = localStorage.getItem('uid') || '';
+    this.authService.getUser(userId).then((user: any) => {
+      const data = {
+        author: user.data().username,
+        title: this.hoaxForm.value.title,
+        content: this.hoaxForm.value.content,
+        published: new Date(),
+        views: 0,
+      };
+      this.hoaxService.addHoax(data);
+    });
   }
 
   private updateHoax(hoaxId: string) {
@@ -269,7 +272,7 @@ export class DashboardComponent implements OnInit {
     this.createLawfactClicked = status;
   }
 
-  onLawfactDeleteClick() {
+  onLawfactDeleteClick(id: string) {
     Swal.fire({
       title: 'Yakin ingin menghapus?',
       text: 'Data tidak akan bisa dikembalikan!',
@@ -281,7 +284,7 @@ export class DashboardComponent implements OnInit {
       confirmButtonText: 'Ya, hapus!',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Delete Logic Here
+        this.deleteHoax(id);
 
         Swal.fire({
           title: 'Berhasil!',
@@ -360,7 +363,7 @@ export class DashboardComponent implements OnInit {
   //   },
   // ];
 
-  onLawspeakDeleteClick() {
+  onLawspeakDeleteClick(id: string) {
     Swal.fire({
       title: 'Yakin ingin menghapus?',
       text: 'Data tidak akan bisa dikembalikan!',
@@ -372,8 +375,7 @@ export class DashboardComponent implements OnInit {
       confirmButtonText: 'Ya, hapus!',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Delete Logic Here
-
+        this.deleteSpeakupThread(id);
         Swal.fire({
           title: 'Berhasil!',
           text: 'Data berhasil dihapus.',
