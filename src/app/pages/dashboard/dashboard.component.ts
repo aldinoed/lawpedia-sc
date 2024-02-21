@@ -29,7 +29,6 @@ import {
 import { initFlowbite } from 'flowbite';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { DataTablesModule } from 'angular-datatables';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EditorModule } from '@tinymce/tinymce-angular';
@@ -43,7 +42,6 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     ReactiveFormsModule,
     RouterModule,
     // BrowserModule,
-    DataTablesModule,
     MatTableModule,
     MatPaginatorModule,
     EditorModule,
@@ -58,7 +56,9 @@ export class DashboardComponent implements OnInit {
   hoaxLength!: number;
   documentLength: number = 0;
   hoaxForm: FormGroup;
+  articleSearchForm: FormGroup;
   analyticCards: Array<any> = [];
+  articleDrafts: Array<any> = [];
 
   currentPath: string = '';
 
@@ -78,6 +78,9 @@ export class DashboardComponent implements OnInit {
       author: '',
       title: '',
       content: '',
+    });
+    this.articleSearchForm = this.formBuilder.group({
+      searchKeyword: '',
     });
 
     this.currentPath = this.router.url;
@@ -108,9 +111,11 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    this.articleService.getArticleDrafts().subscribe((drafts) => {
-      console.log('drafts:', drafts);
-    });
+    // this.articleService.getArticleDrafts().subscribe((drafts) => {
+    //   console.log('drafts:', drafts);
+    //   this.articleDrafts = drafts;
+    // });
+    this.loadArticleDrafts();
 
     this.speakupService.getSpeakupThreads().subscribe((threads) => {
       this.speakupLength = threads.length;
@@ -160,55 +165,33 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // ANALYTIC CARD DATA
-  // analyticCards: Array<any> = [
-  //   {
-  //     name: 'Jumlah artikel terunggah',
-  //     amount: 755,
-  //   },
-  //   {
-  //     name: 'Jumlah hoaks threads terunggah',
-  //     amount: 755,
-  //   },
-  //   {
-  //     name: 'Jumlah Speakup threads terunggah',
-  //     amount: 755,
-  //   },
-  //   {
-  //     name: 'Jumlah Sumber Literasi terunggah',
-  //     amount: 755,
-  //   },
-  // ];
-
   // ARTICLE SECTION
-  articleSearchInput = '';
+  private loadArticleDrafts() {
+    this.articleService.getArticleDrafts().subscribe((drafts) => {
+      // Filter articles based on the search keyword
+      if (this.articleSearchInput) {
+        drafts = drafts.filter(
+          (draft) =>
+            draft.title
+              .toLowerCase()
+              .includes(this.articleSearchForm.value.searchKeyword.toLowerCase())
+        );
+      }
+      console.log('drafts:', drafts);
+      this.articleDrafts = drafts;
+    });
+  }
 
-  articles: Array<any> = [
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'diterima',
-    },
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'diterima',
-    },
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'ditinjau',
-    },
-    {
-      title: 'Lorem ipsum dolor sit amet',
-      status: 'ditinjau',
-    },
-    {
-      title: 'Hukum Mendukung Israel',
-      status: 'ditinjau',
-    },
-    {
-      title: 'Hukum Korupsi Uang Beasiswa',
-      status: 'ditinjau',
-    },
-  ];
+  onAcceptArticle(articleId: string) {
+    this.articleService.publishArticle(articleId);
+  }
+  
+  articleSearchInput = '';
+  onSearchArticle() {
+    this.articleSearchInput = this.articleSearchForm.value.searchKeyword;
+    console.log(this.articleSearchForm.value.searchKeyword);
+    this.loadArticleDrafts();
+  }
 
   // HOAX SECTION
   private createHoax() {
@@ -328,3 +311,5 @@ export class DashboardComponent implements OnInit {
     this.createLawbotClicked = status;
   }
 }
+
+

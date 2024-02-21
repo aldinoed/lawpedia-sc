@@ -29,7 +29,7 @@
     <h1 class="text-3xl font-medium text-moca">LawLibrary</h1>
   </div>
 
-  <div class="mt-6 max-w-sm">
+  <form [formGroup]="articleSearchForm" (ngSubmit)="onSearchArticle()" class="mt-6 max-w-sm">
     <label for="voice-search" class="sr-only">Search</label>
     <div class="relative w-full">
       <div
@@ -41,11 +41,11 @@
         class="bg-gray-50 border border-moca text-sm rounded-lg focus:ring-moca focus:border-moca block w-full p-2.5 placeholder:text-moca"
         placeholder="Cari judul..."
         required
-        [(ngModel)]="articleSearchInput"
+        name="searchKeyword"
+        formControlName="searchKeyword"
       />
       <button
-        type="button"
-        disabled
+        type="submit"
         class="absolute inset-y-0 end-0 flex items-center pe-3"
       >
         <svg
@@ -64,7 +64,7 @@
         </svg>
       </button>
     </div>
-  </div>
+  </form>
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -76,7 +76,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let article of articles">
+        <ng-container *ngFor="let article of articleDrafts">
           <tr class="odd:bg-white even:bg-gray-100 border-b">
             <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
               {{ article.title }}
@@ -95,6 +95,7 @@
             <td class="px-6 py-4">
               <div class="flex gap-1">
                 <button
+                  (click)="onAcceptArticle(article.id)"
                   class="p-1 bg-moca text-white rounded hover:bg-opacity-85 transition focus:outline-gold"
                 >
                   <svg
@@ -234,7 +235,7 @@
       <h1 class="text-3xl font-medium text-moca">LawFact</h1>
     </div>
 
-    <div class="mt-6 flex justify-between items-center">
+    <form class="mt-6 flex justify-between items-center">
       <div>
         <label for="voice-search" class="sr-only">Search</label>
         <div class="relative w-64 md:w-72">
@@ -294,7 +295,7 @@
           </svg>
         </button>
       </div>
-    </div>
+    </form>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500">

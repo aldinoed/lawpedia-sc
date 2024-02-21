@@ -97,8 +97,18 @@ export class ArticleService {
     const articleRef = doc(this.firestore, 'articleDrafts', articleId);
     getDoc(articleRef).then((doc) => {
       if (doc.exists()) {
-        addDoc(collection(this.firestore, 'articles'), doc.data())
+        // const data = doc.data();
+        const data = {
+          author : doc.data()['author'],
+          category: doc.data()['category'],
+          content: doc.data()['content'],
+          published: new Date(),
+          title: doc.data()['title'],
+          views: 0
+        }
+        addDoc(collection(this.firestore, 'articles'), data)
         .then(() => {
+          console.log('Document successfully written!');
           return setDoc(articleRef, { status: 'Disetujui' }, { merge: true });
         })
         .catch((error) => {
