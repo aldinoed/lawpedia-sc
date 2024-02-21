@@ -29,7 +29,11 @@
     <h1 class="text-3xl font-medium text-moca">LawLibrary</h1>
   </div>
 
-  <form [formGroup]="articleSearchForm" (ngSubmit)="onSearchArticle()" class="mt-6 max-w-sm">
+  <form
+    [formGroup]="articleSearchForm"
+    (ngSubmit)="onSearchArticle()"
+    class="mt-6 max-w-sm"
+  >
     <label for="voice-search" class="sr-only">Search</label>
     <div class="relative w-full">
       <div
@@ -85,8 +89,8 @@
               <div
                 class="py-1 px-6 rounded-lg bg-moca"
                 [ngClass]="{
-                  'text-white': article.status === 'ditinjau',
-                  'bg-opacity-20': article.status === 'diterima',
+                  'text-white ': article.status === 'Disetujui',
+                  'bg-opacity-20': article.status === 'Ditinjau',
                 }"
               >
                 {{ article.status }}
@@ -96,7 +100,13 @@
               <div class="flex gap-1">
                 <button
                   (click)="onAcceptArticle(article.id)"
-                  class="p-1 bg-moca text-white rounded hover:bg-opacity-85 transition focus:outline-gold"
+                  class="p-1 bg-moca text-white rounded transition focus:outline-gold"
+                  [ngClass]="{
+                    'bg-opacity-50 cursor-not-allowed':
+                      article.status === 'Disetujui',
+                      'hover:bg-opacity-85': article.status === 'Ditinjau',
+                  }"
+                  [disabled]="article.status === 'Disetujui'"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +157,11 @@
     <h1 class="text-3xl font-medium text-moca">LawSpeak</h1>
   </div>
 
-  <form [formGroup]="speakupSearchForm" (ngSubmit)="onSearchSpeakup()" class="mt-6 max-w-sm">
+  <form
+    [formGroup]="speakupSearchForm"
+    (ngSubmit)="onSearchSpeakup()"
+    class="mt-6 max-w-sm"
+  >
     <label for="voice-search" class="sr-only">Search</label>
     <div class="relative w-full">
       <div
