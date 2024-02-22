@@ -217,8 +217,9 @@
             <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
               {{ speakup.authorUsername }}
             </th>
-            <td class="px-6 py-4">
-              {{ speakup.content }}
+            <td class="px-6 py-4 overflow-hidden">
+              <!-- {{ speakup.content }} -->
+              <div [innerHtml]="speakup.content" class="line-clamp-3"></div>
             </td>
             <td class="px-6 py-4">
               <button
