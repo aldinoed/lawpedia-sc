@@ -184,7 +184,7 @@ export class HoaxThreadsListComponent implements OnInit {
         content: hoax.content,
         views: hoax.views,
         published: hoax.published.toDate(),
-        images: hoax.images,
+        // images: hoax.images,
       }));
 
       this.hoaxList.forEach((hoax) => {
@@ -192,6 +192,7 @@ export class HoaxThreadsListComponent implements OnInit {
           hoax.images = images;
         });
       });
+      console.log(this.hoaxList);
     });
   }
 }

@@ -85,6 +85,7 @@ export class DashboardComponent implements OnInit {
       author: '',
       title: '',
       content: '',
+      media: '',
     });
     this.articleSearchForm = this.formBuilder.group({
       searchKeyword: '',
@@ -101,9 +102,9 @@ export class DashboardComponent implements OnInit {
   
     this.currentPath = this.router.url;
   }
-  ngAfterViewInit(): void {
-    throw new Error('Method not implemented.');
-  }
+  // ngAfterViewInit(): void {
+  //   throw new Error('Method not implemented.');
+  // }
 
   // ngOnDestroy() {
   //   this.event$.unsubscribe();
@@ -217,12 +218,26 @@ export class DashboardComponent implements OnInit {
         author: user.data().username,
         title: this.hoaxForm.value.title,
         content: this.hoaxForm.value.content,
+        file: this.hoaxMedia,
         published: new Date(),
         views: 0,
       };
-      this.hoaxService.addHoax(data);
+      this.hoaxService.addHoax(data).then(() => {
+        Swal.fire({
+          title: 'Berhasil!',
+          text: 'Data berhasil ditambahkan.',
+          icon: 'success',
+        });
+      });
+      console.log('data:', data);
     });
   }
+
+  hoaxMedia: File | null = null;
+  async handleFileInput(event: any) {
+    this.hoaxMedia = event.target.files[0];
+  }
+  
 
   private updateHoax(hoaxId: string) {
     const data = {

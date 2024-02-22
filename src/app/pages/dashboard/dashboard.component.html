@@ -386,49 +386,47 @@
     </div>
     <div class="mt-6">
       <!-- FORM -->
-      <form [formGroup]="hoaxForm" (ngSubmit)="onCreateHoax()">
-        <label for="input-title" class="block font-medium mb-2">Judul</label>
-        <input
-          type="text"
-          id="input-title"
-          name="input-title"
-          formControlName="title"
-          class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
-        />
+    <form [formGroup]="hoaxForm" (ngSubmit)="onCreateHoax()">
+  <label for="input-title" class="block font-medium mb-2">Judul</label>
+  <input
+    type="text"
+    id="input-title"
+    name="input-title"
+    formControlName="title"
+    class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
+  />
 
-        <label class="block mb-2 mt-4 text-sm font-medium" for="file_input"
-          >Upload media</label
-        >
-        <input
-          class="block w-full text-sm border-2 border-gray-200 rounded-lg cursor-pointer"
-          id="file_input"
-          name="file_input"
-          type="file"
-          formControlName="media"
-        />
+  <label class="block mb-2 mt-4 text-sm font-medium" for="file_input">Upload media</label>
+  <input
+    class="block w-full text-sm border-2 border-gray-200 rounded-lg cursor-pointer"
+    id="file_input"
+    name="file_input"
+    type="file"
+    (change)="handleFileInput($event)"
+    formControlName="media"
+  />
 
-        <label for="input-content" class="block font-medium mb-2 mt-4"
-          >Konten</label
-        >
-        <editor
-          apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
-          [init]="{
-            plugins: 'list link image table code help wordcount',
-            menubar: 'edit view insert tools table help',
-            height: 600
-          }"
-          id="input-content"
-          name="input-content"
-          formControlName="content"
-        ></editor>
+  <label for="input-content" class="block font-medium mb-2 mt-4">Konten</label>
+  <editor
+    apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
+    [init]="{
+      plugins: 'list link image table code help wordcount',
+      menubar: 'edit view insert tools table help',
+      height: 600
+    }"
+    id="input-content"
+    name="input-content"
+    formControlName="content"
+  ></editor>
 
-        <button
-          type="submit"
-          class="inline-flex items-center mt-6 px-10 py-2 text-sm font-medium text-center text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
-        >
-          Unggah
-        </button>
-      </form>
+  <button
+    type="submit"
+    class="inline-flex items-center mt-6 px-10 py-2 text-sm font-medium text-center text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+  >
+    Unggah
+  </button>
+</form>
+
     </div>
   </ng-container>
 </div>

@@ -10,14 +10,14 @@ import {
   addDoc,
   deleteDoc,
 } from '@angular/fire/firestore'
-import { 
-  Storage, 
-  getDownloadURL, 
-  ref, 
+import {
+  Storage,
+  getDownloadURL,
+  ref,
   listAll,
   uploadBytes,
   uploadBytesResumable,
-  uploadString, 
+  uploadString,
 } from '@angular/fire/storage';
 import { Observable, combineLatest, map } from 'rxjs';
 import { from } from 'rxjs';
@@ -44,7 +44,7 @@ export class HoaxService {
   getHoax(id: string): Observable<any> {
     this.updateHoaxViews(id);
     return this.hoaxList.pipe(
-      map((hoaxes: Hoax[]) => 
+      map((hoaxes: Hoax[]) =>
         hoaxes.find((hoax) => hoax.id === id))
     );
   }
@@ -79,9 +79,26 @@ export class HoaxService {
     });
   }
 
-  addHoax(data: any): Promise<any> {
-    return addDoc(collection(this.firestore, 'hoaxList'), data);
+  addHoax(data: any): any {
+    const file = data.file;
+    delete data.file;
+    addDoc(collection(this.firestore, 'hoaxList'), data)
+      .then(async (docRef) => {
+        const filePath = `content/media/${docRef.id}/index`; // Using file.name to get the file name
+        const fileRef = ref(this.storage, filePath);
+  
+        try {
+          const snapshot = await uploadBytes(fileRef, file);
+          console.log('Uploaded a blob or file!', snapshot);
+        } catch (error) {
+          console.error('Error uploading file', error);
+        }
+      })
+      .catch((error) => {
+        console.error('Error adding document:', error);
+      });
   }
+  
 
   updateHoax(data: any, id: string): Promise<any> {
     return setDoc(doc(this.firestore, 'hoaxList', id), data);
@@ -89,10 +106,6 @@ export class HoaxService {
 
   deleteHoax(id: string): Promise<any> {
     return deleteDoc(doc(this.firestore, 'hoaxList', id));
-  }
-
-  addHoaxImage(id: string, file: File): Promise<any> {
-    return uploadBytes(ref(this.storage, `content/media/${id}/${file.name}`), file);
   }
 
 }
