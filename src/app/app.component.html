@@ -181,10 +181,9 @@
   *ngIf="
     !currentPath.includes('/dashboard') && !currentPath.includes('/lawbot')
   "
+  class="bg-latte "
 >
-  <div
-    class="px-4 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-3 gap-4 bg-latte"
-  >
+  <div class="px-4 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 gap-4 py-6 items-center">
     <div class="flex items-center justify-center md:justify-start">
       <button [routerLink]="['/home']">
         <span class="text-2xl font-semibold whitespace-nowrap"
@@ -196,30 +195,60 @@
       </button>
     </div>
 
-    <div class="flex justify-center">
-      <div>
-        <p class="mb-3 font-medium text-center md:text-start">Kontak Kami</p>
+    <div class="flex justify-center md:justify-end">
+      <div class="">
+        <!-- <p class="mb-3 font-medium text-center md:text-start">Kontak Kami</p> -->
         <ng-container *ngFor="let contact of contactData">
           <div class="flex items-center gap-2 text-sm mb-2">
-            <img [src]="contact.icon" alt="icon" class="h-4" />
+            <ng-container *ngIf="contact.id === 1">
+              <svg
+                class="w-4 h-4"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 16"
+              >
+                <path
+                  d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"
+                />
+                <path
+                  d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"
+                />
+              </svg>
+            </ng-container>
+            <ng-container *ngIf="contact.id === 2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </ng-container>
             <p>{{ contact.value }}</p>
           </div>
         </ng-container>
       </div>
     </div>
 
-    <div class="flex justify-center md:justify-end">
+    <!-- <div class="flex justify-center md:justify-end">
       <div>
         <p class="hidden md:block mb-2 text-transparent">Social Media</p>
         <ng-container *ngFor="let socialMedia of socialMediaData">
           <div class="flex items-center gap-2 text-sm mb-2">
-            <img [src]="socialMedia.icon" alt="icon" class="h-4" />
+            <span>{{ socialMedia.icon }}</span>
             <p>{{ socialMedia.value }}</p>
           </div>
         </ng-container>
       </div>
-    </div>
+    </div> -->
   </div>
+  <div class="text-center border-t px-4 md:px-12 lg:px-20  border-gray-200 py-6">&copy; 2024 LawSites Team.</div>
 </footer>
 
 <!-- LAYOUT FOR DASHBOARD -->
@@ -309,7 +338,7 @@
               authenticatedUser.length === 20,
             'bg-gray-500 ':
               authenticatedUser.length > 20,
-            
+
           }"
       >
         <span class="font-medium text-white">{{

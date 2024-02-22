@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
     this.chatbotSearchForm = this.formBuilder.group({
       searchKeyword: '',
     });
-  
+
     this.currentPath = this.router.url;
   }
   // ngAfterViewInit(): void {
@@ -188,11 +188,10 @@ export class DashboardComponent implements OnInit {
       // Filter articles based on the search keyword
       console.log('articleSearchInput:', this.articleSearchInput);
       if (this.articleSearchInput) {
-        drafts = drafts.filter(
-          (draft) =>
-            draft.title
-              .toLowerCase()
-              .includes(this.articleSearchForm.value.searchKeyword.toLowerCase())
+        drafts = drafts.filter((draft) =>
+          draft.title
+            .toLowerCase()
+            .includes(this.articleSearchForm.value.searchKeyword.toLowerCase())
         );
       }
       console.log('drafts:', drafts);
@@ -203,7 +202,7 @@ export class DashboardComponent implements OnInit {
   onAcceptArticle(articleId: string) {
     this.articleService.publishArticle(articleId);
   }
-  
+
   articleSearchInput = '';
   onSearchArticle() {
     this.articleSearchInput = this.articleSearchForm.value.searchKeyword;
@@ -237,7 +236,6 @@ export class DashboardComponent implements OnInit {
   async handleFileInput(event: any) {
     this.hoaxMedia = event.target.files[0];
   }
-  
 
   private updateHoax(hoaxId: string) {
     const data = {
@@ -257,11 +255,10 @@ export class DashboardComponent implements OnInit {
       // Filter hoaxes based on the search keyword
       console.log('hoaxSearchInput:', this.hoaxSearchInput);
       if (this.hoaxSearchInput) {
-        hoaxes = hoaxes.filter(
-          (hoax) =>
-            hoax.title
-              .toLowerCase()
-              .includes(this.hoaxSearchForm.value.searchKeyword.toLowerCase())
+        hoaxes = hoaxes.filter((hoax) =>
+          hoax.title
+            .toLowerCase()
+            .includes(this.hoaxSearchForm.value.searchKeyword.toLowerCase())
         );
       }
 
@@ -328,11 +325,10 @@ export class DashboardComponent implements OnInit {
 
       // Filter threads based on the search keyword
       if (this.speakupSearchInput) {
-        threads = threads.filter(
-          (thread) =>
-            thread['id']
-              .toLowerCase()
-              .includes(this.speakupSearchForm.value.searchKeyword.toLowerCase())
+        threads = threads.filter((thread) =>
+          thread['id']
+            .toLowerCase()
+            .includes(this.speakupSearchForm.value.searchKeyword.toLowerCase())
         );
       }
       this.speakupList = threads;
@@ -460,5 +456,3 @@ export class DashboardComponent implements OnInit {
     });
   }
 }
-
-

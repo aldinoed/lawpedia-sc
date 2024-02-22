@@ -110,7 +110,7 @@ export class HoaxThreadsListComponent implements OnInit {
       searchKeyword: '',
     });
   }
-  
+
   // INIT
   ngOnInit() {
     this.loadSortedHoaxList();
@@ -149,11 +149,11 @@ export class HoaxThreadsListComponent implements OnInit {
           );
         });
      }
-      
+
       // Filter hoax based on the search keyword
       if (this.searchKeyword) {
         hoaxList = hoaxList.filter(
-          (hoax) => 
+          (hoax) =>
           hoax.title
             .toLowerCase()
             .includes(this.searchForm.value.searchKeyword.toLowerCase()) ||
@@ -184,7 +184,7 @@ export class HoaxThreadsListComponent implements OnInit {
         content: hoax.content,
         views: hoax.views,
         published: hoax.published.toDate(),
-        // images: hoax.images,
+        images: hoax.images,
       }));
 
       this.hoaxList.forEach((hoax) => {
