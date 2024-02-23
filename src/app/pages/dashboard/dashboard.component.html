@@ -390,47 +390,50 @@
     </div>
     <div class="mt-6">
       <!-- FORM -->
-    <form [formGroup]="hoaxForm" (ngSubmit)="onCreateHoax()">
-  <label for="input-title" class="block font-medium mb-2">Judul</label>
-  <input
-    type="text"
-    id="input-title"
-    name="input-title"
-    formControlName="title"
-    class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
-  />
+      <form [formGroup]="hoaxForm" (ngSubmit)="onCreateHoax()">
+        <label for="input-title" class="block font-medium mb-2">Judul</label>
+        <input
+          type="text"
+          id="input-title"
+          name="input-title"
+          formControlName="title"
+          class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
+        />
 
-  <label class="block mb-2 mt-4 text-sm font-medium" for="file_input">Upload media</label>
-  <input
-    class="block w-full text-sm border-2 border-gray-200 rounded-lg cursor-pointer"
-    id="file_input"
-    name="file_input"
-    type="file"
-    (change)="handleFileHoaxInput($event)"
-    formControlName="media"
-  />
+        <label class="block mb-2 mt-4 text-sm font-medium" for="file_input"
+          >Upload media</label
+        >
+        <input
+          class="block w-full text-sm border-2 border-gray-200 rounded-lg cursor-pointer"
+          id="file_input"
+          name="file_input"
+          type="file"
+          (change)="handleFileHoaxInput($event)"
+          formControlName="media"
+        />
 
-  <label for="input-content" class="block font-medium mb-2 mt-4">Konten</label>
-  <editor
-    apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
-    [init]="{
-      plugins: 'list link image table code help wordcount',
-      menubar: 'edit view insert tools table help',
-      height: 600
-    }"
-    id="input-content"
-    name="input-content"
-    formControlName="content"
-  ></editor>
+        <label for="input-content" class="block font-medium mb-2 mt-4"
+          >Konten</label
+        >
+        <editor
+          apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
+          [init]="{
+            plugins: 'list link image table code help wordcount',
+            menubar: 'edit view insert tools table help',
+            height: 600
+          }"
+          id="input-content"
+          name="input-content"
+          formControlName="content"
+        ></editor>
 
-  <button
-    type="submit"
-    class="inline-flex items-center mt-6 px-10 py-2 text-sm font-medium text-center text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
-  >
-    Unggah
-  </button>
-</form>
-
+        <button
+          type="submit"
+          class="inline-flex items-center mt-6 px-10 py-2 text-sm font-medium text-center text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+        >
+          Unggah
+        </button>
+      </form>
     </div>
   </ng-container>
 </div>
@@ -446,7 +449,7 @@
     
     <!-- Search -->
     <div class="mt-6 flex justify-between items-center">
-      <div>
+      <form [formGroup]="chatbotSearchForm" (ngSubmit)="onSearchChatbot()" >
         <label for="voice-search" class="sr-only">Search</label>
         <div class="relative w-64 md:w-72">
           <div
@@ -458,11 +461,11 @@
             class="bg-gray-50 border border-moca text-sm rounded-lg focus:ring-moca focus:border-moca block w-full p-2.5 placeholder:text-moca"
             placeholder="Cari judul, kategori..."
             required
-            [(ngModel)]="chatbotSearchInput"
+            formControlName="searchKeyword"
+            name="searchKeyword"
           />
           <button
-            type="button"
-            disabled
+            type="submit"
             class="absolute inset-y-0 end-0 flex items-center pe-3"
           >
             <svg
@@ -481,7 +484,7 @@
             </svg>
           </button>
         </div>
-      </div>
+      </form>
 
       <div>
         <button
@@ -511,7 +514,7 @@
       <table class="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead class="text-xs text-white uppercase bg-moca">
           <tr>
-            <th scope="col" class="px-6 py-3">Judul</th>
+            <th scope="col" class="px-6 py-3">Nama File</th>
             <th scope="col" class="px-6 py-3">Kategori</th>
             <th scope="col" class="px-6 py-3">Aksi</th>
           </tr>
@@ -520,14 +523,16 @@
           <ng-container *ngFor="let chatbot of chatbotList">
             <tr class="odd:bg-white even:bg-gray-100 border-b">
               <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                {{ chatbot.title }}
+                {{ chatbot.filename }}
               </th>
               <td class="px-6 py-4">
                 {{ chatbot.category }}
               </td>
               <td class="px-6 py-4">
                 <div class="flex gap-1">
-                  <button
+                  <a
+                    target="_blank"
+                    href={{chatbot.url}}
                     class="p-1 bg-moca text-white rounded hover:bg-opacity-85 transition focus:outline-gold"
                   >
                     <svg
@@ -549,11 +554,11 @@
                         d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                       />
                     </svg>
-                  </button>
+                  </a>
                   <!-- Delete -->
                   <button
                     class="p-1 bg-red-500 hover:bg-red-600 transition focus:outline-red-700 text-white rounded"
-                    (click)="onLawbotDeleteClick()"
+                    (click)="onLawbotDeleteClick(chatbot.path)"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

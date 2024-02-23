@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
   articleLength!: number;
   speakupLength!: number;
   hoaxLength!: number;
-  documentLength: number = 0;
+  documentLength!: number;
   hoaxForm: FormGroup;
   chatbotForm: FormGroup;
   articleSearchForm: FormGroup;
@@ -67,6 +67,7 @@ export class DashboardComponent implements OnInit {
   hoaxList: Array<any> = [];
   speakupList: Array<any> = [];
   chatbotList: Array<any> = [];
+  chatbotCategories: Array<any> = [];
 
   currentPath: string = '';
 
@@ -104,7 +105,7 @@ export class DashboardComponent implements OnInit {
     this.chatbotSearchForm = this.formBuilder.group({
       searchKeyword: '',
     });
-  
+
     this.currentPath = this.router.url;
   }
   // ngAfterViewInit(): void {
@@ -126,7 +127,6 @@ export class DashboardComponent implements OnInit {
 
     this.articleService.getArticles().subscribe((articles) => {
       this.articleLength = articles.length;
-      // console.log('articleLength:', this.articleLength);
       this.analyticCards.push({
         name: 'Jumlah Artikel Terunggah',
         amount: this.articleLength,
@@ -135,49 +135,11 @@ export class DashboardComponent implements OnInit {
 
     this.loadArticleDrafts();
 
-    // this.speakupService.getSpeakupThreads().subscribe((threads) => {
-    //   this.speakupLength = threads.length;
-    //   console.log('speakup:', threads);
-    //   console.log('speakupLength:', this.speakupLength);
-    //   this.analyticCards.push({
-    //     name: 'Jumlah Speakup Threads Terunggah',
-    //     amount: this.speakupLength,
-    //   });
-    // });
-
     this.loadSpeakupThreads();
-
-    // this.hoaxService.getHoaxList().subscribe((hoaxes) => {
-    //   this.hoaxLength = hoaxes.length;
-    //   console.log('hoaxes:', hoaxes);
-    //   console.log('hoaxLength:', this.hoaxLength);
-    //   this.analyticCards.push({
-    //     name: 'Jumlah Informasi Hoaks Terunggah',
-    //     amount: this.hoaxLength,
-    //   });
-    // });
 
     this.loadHoaxes();
 
-    this.chatbotService.getTopics().subscribe((topics) => {
-      // console.log('topics:', topics);
-      topics.forEach((topic) => {
-        console.log('topic:', topic.path);
-        this.chatbotService.getDocuments(topic.path).then((documents: any) => {
-          console.log(
-            'topic',
-            topic.name,
-            'panjang dokumen:',
-            documents.prefixes.length
-          );
-          this.documentLength += documents.prefixes.length;
-        });
-      });
-      this.analyticCards.push({
-        name: 'Jumlah Dokumen Chatbot terunggah',
-        amount: this.documentLength,
-      });
-    });
+    this.loadChatbotDocuments();
   }
 
   getActiveTab(): void {
@@ -191,16 +153,13 @@ export class DashboardComponent implements OnInit {
   private loadArticleDrafts() {
     this.articleService.getArticleDrafts().subscribe((drafts) => {
       // Filter articles based on the search keyword
-      console.log('articleSearchInput:', this.articleSearchInput);
       if (this.articleSearchInput) {
-        drafts = drafts.filter(
-          (draft) =>
-            draft.title
-              .toLowerCase()
-              .includes(this.articleSearchForm.value.searchKeyword.toLowerCase())
+        drafts = drafts.filter((draft) =>
+          draft.title
+            .toLowerCase()
+            .includes(this.articleSearchForm.value.searchKeyword.toLowerCase())
         );
       }
-      console.log('drafts:', drafts);
       this.articleDrafts = drafts;
     });
   }
@@ -208,7 +167,7 @@ export class DashboardComponent implements OnInit {
   onAcceptArticle(articleId: string) {
     this.articleService.publishArticle(articleId);
   }
-  
+
   articleSearchInput = '';
   onSearchArticle() {
     this.articleSearchInput = this.articleSearchForm.value.searchKeyword;
@@ -234,7 +193,7 @@ export class DashboardComponent implements OnInit {
           icon: 'success',
         });
       });
-      console.log('data:', data);
+      // console.log('data:', data);
     });
   }
 
@@ -246,7 +205,7 @@ export class DashboardComponent implements OnInit {
   async handleFileHoaxInput(event: any) {
     this.hoaxMedia = event.target.files[0];
   }
-  
+
   private updateHoax(hoaxId: string) {
     const data = {
       author: this.hoaxForm.value.author,
@@ -259,13 +218,12 @@ export class DashboardComponent implements OnInit {
   private loadHoaxes() {
     this.hoaxService.getHoaxList().subscribe((hoaxes) => {
       // Filter hoaxes based on the search keyword
-      console.log('hoaxSearchInput:', this.hoaxSearchInput);
+      // console.log('hoaxSearchInput:', this.hoaxSearchInput);
       if (this.hoaxSearchInput) {
-        hoaxes = hoaxes.filter(
-          (hoax) =>
-            hoax.title
-              .toLowerCase()
-              .includes(this.hoaxSearchForm.value.searchKeyword.toLowerCase())
+        hoaxes = hoaxes.filter((hoax) =>
+          hoax.title
+            .toLowerCase()
+            .includes(this.hoaxSearchForm.value.searchKeyword.toLowerCase())
         );
       }
 
@@ -276,7 +234,7 @@ export class DashboardComponent implements OnInit {
       });
 
       this.hoaxList = hoaxes;
-      console.log('hoaxList:', this.hoaxList);
+      // console.log('hoaxList:', this.hoaxList);
     });
   }
 
@@ -332,15 +290,14 @@ export class DashboardComponent implements OnInit {
 
       // Filter threads based on the search keyword
       if (this.speakupSearchInput) {
-        threads = threads.filter(
-          (thread) =>
-            thread['id']
-              .toLowerCase()
-              .includes(this.speakupSearchForm.value.searchKeyword.toLowerCase())
+        threads = threads.filter((thread) =>
+          thread['id']
+            .toLowerCase()
+            .includes(this.speakupSearchForm.value.searchKeyword.toLowerCase())
         );
       }
       this.speakupList = threads;
-      console.log('speakupList:', this.speakupList);
+      // console.log('speakupList:', this.speakupList);
     });
   }
 
@@ -353,34 +310,6 @@ export class DashboardComponent implements OnInit {
     this.speakupSearchInput = this.speakupSearchForm.value.searchKeyword;
     this.loadSpeakupThreads();
   }
-
-  // speakupList: Array<any> = [
-  //   {
-  //     username: 'John Doe',
-  //     content:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //   },
-  //   {
-  //     username: 'John Doe',
-  //     content:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //   },
-  //   {
-  //     username: 'John Doe',
-  //     content:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //   },
-  //   {
-  //     username: 'John Doe',
-  //     content:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //   },
-  //   {
-  //     username: 'John Doe',
-  //     content:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //   },
-  // ];
 
   onLawspeakDeleteClick(id: string) {
     Swal.fire({
@@ -406,49 +335,76 @@ export class DashboardComponent implements OnInit {
 
   // CHATBOT SECTION
   chatbotSearchInput = '';
+  onSearchChatbot() {
+    this.chatbotSearchInput = this.chatbotSearchForm.value.searchKeyword;
+    this.loadChatbotDocuments();
+  }
 
-  // CHATBOT SECTION
-  // chatbotList: Array<any> = [
-  //   {
-  //     title:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //     category: 'Hukum Tata Negara',
-  //   },
-  //   {
-  //     title:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //     category: 'Hukum Tata Negara',
-  //   },
-  //   {
-  //     title:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //     category: 'Hukum Tata Negara',
-  //   },
-  //   {
-  //     title:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //     category: 'Hukum Tata Negara',
-  //   },
-  //   {
-  //     title:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit.',
-  //     category: 'Hukum Tata Negara',
-  //   },
-  // ];
+  private loadChatbotTopics() {
+  }
+
+  private loadChatbotDocuments() {
+    this.chatbotService.getTopics().subscribe((topics) => {
+      this.chatbotCategories = topics;
+      topics.forEach((topic) => {
+        this.chatbotService.getDocuments(topic.path).then((documents: any) => {
+          documents.items.map((item: any) => {
+            this.chatbotService.getDownloadUrl(item._location.path).then((url: any) => {
+              const data = {
+                filename: item._location.path.split('/').pop(),
+                category: topic.name,
+                url: url,
+                path: item._location.path,
+              }
+              this.chatbotList.push(data);
+            });
+          });
+        });
+      });
+
+      if (this.chatbotSearchInput) {
+        this.chatbotList = this.chatbotList.filter((doc) =>
+          doc.filename
+            .toLowerCase()
+            .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase()) ||
+          doc.category
+            .toLowerCase()
+            .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase())
+        );
+      }
+
+      this.analyticCards.push({
+        name: 'Jumlah Dokumen Chatbot terunggah',
+        amount: this.chatbotList.length,
+      });
+    });
+  }
+
+
+  chatbotDoc: File | null = null;
+  async handleFileChatbotInput(event: any) {
+    this.chatbotDoc = event.target.files[0];
+  }
+
   onCreateDocument() {
     const userId = localStorage.getItem('uid') || '';
     this.authService.getUser(userId).then((user: any) => {
       const data = {
+        title: this.chatbotForm.value.title,
+        topic: this.chatbotForm.value.category,
+        file: this.chatbotDoc,
+        published: new Date(),
       };
+      // this.chatbotService.addNewDocument();
     });
   }
-  
+
   createLawbotClicked: boolean = false;
   onCreateLawbotClick(status: boolean) {
     this.createLawbotClicked = status;
   }
 
-  onLawbotDeleteClick() {
+  onLawbotDeleteClick(path: string) {
     Swal.fire({
       title: 'Yakin ingin menghapus?',
       text: 'Data tidak akan bisa dikembalikan!',
@@ -460,8 +416,7 @@ export class DashboardComponent implements OnInit {
       confirmButtonText: 'Ya, hapus!',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Delete Logic Here
-
+        this.chatbotService.deleteDocument(path);
         Swal.fire({
           title: 'Berhasil!',
           text: 'Data berhasil dihapus.',
@@ -470,5 +425,4 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-
 }

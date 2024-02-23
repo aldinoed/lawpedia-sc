@@ -58,12 +58,12 @@ export class AppComponent implements OnInit {
   // Footer
   contactData: Array<any> = [
     {
-      icon: '/assets/email-logo.png',
-      value: 'lawsites@gmail.com',
+      id: 1,
+      value: 'lawsites06@gmail.com',
     },
     {
-      icon: '/assets/phone-logo.png',
-      value: '+62-881-2678-1990',
+      id: 2,
+      value: '+62-882-1883-2453',
     },
   ];
 

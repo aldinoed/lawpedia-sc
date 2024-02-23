@@ -23,6 +23,7 @@ import {
   uploadBytes,
   uploadBytesResumable,
   uploadString,
+  deleteObject,
 } from '@angular/fire/storage';
 import { AuthService } from './auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -199,7 +200,17 @@ export class ChatbotService {
 
   getDocuments(topic: string): any {
     const storageRef = ref(this.storage, topic);
-    return listAll(storageRef);
+    return listAll(storageRef)
+  }
+
+  deleteDocument(path: string): any {
+    const storageRef = ref(this.storage, path);
+    return deleteObject(storageRef);
+  }
+
+  getDownloadUrl(path: string): any {
+    const storageRef = ref(this.storage, path);
+    return getDownloadURL(storageRef);
   }
 
 }
