@@ -22,7 +22,6 @@
   </div>
 </ng-container>
 
-
 <!-- LAWLIBRARY ACTIVE TAB-->
 <div *ngIf="currentPath.includes('/dashboard/lawlibrary')">
   <!-- Your Lawlibrary content here -->
@@ -152,7 +151,6 @@
 </div>
 <!-- LAWLIBRARY TAB END -->
 
-
 <!-- LAWSPEAK ACTIVE TAB -->
 <div *ngIf="currentPath.includes('/dashboard/lawspeak')">
   <div class="p-6 rounded-lg shadow-md mt-4">
@@ -251,7 +249,6 @@
   </div>
 </div>
 <!-- LAWSPEAK TAB END -->
-
 
 <!-- LAWFACT ACTIVE TAB -->
 <div *ngIf="currentPath.includes('/dashboard/lawfact')">
@@ -439,17 +436,16 @@
 </div>
 <!-- LAWFACT TAB END -->
 
-
 <!-- LAWBOT ACTIVE TAB -->
 <div *ngIf="currentPath.includes('/dashboard/lawbot')">
   <ng-container *ngIf="createLawbotClicked === false">
     <div class="p-6 rounded-lg shadow-md mt-4">
       <h1 class="text-3xl font-medium text-moca">LawBot</h1>
     </div>
-    
+
     <!-- Search -->
     <div class="mt-6 flex justify-between items-center">
-      <form [formGroup]="chatbotSearchForm" (ngSubmit)="onSearchChatbot()" >
+      <form [formGroup]="chatbotSearchForm" (ngSubmit)="onSearchChatbot()">
         <label for="voice-search" class="sr-only">Search</label>
         <div class="relative w-64 md:w-72">
           <div
@@ -532,7 +528,7 @@
                 <div class="flex gap-1">
                   <a
                     target="_blank"
-                    href={{chatbot.url}}
+                    href="{{ chatbot.url }}"
                     class="p-1 bg-moca text-white rounded hover:bg-opacity-85 transition focus:outline-gold"
                   >
                     <svg
@@ -609,8 +605,12 @@
       </button>
     </div>
     <div class="mt-6">
-      <!-- FORM -->
-      <form [formGroup]="chatbotForm" (ngSubmit)="onCreateDocument()" class="w-full lg:w-1/2">
+      <!-- FORM CHATBOT-->
+      <form
+        [formGroup]="chatbotForm"
+        (ngSubmit)="onCreateDocument()"
+        class="w-full lg:w-1/2"
+      >
         <label for="input-title" class="block font-medium mb-2">Judul</label>
         <input
           type="text"
@@ -618,14 +618,33 @@
           class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
         />
 
-        <label for="input-category" class="block font-medium mb-2 mt-4"
+        <!-- <label for="input-category" class="block font-medium mb-2 mt-4"
           >Kategori</label
         >
         <input
           type="text"
           id="input-category"
           class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
-        />
+        /> -->
+        <div class="mt-4">
+          <label
+            for="select-category"
+            class="block text-sm font-medium text-gray-700"
+            >Kategori</label
+          >
+          <select
+            formControlName="category"
+            id="select-category"
+            class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+          >
+            <option
+              *ngFor="let item of chatbotCategories; let i = index"
+              [ngValue]="item.id"
+            >
+              {{ i === 0 ? "Pilih Kategori" : item.name }}
+            </option>
+          </select>
+        </div>
 
         <label class="block mb-2 mt-4 text-sm font-medium" for="file_input"
           >File Sumber</label
