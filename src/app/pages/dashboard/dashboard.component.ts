@@ -57,6 +57,7 @@ export class DashboardComponent implements OnInit {
   hoaxLength!: number;
   documentLength: number = 0;
   hoaxForm: FormGroup;
+  chatbotForm: FormGroup;
   articleSearchForm: FormGroup;
   hoaxSearchForm: FormGroup;
   speakupSearchForm: FormGroup;
@@ -86,6 +87,10 @@ export class DashboardComponent implements OnInit {
       title: '',
       content: '',
       media: '',
+    });
+    this.chatbotForm = this.formBuilder.group({
+      title: '',
+      category: '',
     });
     this.articleSearchForm = this.formBuilder.group({
       searchKeyword: '',
@@ -233,12 +238,15 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  deleteHoax(hoaxId: string) {
+    this.hoaxService.deleteHoax(hoaxId);
+  }
+
   hoaxMedia: File | null = null;
-  async handleFileInput(event: any) {
+  async handleFileHoaxInput(event: any) {
     this.hoaxMedia = event.target.files[0];
   }
   
-
   private updateHoax(hoaxId: string) {
     const data = {
       author: this.hoaxForm.value.author,
@@ -246,10 +254,6 @@ export class DashboardComponent implements OnInit {
       content: this.hoaxForm.value.content,
     };
     this.hoaxService.updateHoax(data, hoaxId);
-  }
-
-  deleteHoax(hoaxId: string) {
-    this.hoaxService.deleteHoax(hoaxId);
   }
 
   private loadHoaxes() {
@@ -431,7 +435,14 @@ export class DashboardComponent implements OnInit {
   //     category: 'Hukum Tata Negara',
   //   },
   // ];
-
+  onCreateDocument() {
+    const userId = localStorage.getItem('uid') || '';
+    this.authService.getUser(userId).then((user: any) => {
+      const data = {
+      };
+    });
+  }
+  
   createLawbotClicked: boolean = false;
   onCreateLawbotClick(status: boolean) {
     this.createLawbotClicked = status;
@@ -459,6 +470,5 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
 }
-
-
