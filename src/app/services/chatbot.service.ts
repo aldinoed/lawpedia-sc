@@ -193,9 +193,14 @@ export class ChatbotService {
       });
   }
 
-  addNewDocument(file: File, topic: string): any {
-    const storageRef = ref(this.storage, `${topic}/${file.name}`);
-    return uploadBytes(storageRef, file);
+  addNewDocument(data: any): Promise<any> {
+    const storageRef = ref(this.storage, `${data.topic}/${data.title}`);
+    const result = uploadBytes(storageRef, data.file);
+    if (result) {
+      return result;
+    } else {
+      return Promise.reject('Error uploading file');
+    }
   }
 
   getDocuments(topic: string): any {

@@ -90,8 +90,8 @@ export class DashboardComponent implements OnInit {
       media: '',
     });
     this.chatbotForm = this.formBuilder.group({
-      title: '',
-      category: '',
+      title: ['', Validators.required],
+      category: ['', Validators.required],
     });
     this.articleSearchForm = this.formBuilder.group({
       searchKeyword: '',
@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     initFlowbite();
-
+    this.router.navigateByUrl(this.router.url);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.getActiveTab();
@@ -151,6 +151,7 @@ export class DashboardComponent implements OnInit {
 
   // ARTICLE SECTION
   private loadArticleDrafts() {
+    this.articleDrafts = [];
     this.articleService.getArticleDrafts().subscribe((drafts) => {
       // Filter articles based on the search keyword
       if (this.articleSearchInput) {
@@ -161,6 +162,17 @@ export class DashboardComponent implements OnInit {
         );
       }
       this.articleDrafts = drafts;
+    });
+  }
+
+  onPreviewArticle(articleId: string) {
+    this.articleService.getArticleDraft(articleId).subscribe((article) => {
+      Swal.fire({
+        title: article.title,
+        html: `<div style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;">${article.content}</div>`,
+        showCloseButton: true,
+        showConfirmButton: false,
+      });
     });
   }
 
@@ -216,6 +228,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadHoaxes() {
+    this.hoaxList = [];
     this.hoaxService.getHoaxList().subscribe((hoaxes) => {
       // Filter hoaxes based on the search keyword
       // console.log('hoaxSearchInput:', this.hoaxSearchInput);
@@ -274,6 +287,7 @@ export class DashboardComponent implements OnInit {
 
   // SPEAKUP SECTION
   private loadSpeakupThreads() {
+    this.speakupList = [];
     this.speakupService.getSpeakupThreads().subscribe((threads) => {
       this.speakupLength = threads.length;
       this.analyticCards.push({
@@ -344,41 +358,46 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadChatbotDocuments() {
+    this.chatbotList = [];
     this.chatbotService.getTopics().subscribe((topics) => {
       this.chatbotCategories = topics;
-      topics.forEach((topic) => {
-        this.chatbotService.getDocuments(topic.path).then((documents: any) => {
-          documents.items.map((item: any) => {
-            this.chatbotService.getDownloadUrl(item._location.path).then((url: any) => {
+      const promises = topics.map((topic) => {
+        return this.chatbotService.getDocuments(topic.path).then((documents: any) => {
+          return Promise.all(documents.items.map((item: any) => {
+            return this.chatbotService.getDownloadUrl(item._location.path).then((url: any) => {
               const data = {
                 filename: item._location.path.split('/').pop(),
                 category: topic.name,
                 url: url,
                 path: item._location.path,
-              }
+              };
               this.chatbotList.push(data);
             });
-          });
+          }));
         });
       });
-
-      if (this.chatbotSearchInput) {
-        this.chatbotList = this.chatbotList.filter((doc) =>
-          doc.filename
-            .toLowerCase()
-            .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase()) ||
-          doc.category
-            .toLowerCase()
-            .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase())
-        );
-      }
-
-      this.analyticCards.push({
-        name: 'Jumlah Dokumen Chatbot terunggah',
-        amount: this.chatbotList.length,
+  
+      Promise.all(promises).then(() => {
+        // Filter chatbotList if search input is provided
+        if (this.chatbotSearchInput) {
+          this.chatbotList = this.chatbotList.filter((doc) =>
+            doc.filename
+              .toLowerCase()
+              .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase()) ||
+            doc.category
+              .toLowerCase()
+              .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase())
+          );
+        }
+  
+        this.analyticCards.push({
+          name: 'Jumlah Dokumen Chatbot terunggah',
+          amount: this.chatbotList.length,
+        });
       });
     });
   }
+  
 
 
   chatbotDoc: File | null = null;
@@ -387,18 +406,41 @@ export class DashboardComponent implements OnInit {
   }
 
   onCreateDocument() {
-    const userId = localStorage.getItem('uid') || '';
-    this.authService.getUser(userId).then((user: any) => {
-      const data = {
-        title: this.chatbotForm.value.title,
-        topic: this.chatbotForm.value.category,
-        file: this.chatbotDoc,
-        published: new Date(),
-      };
-      // this.chatbotService.addNewDocument();
-    });
-  }
+    if (this.chatbotDoc && this.chatbotForm.valid) {
+      const userId = localStorage.getItem('uid') || '';
+      this.authService.getUser(userId).then((user: any) => {
+        const data = {
+          title: this.chatbotForm.value.title,
+          topic: this.chatbotForm.value.category,
+          file: this.chatbotDoc,
+          published: new Date(),
+        };
 
+        this.chatbotService.addNewDocument(data).then(() => {
+          Swal.fire({
+            title: 'Berhasil!',
+            text: 'Data berhasil ditambahkan.',
+            icon: 'success',
+          });
+          this.onCreateLawbotClick(false);
+          this.loadChatbotDocuments();
+        }).catch((error) => {
+          console.error('Error adding document:', error);
+          Swal.fire({
+            title: 'Gagal!',
+            text: 'Data gagal ditambahkan.',
+            icon: 'error',
+          });
+        });
+      });
+    } else {
+      Swal.fire({
+        title: 'Gagal!',
+        text: 'Data tidak lengkap.',
+        icon: 'error',
+      });
+    }
+  }
   createLawbotClicked: boolean = false;
   onCreateLawbotClick(status: boolean) {
     this.createLawbotClicked = status;
@@ -417,6 +459,7 @@ export class DashboardComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.chatbotService.deleteDocument(path);
+        this.loadChatbotDocuments();
         Swal.fire({
           title: 'Berhasil!',
           text: 'Data berhasil dihapus.',

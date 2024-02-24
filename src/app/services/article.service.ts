@@ -89,6 +89,23 @@ export class ArticleService {
     });
   }
 
+  getArticleDraft(id: string): Observable<any> {
+    return collectionData(collection(this.firestore, 'articleDrafts'), {
+      idField: 'id',
+    }).pipe(
+      map((drafts: any[]) => drafts.find((draft) => draft.id === id))
+    );
+  }
+
+  previewArticle(article: any): void {
+    Swal.fire({
+      title: article.title,
+      html: article.content,
+      showCloseButton: true,
+      showConfirmButton: false,
+    });
+  }
+
   addArticle(article: any): void {
     addDoc(collection(this.firestore, 'articleDrafts'), article);
   }
