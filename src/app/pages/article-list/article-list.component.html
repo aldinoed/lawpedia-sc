@@ -263,8 +263,11 @@
                     />
                   </svg>
 
-                  <p>
+                  <!-- <p>
                     {{ ratings[i] ? ratings[i].toFixed(1) : "NR" }}
+                  </p> -->
+                  <p>
+                    {{ article?.rating }}
                   </p>
                 </div>
               </div>
@@ -342,12 +345,13 @@
           </h1>
         </div>
         <img src="/assets/panduan-img.png" alt="image" class="max-h-80" />
-        <button
-          [routerLink]="['/lawlibrary/contribute']"
+        <a
+          target="_blank"
+          href="https://firebasestorage.googleapis.com/v0/b/lawpedia00.appspot.com/o/Panduan%20Pengiriman%20Naskah%20Artikel%20pada%20Fitur%20LawLibrary.pdf?alt=media&token=c706f6f9-27be-4290-abb6-112596255231"
           class="inline-flex items-center px-10 py-2 text-sm font-medium text-center text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
         >
           Unduh
-        </button>
+      </a>
       </div>
     </section>
   </ng-container>
