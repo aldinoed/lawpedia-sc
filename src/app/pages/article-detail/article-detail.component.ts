@@ -82,7 +82,7 @@ export class ArticleDetailComponent implements OnInit {
         this.ratingValue = rating;
       });
     });
-    this.articleService.getArticleRating(id ? id : '').subscribe((rating) => {
+    this.articleService.getArticleRating(id ? id : '').subscribe((rating: any) => {
       this.rating = rating;
     });
     this.loadPopularArticles();

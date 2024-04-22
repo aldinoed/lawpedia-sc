@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ArticleService } from '../../services/article.service';
 import { Article } from '../../services/article.service';
@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormBuilder } from '@angular/forms';
+import { get } from '@angular/fire/database';
 
 interface Category {
   value: string;
@@ -65,12 +66,13 @@ export class ArticleListComponent implements OnInit {
 
   // SORT SELECT
   sortLists: Sort[] = [
-    { value: 1, viewValue: 'Waktu Publish Desc' },
-    { value: 2, viewValue: 'Waktu Publish Asc' },
-    { value: 3, viewValue: 'Jumlah View Desc' },
-    { value: 4, viewValue: 'Jumlah View Asc' },
-    { value: 5, viewValue: 'Title Desc' },
-    { value: 6, viewValue: 'Title Asc' },
+    { value: 1, viewValue: 'Terbaru' },
+    { value: 2, viewValue: 'Terlama' },
+    { value: 3, viewValue: 'Dilihat Terbanyak' },
+    { value: 4, viewValue: 'Dilihat Terendah' },
+    { value: 5, viewValue: 'Rating Terbanyak' },
+    { value: 6, viewValue: 'Rating Terendah' },
+    { value: 7, viewValue: 'Hot & New' }
   ];
   selectedSort = 1;
   onSortChange() {
@@ -132,33 +134,13 @@ export class ArticleListComponent implements OnInit {
         );
       }
 
-      // Sort articles based on the selected sort method
-      articles.sort((a, b) => {
-        if (this.selectedSort === 1) {
-          return b.published.seconds - a.published.seconds;
-        } else if (this.selectedSort === 2) {
-          return a.published.seconds - b.published.seconds;
-        } else if (this.selectedSort === 3) {
-          return b.views - a.views;
-        } else if (this.selectedSort === 4) {
-          return a.views - b.views;
-        } else if (this.selectedSort === 5) {
-          return b.title.localeCompare(a.title);
-        } else if (this.selectedSort === 6) {
-          return a.title.localeCompare(b.title);
-        }
-        return 0;
-      });
-
-      // Get the ratings and subscribe to the Observable<number>
-      articles.map((article) =>
-        this.articleService
-          .getArticleRating(article.id)
-          .subscribe((rating) => this.ratings.push(rating))
-      );
-
       // Map articles for display
-      this.articles = articles.map((article) => ({
+      this.articles = articles.map((article) =>
+      (this.articleService
+        .getArticleRating(article.id)
+        .subscribe((rating: number) => {
+          article.rating = rating ? rating : 0;
+        }), {
         id: article.id,
         title: article.title,
         author: article.author,
@@ -166,9 +148,48 @@ export class ArticleListComponent implements OnInit {
         category: article.category,
         views: article.views,
         published: article.published.toDate(),
-      }));
+      })
+      );
+
+      // Get the ratings and subscribe to the Observable<number>
+      this.articles.map((article) =>
+        this.articleService
+          .getArticleRating(article.id)
+          .subscribe((rating: number) => {
+            article.rating = rating ? rating : 0;
+          })
+      );
+
+      // articles.forEach((article) => {
+      //   this.articleService.getArticleRating(article.id).subscribe((rating: number) => {
+      //     article.rating = rating ? rating : 0;
+
+      //   });
+      // });
+
+
+      // Sort articles based on the selected sort method
+      this.articles.sort((a, b) => {
+        if (this.selectedSort === 1) {
+          return b.published - a.published;
+        } else if (this.selectedSort === 2) {
+          return a.published - b.published;
+        } else if (this.selectedSort === 3) {
+          return b.views - a.views;
+        } else if (this.selectedSort === 4) {
+          return a.views - b.views;
+        } else if (this.selectedSort === 5) {
+          return b.rating - a.rating;
+        } else if (this.selectedSort === 6) {
+          return a.rating - b.rating;
+        } else if (this.selectedSort === 7) {
+          return b.views - a.views && b.published - a.published;
+        }
+        return 0;
+      });
     });
   }
+
 
   // LOAD POPULAR ARTICLES
   private loadPopularArticles() {
