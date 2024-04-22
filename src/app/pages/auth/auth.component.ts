@@ -17,6 +17,7 @@ export class AuthComponent implements OnInit {
   email: string = '';
   password: string = '';
   username: string = '';
+  confirmPassword: string = '';
 
   constructor(private auth: AuthService, private router: Router) {}
 
@@ -55,11 +56,21 @@ export class AuthComponent implements OnInit {
       alert('Please enter your password');
       return;
     }
+    if ((this.confirmPassword = '')) {
+      alert('Please confirm your password');
+      return;
+    }
+    if (this.confirmPassword != this.password) {
+      alert('Your password and confirmation password do not match.');
+      return;
+    }
 
     this.auth.register(this.username, this.email, this.password);
 
     this.email = '';
     this.password = '';
+    this.username = '';
+    this.confirmPassword = '';
   }
 
   googleLogin() {
