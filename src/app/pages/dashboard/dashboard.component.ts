@@ -33,11 +33,14 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import Swal from 'sweetalert2';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
+    CKEditorModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -70,6 +73,8 @@ export class DashboardComponent implements OnInit {
   chatbotCategories: Array<any> = [];
 
   currentPath: string = '';
+
+  public Editor = ClassicEditor;
 
   constructor(
     private articleService: ArticleService,

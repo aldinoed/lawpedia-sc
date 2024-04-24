@@ -21,11 +21,13 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
 import { ArticleCategory } from '../../services/article.service';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'app-send-article',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EditorModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EditorModule, CKEditorModule],
   templateUrl: './send-article.component.html',
   styleUrl: './send-article.component.css',
 })
@@ -34,6 +36,7 @@ export class SendArticleComponent implements OnInit {
   form: FormGroup;
   firestore: Firestore = inject(Firestore);
   categories: Category[] = [];
+  public Editor = ClassicEditor;
 
   constructor(
     private formBuilder: FormBuilder, 

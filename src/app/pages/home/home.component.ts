@@ -12,6 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
+import { ArticleService } from '../../services/article.service';
 
 @Component({
   selector: 'app-home',
@@ -52,11 +53,15 @@ export class HomeComponent implements OnInit {
   subject: string = '';
   body: string = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private articleService: ArticleService) {
     this.items$ = collectionData(collection(this.firestore, 'test'));
   }
 
   ngOnInit(): void {
     initFlowbite();
+    this.articleService.fetchDataOnceADay().subscribe(data => {
+      // Process the API response data here
+      console.log('API data:', data);
+    });
   }
 }

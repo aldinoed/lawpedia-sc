@@ -23,11 +23,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Firestore, doc } from '@angular/fire/firestore';
 import { initFlowbite } from 'flowbite';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-speakup-threads-list',
   standalone: true,
   imports: [
+    CKEditorModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -52,6 +55,7 @@ export class SpeakupThreadsListComponent implements OnInit {
   followForm: FormGroup;
   searchForm: FormGroup;
   searchKeyword: string = '';
+  public Editor = ClassicEditor;
 
   // CONSTRUCTOR
   constructor(

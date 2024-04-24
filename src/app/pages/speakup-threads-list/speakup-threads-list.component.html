@@ -81,7 +81,7 @@
               class="block text-sm font-medium text-gray-700"
               >Konten</label
             >
-            <editor
+            <!-- <editor
               apiKey="1xt4ppnjnw5zhlf8eubymzehivyuh7ap4vmd27mq7l38r0hn"
               [init]="{
                 plugins: 'list link image wordcount',
@@ -91,7 +91,12 @@
               formControlName="content"
               id="input-content-{{ threadForm.get('content')?.value }}"
               class="mt-1"
-            ></editor>
+            ></editor> -->
+            <ckeditor 
+            [editor]="Editor" 
+            data="<p>Hello, world!</p>">
+            
+            </ckeditor>
           </div>
           <div>
             <button

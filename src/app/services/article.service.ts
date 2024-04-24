@@ -9,14 +9,15 @@ import {
   setDoc,
   addDoc,
 } from '@angular/fire/firestore';
-import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
-import { switchMap, map, toArray, take } from 'rxjs/operators';
+import { OperatorFunction, Observable, of, forkJoin, timer } from 'rxjs';
+import { switchMap, map, toArray, take, takeUntil } from 'rxjs/operators';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
 import { from, combineLatest } from 'rxjs';
 import { query, where } from '@angular/fire/firestore';
 import Swal from 'sweetalert2';
 import { AuthService } from './auth.service';
 import { user } from '@angular/fire/auth';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,8 @@ export class ArticleService {
   categories: Observable<ArticleCategory[]>;
   combinedArticles: Observable<any[]>;
 
-  constructor() {
+  constructor(private http: HttpClient) {
+    
     this.user$ = this.auth.user$;
 
     this.articles = collectionData(collection(this.firestore, 'articles'), {
@@ -60,6 +62,20 @@ export class ArticleService {
       })
     );
 
+  }
+
+  private readonly apiUrl: string = 'https://lawbot-dzmp5jbhna-et.a.run.app/generate-quiz';
+
+  public fetchDataOnceADay(): Observable<any> {
+    // Create a timer that emits every 24 hours (in milliseconds)
+    const dailyTimer = timer(0, 24 * 60 * 60 * 1000);
+
+    // Combine the timer with the API call
+    return dailyTimer.pipe(
+      switchMap(() => this.http.get<any>(this.apiUrl)),
+      map(response => response.data), // Handle response data
+      takeUntil(of(false)) // Stop after one execution
+    );
   }
 
   getArticles(): Observable<any[]> {

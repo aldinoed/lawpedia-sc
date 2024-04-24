@@ -33,7 +33,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ChatbotService {
   topics: Observable<Topic[]>;
-
+  apiUrl = 'https://lawbot-dzmp5jbhna-et.a.run.app';
   constructor(
     private firestore: Firestore,
     private auth: AuthService,
@@ -107,7 +107,7 @@ export class ChatbotService {
   }
 
   initiateModel(historyId: string, roomId: string): any {
-    const apiUrl = 'http://localhost:1000';
+    // const apiUrl = 'https://qpskbt58-8000.asse.devtunnels.ms/';
   
     const chatbotRoomRef = doc(this.firestore, 'chatbotHistory', historyId, 'rooms', roomId);
     return from(getDoc(chatbotRoomRef)).pipe(
@@ -119,7 +119,7 @@ export class ChatbotService {
               topic: topicDoc.data().name
             };
             // return formData;
-            return this.http.get<any>(`${apiUrl}/initiate-chat`, { params: formData })
+            return this.http.get<any>(`${this.apiUrl}/initiate-chat`, { params: formData })
           })
         );
       })
@@ -149,7 +149,7 @@ export class ChatbotService {
     roomId: string,
     question: string
   ): any {
-    const apiUrl = 'http://localhost:1000';
+    // const apiUrl = 'https://qpskbt58-8000.asse.devtunnels.ms/';
     const chatbotRoomRef = collection(
       this.firestore,
       'chatbotHistory',
@@ -164,10 +164,10 @@ export class ChatbotService {
       response: '...',
     };
     console.log("message:", message);
-  
+    
     const addMessagePromise = addDoc(chatbotRoomRef, message);
     const responsePromise = this.http
-      .get<any>(`${apiUrl}/chatbot`, { params: formData })
+      .get<any>(`${this.apiUrl}/chatbot`, { params: formData })
       .toPromise();
     return Promise.all([addMessagePromise, responsePromise])
       .then(([docRef, response]) => {

@@ -37,9 +37,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app.routes';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   imports: [
+    CKEditorModule,
     BrowserModule,
     HttpClientModule,
     RouterModule,
