@@ -359,42 +359,52 @@ export class DashboardComponent implements OnInit {
     this.loadChatbotDocuments();
   }
 
-  private loadChatbotTopics() {
-  }
+  private loadChatbotTopics() {}
 
   private loadChatbotDocuments() {
     this.chatbotList = [];
     this.chatbotService.getTopics().subscribe((topics) => {
       this.chatbotCategories = topics;
       const promises = topics.map((topic) => {
-        return this.chatbotService.getDocuments(topic.path).then((documents: any) => {
-          return Promise.all(documents.items.map((item: any) => {
-            return this.chatbotService.getDownloadUrl(item._location.path).then((url: any) => {
-              const data = {
-                filename: item._location.path.split('/').pop(),
-                category: topic.name,
-                url: url,
-                path: item._location.path,
-              };
-              this.chatbotList.push(data);
-            });
-          }));
-        });
+        return this.chatbotService
+          .getDocuments(topic.path)
+          .then((documents: any) => {
+            return Promise.all(
+              documents.items.map((item: any) => {
+                return this.chatbotService
+                  .getDownloadUrl(item._location.path)
+                  .then((url: any) => {
+                    const data = {
+                      filename: item._location.path.split('/').pop(),
+                      category: topic.name,
+                      url: url,
+                      path: item._location.path,
+                    };
+                    this.chatbotList.push(data);
+                  });
+              })
+            );
+          });
       });
-  
+
       Promise.all(promises).then(() => {
         // Filter chatbotList if search input is provided
         if (this.chatbotSearchInput) {
-          this.chatbotList = this.chatbotList.filter((doc) =>
-            doc.filename
-              .toLowerCase()
-              .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase()) ||
-            doc.category
-              .toLowerCase()
-              .includes(this.chatbotSearchForm.value.searchKeyword.toLowerCase())
+          this.chatbotList = this.chatbotList.filter(
+            (doc) =>
+              doc.filename
+                .toLowerCase()
+                .includes(
+                  this.chatbotSearchForm.value.searchKeyword.toLowerCase()
+                ) ||
+              doc.category
+                .toLowerCase()
+                .includes(
+                  this.chatbotSearchForm.value.searchKeyword.toLowerCase()
+                )
           );
         }
-  
+
         this.analyticCards.push({
           name: 'Jumlah Dokumen Chatbot terunggah',
           amount: this.chatbotList.length,
@@ -402,8 +412,6 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
-  
-
 
   chatbotDoc: File | null = null;
   async handleFileChatbotInput(event: any) {
@@ -421,22 +429,25 @@ export class DashboardComponent implements OnInit {
           published: new Date(),
         };
 
-        this.chatbotService.addNewDocument(data).then(() => {
-          Swal.fire({
-            title: 'Berhasil!',
-            text: 'Data berhasil ditambahkan.',
-            icon: 'success',
+        this.chatbotService
+          .addNewDocument(data)
+          .then(() => {
+            Swal.fire({
+              title: 'Berhasil!',
+              text: 'Data berhasil ditambahkan.',
+              icon: 'success',
+            });
+            this.onCreateLawbotClick(false);
+            this.loadChatbotDocuments();
+          })
+          .catch((error) => {
+            console.error('Error adding document:', error);
+            Swal.fire({
+              title: 'Gagal!',
+              text: 'Data gagal ditambahkan.',
+              icon: 'error',
+            });
           });
-          this.onCreateLawbotClick(false);
-          this.loadChatbotDocuments();
-        }).catch((error) => {
-          console.error('Error adding document:', error);
-          Swal.fire({
-            title: 'Gagal!',
-            text: 'Data gagal ditambahkan.',
-            icon: 'error',
-          });
-        });
       });
     } else {
       Swal.fire({

@@ -24,7 +24,9 @@
       </option>
     </select>
 
-    <label for="input-author" class="block font-medium mb-2 mt-4">Penulis</label>
+    <label for="input-author" class="block font-medium mb-2 mt-4"
+      >Penulis</label
+    >
     <input
       type="text"
       id="input-author"
@@ -45,10 +47,26 @@
       formControlName="content"
       id="input-content"
     ></editor> -->
-    <ckeditor 
-    [editor]="Editor" 
-    data="<p>Hello, world!</p>">
-    
+    <ckeditor
+      [editor]="Editor"
+      [config]="{
+        placeholder: 'Tulis konten artikel di sini...',
+        toolbar: [
+          'heading',
+          '|',
+          'bold',
+          'italic',
+          'link',
+          'bulletedList',
+          'numberedList',
+          'blockQuote',
+          'insertTable',
+          'undo',
+          'redo'
+        ]
+      }"
+      formControlName="content"
+    >
     </ckeditor>
     <button
       type="submit"
@@ -58,6 +76,5 @@
     </button>
   </form>
 </main>
-
 
 <!--  -->

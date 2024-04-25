@@ -27,11 +27,16 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 @Component({
   selector: 'app-send-article',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EditorModule, CKEditorModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    // EditorModule,
+    CKEditorModule,
+  ],
   templateUrl: './send-article.component.html',
   styleUrl: './send-article.component.css',
 })
-
 export class SendArticleComponent implements OnInit {
   form: FormGroup;
   firestore: Firestore = inject(Firestore);
@@ -39,9 +44,10 @@ export class SendArticleComponent implements OnInit {
   public Editor = ClassicEditor;
 
   constructor(
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
     private router: Router,
-    private articleService: ArticleService) {
+    private articleService: ArticleService
+  ) {
     this.form = this.formBuilder.group({
       title: '',
       author: '',
@@ -65,11 +71,14 @@ export class SendArticleComponent implements OnInit {
         author: this.form.value.author,
         title: this.form.value.title,
         content: this.form.value.content,
-        category: doc(this.firestore, 'articleCategory/' + this.form.value.category),
+        category: doc(
+          this.firestore,
+          'articleCategory/' + this.form.value.category
+        ),
         views: 0,
         uploaded: new Date(),
         status: 'Ditinjau',
-      }
+      };
       this.articleService.addArticle(data);
       // await addDoc(collection(this.firestore, 'articles'), data);
       Swal.fire({
@@ -89,7 +98,6 @@ export class SendArticleComponent implements OnInit {
     }
   }
 }
-
 
 export interface Category {
   value: string;

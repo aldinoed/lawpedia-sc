@@ -449,10 +449,26 @@
           name="input-content"
           formControlName="content"
         ></editor> -->
-        <ckeditor 
-        [editor]="Editor" 
-        data="<p>Hello, world!</p>">
-        
+        <ckeditor
+          [editor]="Editor"
+          [config]="{
+            placeholder: 'Tulis konten artikel di sini...',
+            toolbar: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              'blockQuote',
+              'insertTable',
+              'undo',
+              'redo'
+            ]
+          }"
+          formControlName="content"
+        >
         </ckeditor>
         <button
           type="submit"
@@ -641,35 +657,35 @@
         (ngSubmit)="onCreateDocument()"
         class="w-full lg:w-1/2"
       >
-      <label for="input-title" class="block font-medium mb-2">Judul</label>
-      <input
-        type="text"
-        id="input-title"
-        formControlName="title"
-        name="title"
-        required
-        class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
-      />
-      <div class="mt-4">
-        <label
-          for="select-category"
-          class="block text-sm font-medium text-gray-700"
-          >Kategori</label
-        >
-        <select
-          formControlName="category"
+        <label for="input-title" class="block font-medium mb-2">Judul</label>
+        <input
+          type="text"
+          id="input-title"
+          formControlName="title"
+          name="title"
           required
-          id="select-category"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-        >
-          <option
-            *ngFor="let item of chatbotCategories; let i = index"
-            [ngValue]="item.path"
+          class="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:outline-moca disabled:opacity-50 disabled:pointer-events-none"
+        />
+        <div class="mt-4">
+          <label
+            for="select-category"
+            class="block text-sm font-medium text-gray-700"
+            >Kategori</label
           >
-            {{ i === 0 ? "Pilih Kategori" : item.name }}
-          </option>
-        </select>
-      </div>
+          <select
+            formControlName="category"
+            required
+            id="select-category"
+            class="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+          >
+            <option
+              *ngFor="let item of chatbotCategories; let i = index"
+              [ngValue]="item.path"
+            >
+              {{ i === 0 ? "Pilih Kategori" : item.name }}
+            </option>
+          </select>
+        </div>
 
         <label class="block mb-2 mt-4 text-sm font-medium" for="file_input"
           >File Sumber</label
