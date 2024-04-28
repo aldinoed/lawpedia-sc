@@ -4,61 +4,79 @@
   <div *ngIf="quizHistoryData" class="flex items-center justify-between mb-8">
     <div class="flex items-center gap-4">
       <p class="text-lg font-medium text-gray-900 dark:text-white">Skor:</p>
-      <p class="text-lg font-medium text-green-500 dark:text-green-400">{{ quizHistory.score }}</p>
+      <p class="text-lg font-medium text-green-500 dark:text-green-400">
+        {{ quizHistory.score }}
+      </p>
     </div>
   </div>
-  <div class="flex flex-col gap-10">
-    <ng-container *ngFor="let questionData of quizData; let i = index">
-      <div>
-        <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
-          {{ i + 1 }}. {{ questionData.question }}
-        </h3>
-        <ul class="flex flex-col gap-4">
-          <ng-container *ngFor="let options of questionData.options; let j = index">
-            <li>
-              <input
-                type="radio"
-                [id]="'option-' + questionData.id + '-' + j"
-                name="{{ questionData.id }}"
-                [value]="options"
-                (change)="onAnswerChange(questionData.id, options)"
-                class="hidden peer"
-                [disabled]="quizHistoryData"
-              />
-              <label
-                [for]="'option-' + questionData.id + '-' + j"
-                [ngClass]="{
-                  'bg-green-100': options === questionData.answer && quizHistoryData,
-                  'bg-red-100': options === questionData.userAnswer && options !== questionData.answer && quizHistoryData,
-                  'bg-gray-100 hover:bg-gray-200': !quizHistoryData
-                }"
-                class="inline-flex items-center justify-between w-11/12 lg:w-2/3 px-5 py-3 border border-gray-300 rounded-lg cursor-pointer peer-checked:border-brown peer-checked:text-brown transition"
-              >
-                <div class="flex items-center gap-4">
-                  <p class="flex">
-                    {{ j === 0 ? 'A' : j === 1 ? 'B' : j === 2 ? 'C' : 'D' }}
-                    <span class="ms-1">.</span>
-                  </p>
-                  <div class="w-full">{{ options }}</div>
-                </div>
-              </label>
-            </li>
-          </ng-container>
-        </ul>
-        <!-- COMING SOON: BOT ANALISA -->
-        <div *ngIf="quizHistoryData" class="text-gray-500 mt-2">
-          Penjelasan: 
+
+  <ng-container *ngIf="quizData.length === 0">
+    <div class="flex items-center justify-center h-96">
+      <p class="font-medium text-gray-900 dark:text-white">
+        Kuis belum tersedia.
+      </p>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="quizData.length > 0">
+    <div class="flex flex-col gap-10">
+      <ng-container *ngFor="let questionData of quizData; let i = index">
+        <div>
+          <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
+            {{ i + 1 }}. {{ questionData.question }}
+          </h3>
+          <ul class="flex flex-col gap-4">
+            <ng-container
+              *ngFor="let options of questionData.options; let j = index"
+            >
+              <li>
+                <input
+                  type="radio"
+                  [id]="'option-' + questionData.id + '-' + j"
+                  name="{{ questionData.id }}"
+                  [value]="options"
+                  (change)="onAnswerChange(questionData.id, options)"
+                  class="hidden peer"
+                  [disabled]="quizHistoryData"
+                />
+                <label
+                  [for]="'option-' + questionData.id + '-' + j"
+                  [ngClass]="{
+                    'bg-green-100':
+                      options === questionData.answer && quizHistoryData,
+                    'bg-red-100':
+                      options === questionData.userAnswer &&
+                      options !== questionData.answer &&
+                      quizHistoryData,
+                    'bg-gray-100 hover:bg-gray-200': !quizHistoryData
+                  }"
+                  class="inline-flex items-center justify-between w-11/12 lg:w-2/3 px-5 py-3 border border-gray-300 rounded-lg cursor-pointer peer-checked:border-brown peer-checked:text-brown transition"
+                >
+                  <div class="flex items-center gap-4">
+                    <p class="flex">
+                      {{ j === 0 ? "A" : j === 1 ? "B" : j === 2 ? "C" : "D" }}
+                      <span class="ms-1">.</span>
+                    </p>
+                    <div class="w-full">{{ options }}</div>
+                  </div>
+                </label>
+              </li>
+            </ng-container>
+          </ul>
+          <!-- COMING SOON: BOT ANALISA -->
+          <div *ngIf="quizHistoryData" class="text-gray-500 mt-2">
+            Penjelasan:
+          </div>
         </div>
-      </div>
-    </ng-container>
-  </div>
-  <div class="mt-8">
-    <button
-      (click)="submitQuiz()"
-      class="px-10 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
-      *ngIf="!quizHistoryData"
-    >
-      Submit
-    </button>
-  </div>
+      </ng-container>
+    </div>
+    <div class="mt-8">
+      <button
+        (click)="submitQuiz()"
+        class="px-10 py-2 text-sm font-medium text-white bg-navy2 rounded-full hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-900 transition"
+        *ngIf="!quizHistoryData"
+      >
+        Submit
+      </button>
+    </div>
+  </ng-container>
 </main>
