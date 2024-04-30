@@ -74,6 +74,8 @@ export class DashboardComponent implements OnInit {
 
   currentPath: string = '';
 
+  userAuthenticatedId: string = localStorage.getItem('uid') || '';
+
   public Editor = ClassicEditor;
 
   constructor(

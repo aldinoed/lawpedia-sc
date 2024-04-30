@@ -82,6 +82,10 @@ export class AppComponent implements OnInit {
 
   event$;
 
+  userAuthenticatedId: string = localStorage.getItem('uid') || '';
+  userAuthenticated: any = {};
+  authenticatedUser: string = '';
+
   constructor(
     private router: Router,
     private auth: AuthService,
@@ -97,6 +101,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     initFlowbite();
+    this.auth.getUser(this.userAuthenticatedId).then((user: any) => {
+      this.userAuthenticated = user.data();
+      this.authenticatedUser = user.data().username || '';
+    });
   }
 
   ngOnDestroy() {
@@ -141,7 +149,8 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  authenticatedUser = 'Jajang Sutarman'; // Authenticated User
+  // Authenticated User
+
 
   // PROFILE ICON
   getInitialName(name: string): string {

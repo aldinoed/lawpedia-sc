@@ -28,6 +28,8 @@
     "@ckeditor/ckeditor5-engine": "^41.3.1",
     "@ckeditor/ckeditor5-utils": "^41.3.1",
     "@ckeditor/ckeditor5-watchdog": "^41.3.1",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "@tinymce/tinymce-angular": "^7.0.0",
     "flowbite": "^2.2.1",
     "has-flag": "^5.0.1",

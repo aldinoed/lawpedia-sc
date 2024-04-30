@@ -309,6 +309,9 @@
             {{ authenticatedUser }}
           </p>
           <button
+            *ngIf="isLoggedIn()"
+            (click)="logout()"
+            type="button"
             class="flex gap-2 items-center justify-center text-sm hover:text-black transition focus:ring-navy2"
           >
             <svg

@@ -14,6 +14,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-chatbot',
@@ -70,7 +71,8 @@ export class ChatbotComponent implements OnInit {
   constructor(
     private chatbotService: ChatbotService,
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private translate: TranslateService
   ) {}
 
   ngOnDestroy(): void {
@@ -140,7 +142,7 @@ export class ChatbotComponent implements OnInit {
             id: message.id,
             content: message.content,
             timestamp: message.created ? message.created.toDate() : null,
-            response: message.response,
+            response: message.response ? this.translate.instant(message.response) : null, // Translate the response
           }))
           .sort((a: any, b: any) => a.timestamp - b.timestamp);
         return [];

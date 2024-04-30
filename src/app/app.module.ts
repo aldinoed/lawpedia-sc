@@ -31,7 +31,7 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 // App imports
 import { AppRoutingModule } from './app.routes';
@@ -39,11 +39,25 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
 @NgModule({
   imports: [
     CKEditorModule,
     BrowserModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     RouterModule,
     AppRoutingModule,
     CommonModule,
