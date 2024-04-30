@@ -38,6 +38,10 @@ export class ChatbotComponent implements OnInit {
   newChatTitle: string = '';
   newChatTopic: string = '';
 
+  // new chat validatior
+  newChatTitleRequired: boolean = false;
+  newChatTopicRequired: boolean = false;
+
   toggleNewChat(): void {
     this.newChatModal = !this.newChatModal;
     // Reset form fields when modal is closed
@@ -48,6 +52,22 @@ export class ChatbotComponent implements OnInit {
   }
 
   createChat(): void {
+    if (!this.newChatTitle) {
+      this.newChatTitleRequired = true;
+    } else {
+      this.newChatTitleRequired = false;
+    }
+
+    if (!this.newChatTopic) {
+      this.newChatTopicRequired = true;
+    } else {
+      this.newChatTopicRequired = false;
+    }
+
+    if (this.newChatTitleRequired || this.newChatTopicRequired) {
+      return;
+    }
+
     // Implement logic to create new chat here
     console.log('Creating new chat...');
     console.log('Title:', this.newChatTitle);
@@ -81,7 +101,7 @@ export class ChatbotComponent implements OnInit {
 
   ngOnInit(): void {
     initFlowbite(); //Flowbite initiation
-    
+
     this.loadTopicList();
     this.loadChatbotHistory();
 

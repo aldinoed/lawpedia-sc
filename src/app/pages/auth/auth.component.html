@@ -52,11 +52,19 @@
               type="email"
               id="email"
               name="login-email"
-              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border text-sm rounded-md block w-full p-2.5"
+              [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': emailRequired === true,
+
+            'border-gray-300 focus:ring-blue-500 ': emailRequired === false,
+
+            }"
               placeholder="Masukkan email Anda ..."
               required
               [(ngModel)]="email"
             />
+            <ng-container *ngIf="emailRequired === true">
+              <p class="text-red-600 text-sm mt-1">Email tidak boleh kosong</p>
+            </ng-container>
           </div>
           <div class="mt-2">
             <label
@@ -68,11 +76,21 @@
               type="password"
               id="password"
               name="login-password"
-              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border text-sm rounded-md block w-full p-2.5"
+              [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': passwordRequired === true,
+
+            'border-gray-300 focus:ring-blue-500 ': passwordRequired === false,
+
+            }"
               placeholder="Masukkan password Anda ..."
               required
               [(ngModel)]="password"
             />
+            <ng-container *ngIf="passwordRequired === true">
+              <p class="text-red-600 text-sm mt-1">
+                Password tidak boleh kosong
+              </p>
+            </ng-container>
           </div>
           <div class="flex flex-col gap-4 mt-6 pb-2">
             <button
@@ -113,11 +131,21 @@
               type="text"
               id="username"
               name="Username"
-              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border text-sm rounded-md block w-full p-2.5"
+              [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': registerUsernameRequired === true,
+
+              'border-gray-300 focus:ring-blue-500 ': registerUsernameRequired === false,
+
+              }"
               placeholder="Masukkan username Anda ..."
               required
               [(ngModel)]="username"
             />
+            <ng-container *ngIf="registerUsernameRequired === true">
+              <p class="text-red-600 text-sm mt-1">
+                Username tidak boleh kosong
+              </p>
+            </ng-container>
           </div>
           <div class="mt-2">
             <label
@@ -129,11 +157,19 @@
               type="email"
               id="email"
               name="email"
-              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border text-sm rounded-md block w-full p-2.5"
+              [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': registerEmailRequired === true,
+
+              'border-gray-300 focus:ring-blue-500 ': registerEmailRequired === false,
+
+              }"
               placeholder="Masukkan email Anda ..."
               required
               [(ngModel)]="email"
             />
+            <ng-container *ngIf="registerEmailRequired === true">
+              <p class="text-red-600 text-sm mt-1">Email tidak boleh kosong</p>
+            </ng-container>
           </div>
           <div class="mt-2">
             <label
@@ -145,11 +181,21 @@
               type="password"
               id="password"
               name="login-password"
-              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border text-sm rounded-md block w-full p-2.5"
+              [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': registerPasswordRequired === true,
+
+              'border-gray-300 focus:ring-blue-500 ': registerPasswordRequired === false,
+
+              }"
               placeholder="Masukkan password Anda ..."
               required
               [(ngModel)]="password"
             />
+            <ng-container *ngIf="registerPasswordRequired === true">
+              <p class="text-red-600 text-sm mt-1">
+                Password tidak boleh kosong
+              </p>
+            </ng-container>
           </div>
           <div class="mt-2">
             <label
@@ -161,11 +207,26 @@
               type="password"
               id="confirm-password"
               name="login-password"
-              class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border text-sm rounded-md block w-full p-2.5"
+              [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': registerConfirmPasswordRequired === true || registerConfirmPasswordMatch === true,
+
+              'border-gray-300 focus:ring-blue-500 ': registerConfirmPasswordRequired === false,
+
+              }"
               placeholder="Masukkan password Anda ..."
               required
               [(ngModel)]="confirmPassword"
             />
+            <ng-container *ngIf="registerConfirmPasswordRequired === true">
+              <p class="text-red-600 text-sm mt-1">
+                Konfirmasi password tidak boleh kosong
+              </p>
+            </ng-container>
+            <ng-container *ngIf="registerConfirmPasswordMatch === true">
+              <p class="text-red-600 text-sm mt-1">
+                Konfirmasi password tidak cocok
+              </p>
+            </ng-container>
           </div>
           <div class="flex flex-col gap-4 mt-6 pb-2">
             <button

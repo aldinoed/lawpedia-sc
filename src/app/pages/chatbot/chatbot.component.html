@@ -56,28 +56,54 @@
   <div class="relative w-96 p-4 bg-white rounded-lg shadow-lg">
     <h3 class="text-lg font-medium mb-4">Buat Conversation Baru</h3>
     <form (ngSubmit)="createChat()" class="flex flex-col space-y-4">
-      <input
-        type="text"
-        id="title"
-        name="title"
-        class="p-2 border border-gray-300 rounded-lg"
-        placeholder="Judul Conversation"
-        required
-        [(ngModel)]="newChatTitle"
-        ngModel
-      />
-      <select
-        id="topic"
-        name="topic"
-        class="p-2 border border-gray-300 rounded-lg"
-        required
-        [(ngModel)]="newChatTopic"
-        ngModel
-      >
-        <option *ngFor="let topic of topics" [value]="topic.id">
-          {{ topic.name }}
-        </option>
-      </select>
+      <div>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          class="p-2 border rounded-lg w-full"
+          [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': newChatTitleRequired === true,
+
+              'border-gray-300 focus:ring-blue-500 ': newChatTitleRequired === false,
+
+              }"
+          placeholder="Judul Conversation"
+          required
+          [(ngModel)]="newChatTitle"
+          ngModel
+        />
+        <p
+          *ngIf="newChatTitleRequired === true"
+          class="text-xs text-red-600 mt-1 ms-2"
+        >
+          Judul tidak boleh kosong
+        </p>
+      </div>
+      <div>
+        <select
+          id="topic"
+          name="topic"
+          class="p-2 border rounded-lg w-full"
+          [ngClass]="{ 'border-red-600 placeholder:text-red-600 focus:ring-red-600 ': newChatTopicRequired === true,
+
+        'border-gray-300 focus:ring-blue-500 ': newChatTopicRequired === false,
+
+        }"
+          required
+          [(ngModel)]="newChatTopic"
+          ngModel
+        >
+          <option *ngFor="let topic of topics" [value]="topic.id">
+            {{ topic.name }}
+          </option>
+        </select>
+        <p
+          *ngIf="newChatTopicRequired === true"
+          class="text-xs text-red-600 mt-1 ms-2"
+        >
+          Topik tidak boleh kosong
+        </p>
+      </div>
       <div class="flex justify-end space-x-4">
         <button
           type="button"

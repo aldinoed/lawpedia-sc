@@ -19,6 +19,18 @@ export class AuthComponent implements OnInit {
   username: string = '';
   confirmPassword: string = '';
 
+  // login validation
+  emailRequired: boolean = false;
+  // emailInvalid: boolean = false;
+  passwordRequired: boolean = false;
+
+  // register validation
+  registerEmailRequired: boolean = false;
+  registerPasswordRequired: boolean = false;
+  registerConfirmPasswordRequired: boolean = false;
+  registerConfirmPasswordMatch: boolean = false;
+  registerUsernameRequired: boolean = false;
+
   constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {}
@@ -29,13 +41,23 @@ export class AuthComponent implements OnInit {
 
   login() {
     if (this.email == '') {
-      alert('Please enter your email');
-      return;
+      this.emailRequired = true;
+    } else {
+      this.emailRequired = false;
     }
+
     if (this.password == '') {
-      alert('Please enter your password');
+      this.passwordRequired = true;
+    } else {
+      this.passwordRequired = false;
+    }
+
+    if (this.emailRequired || this.passwordRequired) {
       return;
     }
+
+    this.emailRequired = false;
+    this.passwordRequired = false;
 
     this.auth.login(this.email, this.password);
 
@@ -45,25 +67,46 @@ export class AuthComponent implements OnInit {
 
   register() {
     if (this.username == '') {
-      alert('Please enter your username');
-      return;
+      this.registerUsernameRequired = true;
+    } else {
+      this.registerUsernameRequired = false;
     }
     if (this.email == '') {
-      alert('Please enter your email');
-      return;
+      this.registerEmailRequired = true;
+    } else {
+      this.registerEmailRequired = false;
     }
     if (this.password == '') {
-      alert('Please enter your password');
+      this.registerPasswordRequired = true;
+    } else {
+      this.registerPasswordRequired = false;
+    }
+    if (this.confirmPassword == '' || this.confirmPassword == null) {
+      this.registerConfirmPasswordRequired = true;
+    } else {
+      this.registerConfirmPasswordRequired = false;
+    }
+    if (this.confirmPassword != '' && this.confirmPassword != this.password) {
+      this.registerConfirmPasswordMatch = true;
+    } else {
+      this.registerConfirmPasswordMatch = false;
+    }
+
+    if (
+      this.registerUsernameRequired ||
+      this.registerEmailRequired ||
+      this.registerPasswordRequired ||
+      this.registerConfirmPasswordRequired ||
+      this.registerConfirmPasswordMatch
+    ) {
       return;
     }
-    if ((this.confirmPassword = '')) {
-      alert('Please confirm your password');
-      return;
-    }
-    if (this.confirmPassword != this.password) {
-      alert('Your password and confirmation password do not match.');
-      return;
-    }
+
+    this.registerUsernameRequired = false;
+    this.registerEmailRequired = false;
+    this.registerPasswordRequired = false;
+    this.registerConfirmPasswordRequired = false;
+    this.registerConfirmPasswordMatch = false;
 
     this.auth.register(this.username, this.email, this.password);
 

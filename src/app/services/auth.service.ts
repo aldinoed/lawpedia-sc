@@ -36,16 +36,14 @@ export class AuthService {
         localStorage.setItem('token', 'true');
         this.user$.subscribe((user) => {
           localStorage.setItem('uid', user?.uid);
-          getDoc(doc(this.firestore, 'users/' + user?.uid)).then(
-            (doc) => {
-              if (doc.exists()) {
-                console.log('Admin', doc.data()['isAdmin']);
-                if (doc.data()['isAdmin']) {
-                  localStorage.setItem('admin', doc.data()['isAdmin']);
-                }
+          getDoc(doc(this.firestore, 'users/' + user?.uid)).then((doc) => {
+            if (doc.exists()) {
+              console.log('Admin', doc.data()['isAdmin']);
+              if (doc.data()['isAdmin']) {
+                localStorage.setItem('admin', doc.data()['isAdmin']);
               }
             }
-          );
+          });
         });
         Swal.fire({
           title: 'Login Success!',
@@ -88,18 +86,16 @@ export class AuthService {
       localStorage.setItem('token', 'true');
       this.user$.subscribe((user) => {
         localStorage.setItem('uid', user?.uid);
-        getDoc(doc(this.firestore, 'users/' + user?.uid)).then(
-          (doc) => {
-            if (doc.exists()) {
-              console.log('Admin', doc.data()['isAdmin']);
-              if (doc.data()['isAdmin']) {
-                localStorage.setItem('admin', doc.data()['isAdmin']);
-              } else {
-                localStorage.removeItem('admin');
-              }
+        getDoc(doc(this.firestore, 'users/' + user?.uid)).then((doc) => {
+          if (doc.exists()) {
+            console.log('Admin', doc.data()['isAdmin']);
+            if (doc.data()['isAdmin']) {
+              localStorage.setItem('admin', doc.data()['isAdmin']);
+            } else {
+              localStorage.removeItem('admin');
             }
           }
-        );
+        });
       });
       Swal.fire({
         title: 'Login Success!',
@@ -136,9 +132,10 @@ export class AuthService {
         title: 'Register Success!',
         text: `You are LawPedia's member now, ${email}!`,
         icon: 'success',
+      }).then(() => {
+        window.location.reload();
       });
-
-      this.router.navigate(['authentication']);
+      // this.router.navigate(['authentication']);
     } catch (err) {
       Swal.fire({
         title: 'Register Failed!',
