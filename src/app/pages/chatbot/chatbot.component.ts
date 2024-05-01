@@ -147,6 +147,26 @@ export class ChatbotComponent implements OnInit {
     });
   }
 
+  preprocessText(text: string): string {
+    // Ganti bintang dengan bullet point
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // ganti bold
+    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>'); // ganti italic
+    text = text.replace(/## (.*?)/g, '</p><h2>$1</h2><p>'); // ganti heading
+    text = text.replace(/^\* (.*?)(?=(\*|$))/gm, '<li>$1</li>'); // ganti bullet point
+  
+    // Ganti poin dan sub-poin
+    text = text.replace(/(^\*{2} (.*?)$)/gm, '<ul><li><strong>$2</strong></li>'); // ganti poin
+    text = text.replace(/(\*{2} (.*?)$)/gm, '</ul><ul><li><strong>$2</strong></li>'); // ganti sub-poin
+  
+    // Tag p untuk paragraf
+    text = '<p>' + text + '</p>';
+  
+    return text;
+  }
+  
+  
+  
+
   private loadChatbotRoom(historyId: string, roomId: string): any {
     this.chatbotService
       .initiateModel(historyId, roomId)
@@ -162,7 +182,7 @@ export class ChatbotComponent implements OnInit {
             id: message.id,
             content: message.content,
             timestamp: message.created ? message.created.toDate() : null,
-            response: message.response ? this.translate.instant(message.response) : null, // Translate the response
+            response: message.response ? this.preprocessText(message.response) : null,
           }))
           .sort((a: any, b: any) => a.timestamp - b.timestamp);
         return [];
