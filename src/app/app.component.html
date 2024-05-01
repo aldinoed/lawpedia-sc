@@ -174,10 +174,18 @@
         </li>
         <li>
           <button
+            *ngIf="!isLoggedIn()"
+            [routerLink]="['/authentication']"
+            type="button"
+            class="block lg:hidden mt-4 ml-4 text-navy2 hover:text-white border border-navy2 hover:bg-navy2 focus:ring-4 focus:outline-navy1 focus:ring-navy1 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 transition"
+          >
+            Login
+          </button>
+          <button
             *ngIf="isLoggedIn()"
             (click)="logout()"
             type="button"
-            class="block lg:hidden mt-4 ml-8 text-white bg-navy2 hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center transition"
+            class="block lg:hidden mt-4 ml-4 text-white bg-navy2 hover:bg-navy1 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center transition"
           >
             Logout
           </button>
